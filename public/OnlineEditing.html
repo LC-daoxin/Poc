@@ -1,0 +1,258 @@
+﻿<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="Access-Control-Allow-Origin" content="*">
+    <title>
+        123
+    </title>
+
+    <style>
+        html {
+            height: 100%;
+            width: 100%;
+        }
+
+        body {
+            background: #fff;
+            color: #333;
+            font-family: Arial, Tahoma,sans-serif;
+            font-size: 12px;
+            font-weight: normal;
+            height: 100%;
+            margin: 0;
+            overflow-y: hidden;
+            padding: 0;
+            text-decoration: none;
+        }
+
+        form {
+            height: 100%;
+        }
+
+        div {
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+
+    <script language="javascript" type="text/javascript" src="http://116.62.116.60:8000/web/editors/api/documenteditor.js"></script>
+
+    <script type="text/javascript" language="javascript">
+
+        var docEditor;
+        var fileName = "";
+        var lang = "zh";
+        var fileType = "";
+        var token = null;
+        var appid = null;
+        var appkey = null;
+
+        var innerAlert = function (message) {
+            if (console && console.log)
+                console.log(message);
+        };
+
+        var onReady = function () {
+            innerAlert("Document editor ready");
+
+        };
+
+        var onDocumentStateChange = function (event) {
+            var title = document.title.replace(/\*$/g, "");
+            document.title = title + (event.data ? "*" : "");
+        };
+
+        var onRequestEditRights = function () {
+            location.href = location.href.replace(RegExp("action=view\&?", "i"), "");
+        };
+
+        var onError = function (event) {
+            if (event)
+                innerAlert(event.data);
+        };
+
+        var onOutdatedVersion = function (event) {
+            location.reload(true);
+        };
+        function ajax(options) {
+            options = options || {};
+            var method = (options.type || "GET").toUpperCase(),
+                url = options.url,
+                queryString = null;
+            if (!url)
+                return;
+            if (options.data) {
+                queryString = [];
+                for (var attr in options.data) {
+                    queryString.push(attr + "=" + options.data[attr]);
+                }
+                queryString = queryString.join("&");
+            }
+            if (method === "GET" && queryString) {
+                url += "?" + queryString;
+                queryString = "";
+            }
+            var xhr = new XMLHttpRequest();
+            xhr.open(method, url, true);
+            if (method === "POST")
+                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            xhr.send(queryString);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 200) {
+                        var data = xhr.responseText;
+                        if (options.dataType === "json")
+                            data = JSON.parse(data);
+                        options.success && options.success(data);
+                    } else {
+                        options.error && options.error(xhr.status);
+                    }
+                }
+            }
+        }
+        var callbackfn = function (result) {
+            if (result && result.data) {
+                var data = result.data,
+                    fileName = data[0],
+                    url = data[1];
+                if (fileName.indexOf('=') > -1)
+                    fileName = fileName.split('=')[1];
+                var host = 'http://116.62.116.60:8000';
+                ajax({
+                    url: host + '/webeditor.ashx?type=save',
+                    type: 'jsonp',
+                    data: { 'filename': fileName, 'fileuri': url },
+                    dataType: 'json',
+                    async: false,
+                    success: function (json) {
+                        if (json.code == 200 || json.code == '200') {
+                            alert('保存成功');
+                        } else {
+                            this.error(json, '保存失败');
+                        }
+                    },
+                    error: function (json, msg) {
+                        alert(msg);
+                    }
+                });
+            }
+        };
+        var connectEditor = function () {
+            var type = 'desktop';
+            if (type == "desktop") {
+                var app = navigator.appVersion;
+                if (app.toLowerCase().indexOf('window') != -1) {
+                    type = "desktop";
+                } else {
+                    type = "mobile";
+                }
+            };
+            var urlString = "http://116.62.116.60:3000/files/123.56.242.202/default/20220414171146POC_Template.docx";
+
+            var arrfn = urlString.split(".");
+            var strp = arrfn[arrfn.length - 1];
+            var documentTypeValue = null;
+            switch (strp) {
+                case "xls":
+                case "xlsx":
+                case "xlsm":
+                case "xlt":
+                case "xltx":
+                case "xltm":
+                case "ods":
+                case "fods":
+                case "ots":
+                case "csv":
+                    documentTypeValue = "spreadsheet";
+                    break;
+                case "pps":
+                case "ppsx":
+                case "ppsm":
+                case "ppt":
+                case "pptx":
+                case "pptm":
+                case "pot":
+                case "potx":
+                case "potm":
+                case "odp":
+                case "fodp":
+                case "otp":
+                    documentTypeValue = "presentation";
+                    break;
+                default:
+                    documentTypeValue = "document";
+                    break;
+            }
+
+            docEditor = new OfficeAPI.DocumentEditor("iframeEditor",
+                {
+                    width: "100%",
+                    height: "100%",
+                    editorType: type,
+                    isReadOnly: 'False',
+                    documentType: documentTypeValue,
+                    document: {
+                        key: "",
+                        title: fileName,
+                        url: urlString,
+
+                        fileType: fileType,
+                        info: {
+                            author: "Me",
+                            created: "2019/11/22"
+                        }
+                    },
+                    editorConfig: {
+                        mode: 'True',
+                        lang: lang,
+                        callbackUrl: "",
+                        user: {
+                            id: "",
+                            name: "e-iceblue",
+                            token: token,
+                            appid: appid,
+                            appkey: appkey
+                        },
+                        customization: {
+                            goback: {
+                                url: ""
+                            },
+                            "openReviewChanges": true,
+                        }
+                    },
+                    events: {
+                        'onReady': onReady,
+                        'onDocumentStateChange': onDocumentStateChange,
+                        'onRequestEditRights': onRequestEditRights,
+                        'onError': onError,
+                        'onOutdatedVersion': onOutdatedVersion,
+                        'onSave': callbackfn
+                    }
+                }
+            );
+        };
+        if (window.addEventListener) {
+            window.addEventListener("load", connectEditor);
+        } else if (window.attachEvent) {
+            window.attachEvent("load", connectEditor);
+        }
+
+    </script>
+</head>
+<body>
+    <form name="form1" method="post" action="./docEditor.aspx?fileID=demo+(2).docx&lang=zh" id="form1">
+        <div>
+            <input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="/wEPDwUKMTkyMjc5MTU4M2RkBQQQBsVcOHQbzTlwYapiES2Trc9Z/U4CC+r9rluZubc=" />
+        </div>
+
+        <div>
+
+            <input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="C2EAC0DE" />
+        </div>
+        <div id="iframeEditor">
+        </div>
+    </form>
+</body>
+</html>
+
+
