@@ -16,7 +16,7 @@
     >
       <a-form-model-item
         class="form-item"
-        :label="$t('username')"
+        label="用户名"
         prop="username"
       >
         <a-input
@@ -27,7 +27,7 @@
       </a-form-model-item>
       <a-form-model-item
         class="form-item"
-        :label="$t('realname')"
+        label="真实姓名"
         prop="realname"
       >
         <a-input
@@ -57,7 +57,7 @@
 				</a-form-model-item>-->
       <a-form-model-item
         class="form-item"
-        :label="$t('nickname')"
+        label="昵称"
         prop="nickname"
       >
         <a-input
@@ -77,7 +77,7 @@
           type="primary"
           icon="search"
           @click="search"
-        >{{ $t('search') }}</a-button>
+        >搜索</a-button>
         <a-button
           type="primary"
           icon="download"
@@ -103,7 +103,7 @@
         <a-button
           icon="delete"
           @click="model = {}"
-        >{{ $t('clear') }}</a-button>
+        >清空</a-button>
 
       </a-space>
       <a-space>
@@ -111,7 +111,7 @@
           icon="redo"
           type="primary"
           @click="refresh"
-        >{{ $t('refresh') }}</a-button>
+        >刷新</a-button>
         <a-popconfirm
           v-show="hasDeleteAuth"
           title="确定执行删除操作？"
@@ -124,9 +124,7 @@
             icon="delete"
             type="danger"
             @click="handleDelete"
-          >{{
-						$t('delete')
-					}}</a-button>
+          >删除</a-button>
         </a-popconfirm>
       </a-space>
     </div>

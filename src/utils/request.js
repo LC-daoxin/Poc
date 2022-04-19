@@ -64,6 +64,46 @@ const installer = {
   }
 }
 
+function handleError(error, reject, opts) {
+	// let isAlert = opts.custom ? opts.custom['isAlert'] : true;
+	// isAlert = isAlert === undefined ? true : isAlert;
+	// console.log(error, error.response)
+	// const {data,config} = error.response
+	// if (isAlert && error instanceof Object && error.code != undefined) {
+	// 	if (error.code === 'ECONNABORTED') {
+	// 		message.error('请求超时');
+	// 	} else if (error.response && error.response.data) {
+	// 		if (error.response.data.msg) {
+	// 			message.error(error.response.data.msg);
+	// 		} else if (error.response.data.message) {
+	// 			message.error(error.response.data.msg);
+	// 		}
+	// 	} else if (error.message) {
+	// 		message.error(error.message);
+	// 	}
+	// }
+	// if(data.errorCode !=undefined && data.status=='FAILED' && config.url =='/oauth/token')
+	// {
+	// 	Modal.error({
+	// 		title: '登录遇到问题',
+	// 		content: '登录遇到问题,将跳转到统一登陆页面',
+	// 		okText: '确定',
+	// 		mask: false,
+	// 		onOk: () => {
+	// 			Cookie.remove('oauth-auth-server');
+	// 			removeAuthorization()
+	// 			db.remove('token');
+	// 			db.remove('state');
+	// 			window.location.href = '/#/ssologin';
+	// 			window.location.reload();
+	// 		},
+	// 	});
+	// }
+	// else{
+	// 	reject(error);
+	// }
+}
+
 // http请求
 const axiosRequest = (opts) => {
 	// 公共参数
