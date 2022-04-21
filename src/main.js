@@ -10,11 +10,17 @@ import i18n from './locales'
 import { VueAxios } from './utils/request'
 import ProLayout, { PageHeaderWrapper } from '@ant-design-vue/pro-layout'
 import themePluginConfig from '../config/themePluginConfig'
-import { Pagination, FormModel, Select, Empty } from 'ant-design-vue'
+import { Pagination, FormModel, Select, Empty,Tree } from 'ant-design-vue'
 Vue.use(Select)
 Vue.use(Pagination)
 Vue.use(FormModel)
 Vue.use(Empty)
+Vue.use(Tree)
+import VXETable from 'vxe-table'
+import 'vxe-table/lib/style.css'
+Vue.prototype.$XModal = VXETable.modal;
+Vue.use(VXETable)
+
 // mock
 // WARNING: `mockjs` NOT SUPPORT `IE` PLEASE DO NOT USE IN `production` ENV.
 import './mock'

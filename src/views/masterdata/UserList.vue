@@ -1,481 +1,234 @@
-/*
- * @Author: Lince 
- * @Date: 2021-08-12 17:28:24 
- * @Last Modified by: Lince
- * @Last Modified time: 2022-04-19 11:49:15
- */
-<template>
-  <a-card>
-    <a-form-model
-      ref="form"
-      class="processCenter"
-      layout="inline"
-      :model="model"
-      :labelCol="{span: searchLabelCol}"
-      :wrapperCol="{span: searchWrapperCol}"
-    >
-      <a-form-model-item
-        class="form-item"
-        label="用户名"
-        prop="username"
-      >
-        <a-input
-          allowClear
-          v-model.trim="model.username"
-					@pressEnter="search"
-        ></a-input>
-      </a-form-model-item>
-      <a-form-model-item
-        class="form-item"
-        label="真实姓名"
-        prop="realname"
-      >
-        <a-input
-          allowClear
-          v-model.trim="model.realname"
-					@pressEnter="search"
-        ></a-input>
-      </a-form-model-item>
-      <!--	<a-form-model-item :label="$t('startingTime')" class="form-item" prop="startDate">
-					
-				<a-date-picker
-					placeholder="开始时间"
-					valueFormat="YYYY-MM-DD HH:mm:ss"
-					allowClear
-					v-model="model.startDate"
-				/>
-			</a-form-model-item>
-			<a-form-model-item :label="$t('endTime')" class="form-item" prop="endDate">
-				<a-date-picker
-				
-					show-time
-					placeholder="结束时间"
-					valueFormat="YYYY-MM-DD HH:mm:ss"
-					allowClear
-					v-model="model.endDate"
-				/>
-				</a-form-model-item>-->
-      <a-form-model-item
-        class="form-item"
-        label="昵称"
-        prop="nickname"
-      >
-        <a-input
-          allowClear
-          v-model.trim="model.nickname"
-        ></a-input>
-      </a-form-model-item>
-    </a-form-model>
-    <div class="search-approval-wrapper">
-      <a-space>
-        <a-button
-          type="primary"
-          icon="plus"
-          @click="$refs.modal.add()"
-        >新建</a-button>
-        <a-button
-          type="primary"
-          icon="search"
-          @click="search"
-        >搜索</a-button>
-        <a-button
-          type="primary"
-          icon="download"
-          @click="handleExport"
-        >导出</a-button>
-        <a-upload
-          :customRequest="handleImport"
-          :disabled="importLoading"
-          :showUploadList="false"
-          style="display: inline-block"
-        >
-          <a-button
-            type="primary"
-            icon="import"
-            :loading="importLoading"
-          > 导入 </a-button>
-        </a-upload>
-        <a-button
-          type="primary"
-          icon="download"
-          @click="downloadImportFile"
-        >导入模板下载</a-button>
-        <a-button
-          icon="delete"
-          @click="model = {}"
-        >清空</a-button>
 
-      </a-space>
-      <a-space>
-        <a-button
-          icon="redo"
-          type="primary"
-          @click="refresh"
-        >刷新</a-button>
-        <a-popconfirm
-          v-show="hasDeleteAuth"
-          title="确定执行删除操作？"
-          okText="确定"
-          cancelText="取消"
-          @confirm="handleDelete"
-        >
-          <a-button
-            v-show="hasDeleteAuth"
-            icon="delete"
-            type="danger"
-            @click="handleDelete"
-          >删除</a-button>
-        </a-popconfirm>
-      </a-space>
-    </div>
-    <public-table
-      class="public-table"
-      :pagination="pagination"
-      :params="tableParams"
-      :rowSelection="true"
-      @pageChange="fetch"
-      @selectionChange="selectionChange"
-    ></public-table>
-    <user-modal
-      ref="modal"
-      @ok="refresh"
-    />
-    <password-modal
-      ref="passwordmodal"
-      @ok="passwordModalOk"
-    ></password-modal>
-  </a-card>
+<template>
+  <div>
+    <vxe-toolbar style="padding-left: 10px; margin-bottom: 10px; border-radius: 5px">
+      <template #buttons>
+        <vxe-input v-model="searchKey" placeholder="用户名称"></vxe-input>
+        <vxe-button status="primary" icon="fa vxe-icon--search" @click="search">查询</vxe-button>
+        <vxe-button status="primary" icon="fa vxe-icon--plus" @click="add">添加</vxe-button>
+        <vxe-button status="primary" icon="fa vxe-icon--edit-outline" @click="edit">编辑</vxe-button>
+        <vxe-button status="primary" icon="fa vxe-icon--close" @click="del">删除</vxe-button>
+      </template>
+    </vxe-toolbar>
+    <vxe-table
+      ref="vxeTable"
+      size="small"
+      border
+      show-overflow
+      row-id="ID"
+      :row-config="{ isHover: true }"
+      :data="userList"
+      :radio-config="{ trigger: 'row' }"
+    >
+      <vxe-column type="radio" align="center" width="80" title="序号"></vxe-column>
+      <vxe-column field="DepartmentName" width="150" title="所属部门"></vxe-column>
+      <vxe-column field="UserName" width="180" title="用户名"></vxe-column>
+      <vxe-column field="Sex" width="80" title="性别"></vxe-column>
+      <vxe-column field="Mobile" title="电话"></vxe-column>
+      <vxe-column field="Status" width="80" title="状态"></vxe-column>
+      <vxe-column field="CreateTime" title="创建日期" :formatter="formatDate"></vxe-column>
+    </vxe-table>
+
+    <vxe-modal v-model="open" :title="title" width="600" height="270" resize>
+      <template #default>
+        <vxe-form :data="formData" title-align="right" title-width="80">
+          <vxe-form-item title="所属部门" field="DepartmentID" span="24">
+            <template #default>
+              <vxe-select v-model="formData.DepartmentID" placeholder="请选择部门">
+                <vxe-option
+                  v-for="item in depList"
+                  :key="item.ID"
+                  :value="item.ID"
+                  :label="item.DepartName"
+                ></vxe-option>
+              </vxe-select>
+            </template>
+          </vxe-form-item>
+          <vxe-form-item title="用户名称" field="UserName" span="12">
+            <template #default>
+              <vxe-input v-model="formData.UserName" placeholder="请输入用户名称"></vxe-input>
+            </template>
+          </vxe-form-item>
+
+          <vxe-form-item title="性别" field="Sex" span="12">
+            <template #default>
+              <vxe-select v-model="formData.Sex" placeholder="请选择性别" clearable>
+                <vxe-option value="男" label="男"></vxe-option>
+                <vxe-option value="女" label="女"></vxe-option>
+              </vxe-select>
+            </template>
+          </vxe-form-item>
+          <vxe-form-item title="电话" field="Mobile" span="24">
+            <template #default>
+              <vxe-input v-model="formData.Mobile" placeholder="请输入电话"></vxe-input>
+            </template>
+          </vxe-form-item>
+          <vxe-form-item align="right" span="24">
+            <template #default>
+              <vxe-button type="button" status="primary" @click="save">保存</vxe-button>
+              <vxe-button type="button" @click="close">取消</vxe-button>
+            </template>
+          </vxe-form-item>
+        </vxe-form>
+      </template>
+    </vxe-modal>
+  </div>
 </template>
 
 <script>
-  import {fileExport} from '@/utils/util';
-  import api from '@/api/masterdata/user';
-  import documentApi from '@/api/documentCenter/documentManage.js';
-  import UserModal from './modules/UserModal';
-  import PasswordModal from './modules/PasswordModal';
-  import {langAndAuth} from '@/mixin';
-  export default {
-  	name: 'UserList',
-  	mixins: [langAndAuth],
-  	data() {
-  		return {
-  			api,
-  			expand: false,
-  			model: {},
-  			selectionKeys: [],
-  			pagination: {
-  				total: 0,
-  				current: 1,
-  				pageSize: 10
-  			},
-  			tableParams: {
-  				loading: false,
-  				dataSource: [],
-  				scroll: {x: 1300},
-  				columns: [
-  					{
-  						title: this.$t('avatar'), // 头像
-  						dataIndex: 'avatar',
-  						i18n: 'avatar',
-  						align: 'center',
-  						width: 60,
-  						customRender: (text, record) => {
-  							const renderElement = [];
-  							renderElement.push(
-  								<div class="anty-img-wrap">
-  									<a-avatar shape="square" size="small" src={record.avatar} icon="user" />
-  								</div>
-  							);
-  							return <a-space>{renderElement}</a-space>;
-  						}
-  					},
-  					{
-  						title: this.$t('username'), // 用户名
-  						dataIndex: 'username',
-  						i18n: 'username',
-  						width: 150,
-  						align: 'center',
-  						ellipsis: true
-  					},
-  					{
-  						title: this.$t('realname'), // 真实姓名
-  						dataIndex: 'realname',
-  						i18n: 'realname',
-  						width: 90,
-  						align: 'center',
-  						ellipsis: true
-  					},
-  					{
-  						title: this.$t('nickname'), // 昵称,
-  						dataIndex: 'nickname',
-  						i18n: 'nickname',
-  						align: 'center',
-  						width: 90,
-  						ellipsis: true
-  					},
-						{
-  						title: '主子账户', // belongTo,
-  						dataIndex: 'belongTo',
-  						// i18n: 'nickname',
-  						align: 'center',
-  						width: 200,
-  						ellipsis: true,
-							customRender: (text, record) => {
-								if (text == '-1') {
-									return <a-tag color='blue'>主账户({record.oaUserId})</a-tag>
-								} else {
-									return text ? <a-tag color='blue'>主账户({text})-子账户({record.oaUserId})</a-tag> : ''
-								}
-  						}
-  					},
-  					{
-  						title: this.$t('sex'), // 性别
-  						dataIndex: 'sex',
-  						i18n: 'sex',
-  						width: 70,
-  						align: 'center',
-  						customRender: (sex) => <a-tag color={this.sexStyle(sex)}>{ this.sexText(sex) }</a-tag>
-  					},
-  					{
-  						title: this.$t('birthday'), // 生日
-  						dataIndex: 'birthday',
-  						i18n: 'birthday',
-  						width: 110,
-  						align: 'center',
-  						ellipsis: true,
-  						customRender: (birthday) => (birthday ? this.$moment(birthday).format('YYYY-MM-DD') : '')
-  					},
-  					{
-  						title: this.$t('email'), // 电子邮件
-  						dataIndex: 'email',
-  						i18n: 'email',
-  						align: 'center',
-  						width: 200,
-  						ellipsis: true
-  					},
-  					{
-  						title: this.$t('mobilePhone'), // 手机号
-  						dataIndex: 'phone',
-  						i18n: 'mobilePhone',
-  						width: 120,
-  						align: 'center',
-  						ellipsis: true
-  					},
-  					{
-  						title: this.$t('status'), // 是否启用
-  						dataIndex: 'status',
-  						i18n: 'status',
-  						align: 'center',
-  						width: 70,
-  						customRender: (status) => <a-tag color={status == 1 ? 'blue' : 'orange'}>{this.statusFilter(status)}</a-tag>
-  					},
-  					// {
-  					// 	title: this.$t('responsibleDepartIds'), // 负责部门
-  					// 	dataIndex: 'responsibleDepartIds',
-  					// 	i18n: 'responsibleDepartIds',
-  					// 	align: 'center',
-  					// 	width: 120,
-  					// 	ellipsis: true
-  					// },
-  					{
-  						title: this.$t('operation'), // 操作
-  						i18n: 'operation',
-  						scopedSlots: {customRender: 'action'},
-  						fixed: 'right',
-  						width: 180,
-  						align: 'center',
-  						customRender: (text, record) => {
-  							const renderElement = [];
-  							const {id} = record;
-  							renderElement.push(
-  								<a-button
-  									icon="edit"
-  									type="primary"
-  									size="small"
-  									onClick={() => {
-  										this.handleEdit(record);
-  									}}
-  								>
-  									{this.$t('edit')}
-  								</a-button>
-  							);
-  							renderElement.push(
-  								<a-dropdown>
-  									<a-button icon="control" size="small">
-  										{this.$t('more')}
-  									</a-button>
-  									<a-menu slot="overlay">
-  										<a-menu-item onClick={() => this.handleDetail(record)}>
-  											<a-icon type="solution" />
-  											<span>用户详情</span>
-  										</a-menu-item>
-  										<a-menu-item onClick={() => this.handleChangePassword(record.username)}>
-  											<a-icon type="edit" />
-  											<span>修改密码</span>
-  										</a-menu-item>
-  										{record.status === 1 ? (
-  											<a-menu-item onClick={() => this.handleDisable(record.id, 0, record.username)}>
-  												<a-icon type="stop" />
-  												<span>{this.$t('disable')}</span>
-  											</a-menu-item>
-  										) : (
-  											<a-menu-item onClick={() => this.handleDisable(record.id, 1, record.username)}>
-  												<a-icon type="check-square" />
-  												<span>{this.$t('enable')}</span>
-  											</a-menu-item>
-  										)}
-  										<a-menu-item>
-  											<a-popconfirm
-  												title="确定删除该用户吗?"
-  												okText={this.$t('ok')}
-  												cancelText={this.$t('cancel')}
-  												onConfirm={() => this.handleDelete(id)}
-  											>
-  												<a-icon type="delete" />
-  												<span>删除用户</span>
-  											</a-popconfirm>
-  										</a-menu-item>
-  									</a-menu>
-  								</a-dropdown>
-  							);
-  							return <a-space>{renderElement}</a-space>;
-  						}
-  					}
-  				]
-  			},
-  			importLoading: false
-  		};
-  	},
-  	computed: {
-  		hasDeleteAuth() {
-  			return this.selectionKeys.length > 0; // && this.checkMenuFuncPermission('processCenter:myTodo:delete');
-  		}
-  	},
-  	created() {
-  		this.refresh();
-  	},
-  	methods: {
-			search() {
-  			// 搜索
-				this.pagination.current = 1;
-				this.fetch(this.pagination.current, this.pagination.pageSize, this.model)
-  		},
-  		//展开收起
-  		toggle() {
-  			this.expand = !this.expand;
-  		},
-  		setShortCol() {
-  			this.searchLabelCol = 7;
-  			this.searchWrapperCol = 17;
-  		},
-  		setLongCol() {
-  			this.searchLabelCol = 9;
-  			this.searchWrapperCol = 15;
-  		},
-  		statusFilter(status) {
-  			const statusMap = {
-  				0: '禁用',
-  				1: '正常'
-  			};
-  			return statusMap[status];
-  		},
-  		async handleDelete(id) {
-  			let ids;
-  			if (this.selectionKeys.length > 0) {
-  				ids = this.selectionKeys.join(',');
-  			} else {
-  				ids = id;
-  			}
+import axios from 'axios'
+import XEUtils from 'xe-utils'
+export default {
+  name: 'UserList',
+  data() {
+    return {
+      open: false,
+      title: '',
+      formData: {},
+      //用户数据
+      userList: [],
+      searchKey: '',
+      //部门数据
+      depList: [],
+    }
+  },
+  mounted() {
+    this.getList('')
+    this.getDepList('')
+  },
+  methods: {
+    getDepList(name) {
+      axios.post('http://123.56.242.202:8080/api/User/GetDepartmentInfo?departmentName=' + name).then((res) => {
+        this.arrayToTree(res.data, 'ID', 'ParentID', this.depList)
+      })
+    },
+    formatDate({ cellValue }, format) {
+      return XEUtils.toDateString(cellValue, format || 'yyyy-MM-dd HH:mm:ss')
+    },
+    getDepName(id) {
+      let name = ''
+      for (var item of this.depList) {
+        if (item.ID == id) {
+          name = item.DepartName
+          break
+        }
+      }
+      return name
+    },
+    arrayToTree(data, id, pid, data2) {
+      if (!data || !data.length) return []
+      var targetData = [] //存储数据的容器(返回)
+      var records = {}
+      var itemLength = data.length //数据集合的个数
+      for (var i = 0; i < itemLength; i++) {
+        var o = data[i]
+        records[o[id]] = o
+      }
+      for (var i = 0; i < itemLength; i++) {
+        var currentData = data[i]
+        var parentData = records[currentData[pid]]
+        if (!parentData) {
+          currentData['prefix'] = '|--'
+          //alert(currentData["name"]);
+          data2.push(currentData)
+          currentData['DepartName'] = currentData['prefix'] + currentData['DepartName']
+          targetData.push(currentData)
+          continue
+        }
 
-  			const res = await api.delete({ids});
-  			const {code, msg} = res;
-  			if (code === '0001') {
-  				this.refresh();
-  				this.$message.success('操作成功');
-  			} else {
-  				this.$message.error(msg);
-  			}
-  		},
-  		async handleExport() {
-  			const postData = {map: {}, model: {}}; // this.queryParams
-  			const res = await api.export(postData);
-  			fileExport(res);
-  		},
-  		handleImport({file}) {
-  			let param = new FormData();
-  			let that = this;
-  			param.append('file', file, file.name);
-  			this.importLoading = true;
-  			userApi
-  				.import(param)
-  				.then((res) => {
-  					if (res.code === '0001') {
-  						this.$message.success('导入成功');
-  						that.$refs.table.refresh(true);
-  					} else {
-  						this.$message.warning(res.msg);
-  						return [];
-  					}
-  					this.importLoading = false;
-  				})
-  				.catch((err) => {
-  					this.importLoading = false;
-  				});
-  		},
-  		async downloadImportFile() {
-  			const res = await documentApi.downloadImportFile('用户导入模板.xlsx');
-  			fileExport(res, '用户导入模板.xlsx');
-  		},
-  		handleEdit(record) {
-  			this.$refs.modal.edit(record, 'edit');
-  		},
-  		handleDetail(record) {
-  			this.$refs.modal.edit(record, 'detail');
-  		},
-  		handleChangePassword(username) {
-  			this.$refs.passwordmodal.show(username);
-  		},
-  		passwordModalOk() {
-  			//TODO 密码修改完成事件
-  		},
-  		handleDisable: function (id, status, username) {
-  			let that = this;
-  			if ('admin' == username) {
-  				that.$message.warning('管理员账号不允许此操作！');
-  				return;
-  			}
-  			api.disableBatch({ids: id, status: status}).then((res) => {
-  				if (res.isSuccess) {
-  					that.$message.success(res.msg);
-  					that.refresh();
-  				} else {
-  					that.$message.warning(res.msg);
-  				}
-  			});
-  		},
-			sexStyle(sex) {
-  			const sexArr = new Map([
-  				[0, 'yellow'],
-  				[1, 'blue'],
-  				[2, 'green']
-  			]);
-  			return sexArr.get(sex) || nameArr.get(0);
-  		},
-			sexText(sex) {
-  			const sexArr = new Map([
-  				[0, '未知'],
-  				[1, '男'],
-  				[2, '女']
-  			]);
-  			return sexArr.get(sex) || nameArr.get(0);
-  		}
-  	},
-  	components: {
-  		PasswordModal,
-  		UserModal
-  	}
-  };
+        currentData['prefix'] = parentData['prefix'] + '|--'
+        //alert(currentData["prefix"]);
+        parentData.children = parentData.children || []
+        parentData.children.push(currentData)
+        currentData['DepartName'] = currentData['prefix'] + currentData['DepartName']
+        data2.push(currentData)
+      }
+      return targetData
+    },
+    search() {
+      this.getList(this.searchKey)
+    },
+    add() {
+      this.title = '新增用户'
+      this.open = true
+      this.formData = {}
+    },
+    edit() {
+      var checked = this.$refs.vxeTable.getRadioRecord()
+      if (checked == null) {
+        this.$XModal.message({ content: '请选择要修改的数据', status: 'warning' })
+        return
+      }
+      this.formData = checked
+      this.title = '修改用户'
+      this.open = true
+    },
+    del() {
+      var checked = this.$refs.vxeTable.getRadioRecord()
+      if (checked == null) {
+        this.$XModal.message({ content: '请选择要删除的数据', status: 'warning' })
+        return
+      }
+      this.$XModal.confirm('确定删除？').then((type) => {
+        if (type === 'confirm') {
+          this.$XModal.message({ id: 'loding', content: '数据处理中...', status: 'loading' })
+          axios.post('http://123.56.242.202:8080/api/User/UserDelete?userID=' + checked.ID).then((res) => {
+            this.$XModal.close('loding')
+            if (res.data.Code == 200) {
+              this.$XModal.message({ content: '删除成功', status: 'success' })
+              this.open = false
+              this.getList('')
+            } else {
+              this.$XModal.message({ content: '删除失败' + res.data.Message, status: 'error' })
+            }
+          })
+        }
+      })
+    },
+    save() {
+      this.$XModal.confirm('确定保存？').then((type) => {
+        if (type === 'confirm') {
+          this.$XModal.message({ id: 'loding', content: '数据处理中...', status: 'loading' })
+          this.formData.DepartmentName = this.getDepName(this.formData.DepartmentID).replace(/\|\-\-/g, '')
+          if (this.formData.ID == null) {
+            axios.post('http://123.56.242.202:8080/api/User/UserCreate', [this.formData]).then((res) => {
+              this.$XModal.close('loding')
+              if (res.data.Code == 200) {
+                this.$XModal.message({ content: '添加成功', status: 'success' })
+                this.open = false
+                this.getList('')
+              } else {
+                this.$XModal.message({ content: '添加失败：' + res.data.Message, status: 'error' })
+              }
+            })
+          } else {
+            axios.post('http://123.56.242.202:8080/api/User/UserUpdate', this.formData).then((res) => {
+              this.$XModal.close('loding')
+              if (res.data.Code == 200) {
+                this.$XModal.message({ content: '修改成功', status: 'success' })
+                this.open = false
+                this.getList('')
+              } else {
+                this.$XModal.message({ content: '修改失败：' + res.data.Message, status: 'error' })
+              }
+            })
+          }
+        }
+      })
+    },
+    close() {
+      this.open = false
+    },
+    getList(name) {
+      axios.post('http://123.56.242.202:8080/api/User/GetUserInfo?departmentID=&userName=' + name).then((res) => {
+        this.userList = res.data
+        setTimeout(() => {
+          this.$refs.vxeTable.setAllTreeExpand(true)
+        }, 200)
+      })
+    },
+  },
+}
 </script>
-
 <style lang="less" scoped>
 </style>
