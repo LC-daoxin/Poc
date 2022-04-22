@@ -21,7 +21,10 @@ const constantRouterComponents = {
   Configuration: () => import('@/views/dashboard/Configuration'),
   UserList: () => import('@/views/masterdata/UserList'),
   DeptList: () => import('@/views/masterdata/DeptList'),
-
+  ActivityList: () => import('@/views/masterdata/ActivityList'),
+  ProposalTemplate: () => import('@/views/masterdata/ProposalTemplate'),
+  ContractTemplate: () => import('@/views/masterdata/ContractTemplate'),
+  
   // form
   BasicForm: () => import('@/views/form/basicForm'),
   StepForm: () => import('@/views/form/stepForm/StepForm'),

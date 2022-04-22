@@ -524,6 +524,40 @@ const userNav = options => {
       path: '/masterdata/DeptList'
     },
     {
+      name: 'ActivityList',
+      parentId: 1,
+      id: 3.1,
+      meta: {
+        title: '节点管理',
+        show: true
+      },
+      component: 'ActivityList',
+      path: '/masterdata/ActivityList'
+    },
+    {
+      name: 'ProposalTemplate',
+      parentId: 1,
+      id: 3.1,
+      meta: {
+        title: 'Proposal模板',
+        show: true
+      },
+      component: 'ProposalTemplate',
+      path: '/masterdata/ProposalTemplate'
+    },
+    {
+      name: 'ContractTemplate',
+      parentId: 1,
+      id: 3.1,
+      meta: {
+        title: '合同模板',
+        show: true
+      },
+      component: 'ContractTemplate',
+      path: '/masterdata/ContractTemplate'
+    },
+    
+    {
       name: 'Report',
       parentId: 1,
       id: 4,
