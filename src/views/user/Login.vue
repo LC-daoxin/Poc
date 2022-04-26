@@ -119,6 +119,7 @@ import TwoStepCaptcha from '@/components/tools/TwoStepCaptcha'
 import { mapActions } from 'vuex'
 import { timeFix } from '@/utils/util'
 import { getSmsCaptcha, get2step } from '@/api/login'
+import axios from 'axios'
 
 export default {
   components: {
@@ -190,17 +191,23 @@ export default {
           delete loginParams.username
           loginParams[!state.loginType ? 'email' : 'username'] = values.username
           loginParams.password = md5(values.password)
-          Login(loginParams)
-            .then((res) => this.loginSuccess(res))
-            .catch(err => this.requestFailed(err))
-            .finally(() => {
-              state.loginBtn = false
+          
+          state.loginBtn = true
+          axios
+            .post('http://123.56.242.202:8080/api/User/UserLogin?userName='+values.username+'&password='+values.password )
+            .then((res) => {
+              if (res.data.Code == 200) {
+                sessionStorage.setItem("Access-Token",res.data.Data.Token);
+                sessionStorage.setItem("LoginUser",JSON.stringify(res.data.Data));
+                state.loginBtn = false
+                this.loginSuccess(res)
+              } else {
+                this.$XModal.message({ content: '账号或密码不对', status: 'error' })
+                state.loginBtn = false
+              }
             })
-        } else {
-          setTimeout(() => {
-            state.loginBtn = false
-          }, 600)
         }
+        
       })
     },
     getCaptcha (e) {

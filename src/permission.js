@@ -18,7 +18,9 @@ router.beforeEach((to, from, next) => {
   NProgress.start() // start progress bar
   to.meta && typeof to.meta.title !== 'undefined' && setDocumentTitle(`${i18nRender(to.meta.title)} - ${domTitle}`)
   /* has token */
-  if (storage.get(ACCESS_TOKEN)) {
+  
+  if (sessionStorage.getItem("Access-Token")!=undefined && sessionStorage.getItem("Access-Token")!=null  && sessionStorage.getItem("Access-Token")!="null") {
+  //if (storage.get(ACCESS_TOKEN)) {
     if (to.path === loginRoutePath) {
       next({ path: defaultRoutePath })
       NProgress.done()

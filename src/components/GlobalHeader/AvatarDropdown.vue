@@ -2,7 +2,7 @@
   <a-dropdown v-if="currentUser && currentUser.name" placement="bottomRight">
     <span class="ant-pro-account-avatar">
       <a-avatar size="small" src="https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png" class="antd-pro-global-header-index-avatar" />
-      <span>{{ currentUser.name }}</span>
+      <span>{{ curUser.UserName }}</span>
     </span>
     <template v-slot:overlay>
       <a-menu class="ant-pro-drop-down menu" :selected-keys="[]">
@@ -42,6 +42,11 @@ export default {
       default: true
     }
   },
+  data() {
+    return {
+      curUser:JSON.parse(sessionStorage.getItem("LoginUser"))
+    }
+  },
   methods: {
     handleToCenter () {
       this.$router.push({ path: '/account/center' })
@@ -57,6 +62,7 @@ export default {
           // return new Promise((resolve, reject) => {
           //   setTimeout(Math.random() > 0.5 ? resolve : reject, 1500)
           // }).catch(() => console.log('Oops errors!'))
+          sessionStorage.setItem("Access-Token",null);
           return this.$store.dispatch('Logout').then(() => {
             this.$router.push({ name: 'login' })
           })
