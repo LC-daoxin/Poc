@@ -537,7 +537,7 @@ const userNav = options => {
     {
       name: 'ProposalTemplate',
       parentId: 1,
-      id: 3.1,
+      id: 3.2,
       meta: {
         title: 'Proposal模板',
         show: true
@@ -548,13 +548,24 @@ const userNav = options => {
     {
       name: 'ContractTemplate',
       parentId: 1,
-      id: 3.1,
+      id: 3.3,
       meta: {
         title: '合同模板',
         show: true
       },
       component: 'ContractTemplate',
       path: '/masterdata/ContractTemplate'
+    },
+    {
+      name: 'MasterBase',
+      parentId: 1,
+      id: 3.4,
+      meta: {
+        title: 'Master基础数据管理',
+        show: true
+      },
+      component: 'MasterBase',
+      path: '/masterdata/MasterBase'
     },
     
     {
