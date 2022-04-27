@@ -569,6 +569,18 @@ const userNav = options => {
     },
     
     {
+      name: 'PropertyMapping',
+      parentId: 1,
+      id: 3.4,
+      meta: {
+        title: 'Property字段管理',
+        show: true
+      },
+      component: 'PropertyMapping',
+      path: '/masterdata/PropertyMapping'
+    },
+
+    {
       name: 'Report',
       parentId: 1,
       id: 4,
