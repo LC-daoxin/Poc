@@ -118,23 +118,10 @@
             },
             {
               title: 'Template Desc',
+              dataIndex: 'TempDesc',
               align: 'center',
               ellipsis: true,
-            },
-            {
-              title: 'Preview',
-              dataIndex: 'URL',
-              align: 'center',
-              width: 220,
-              ellipsis: true,
-              customRender: (text, row, index) => {
-                return (
-                  <a href={text} target="_blank">
-                    Document Link
-                  </a>
-                )
-              },
-            },
+            }
           ],
         },
       }
