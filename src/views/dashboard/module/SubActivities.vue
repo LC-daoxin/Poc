@@ -242,7 +242,7 @@ export default {
     loadData() {
       this.tableParams.loading = true
       axios
-        .get('http://localhost:44372/api/poc/GetSubActivitiesList', {
+        .get('http://123.56.242.202:8080/api/poc/GetSubActivitiesList', {
           params: this.model,
         })
         .then((res) => {

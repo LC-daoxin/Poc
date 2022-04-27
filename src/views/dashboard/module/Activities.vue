@@ -192,7 +192,7 @@ export default {
     loadData(model = {}) {
       this.tableParams.loading = true
       axios
-        .get('http://localhost:44372/api/poc/GetActivitiesList', {
+        .get('http://123.56.242.202:8080/api/poc/GetActivitiesList', {
           params: model,
         })
         .then((res) => {
@@ -205,7 +205,7 @@ export default {
     getActivitiesList(model) {
       this.tableParams.loading = true
       axios
-        .get('http://localhost:44372/api/poc/GetActivitiesList', {
+        .get('http://123.56.242.202:8080/api/poc/GetActivitiesList', {
           params: model,
         })
         .then((res) => {
