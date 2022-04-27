@@ -4,6 +4,7 @@
     <vxe-toolbar style="padding-left: 10px; margin-bottom: 10px; border-radius: 5px">
       <template #buttons>
         <vxe-input v-model="searchData.projectName" placeholder="项目名称(中文)"></vxe-input>
+        &nbsp;
         <vxe-input v-model="searchData.corporateName" placeholder="公司名称(中文)"></vxe-input>
         <vxe-button status="primary" icon="fa vxe-icon--search" @click="search">查询</vxe-button>
         <vxe-button status="primary" icon="fa vxe-icon--plus" @click="add">添加</vxe-button>
