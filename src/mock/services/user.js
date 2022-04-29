@@ -567,7 +567,17 @@ const userNav = options => {
       component: 'MasterBase',
       path: '/masterdata/MasterBase'
     },
-    
+    {
+      name: 'SplitRuleManagement',
+      parentId: 1,
+      id: 3.4,
+      meta: {
+        title: 'Split Rule Management',
+        show: true
+      },
+      component: 'SplitRuleManagement',
+      path: '/masterdata/SplitRuleManagement'
+    },
     {
       name: 'PropertyMapping',
       parentId: 1,
