@@ -15,10 +15,28 @@
           }}</a-select-option>
         </a-select>
       </a-form-model-item>
+
+      <a-form-model-item class="form-item" label="ProjectType1">
+        <a-select allowClear>
+          <a-select-option :value="item.TypeID" :key="item.TypeID" v-for="item in pipelineOptions">{{
+            item.ActivetName
+          }}</a-select-option>
+        </a-select>
+      </a-form-model-item>
+
+      <a-form-model-item class="form-item" label="ProjectType2">
+        <a-select allowClear>
+          <a-select-option :value="item.TypeID" :key="item.TypeID" v-for="item in pipelineOptions">{{
+            item.ActivetName
+          }}</a-select-option>
+        </a-select>
+      </a-form-model-item>
+
       <a-form-model-item label="Activity Name" class="form-item">
         <a-input allowClear v-model="model.activityName"></a-input>
       </a-form-model-item>
     </a-form-model>
+
     <div class="search-approval-wrapper">
       <a-button class="search_btn" type="primary" icon="search" @click="loadData(model)">Search</a-button>
       <a-button class="search_btn" icon="delete" @click="refresh(false)">Reset</a-button>
@@ -142,10 +160,10 @@ export default {
     },
   },
   mounted() {
-     this.model = {
-        proposalPipelineID: '',
-        activityName: '',
-      }
+    this.model = {
+      proposalPipelineID: '',
+      activityName: '',
+    }
 
     this.getProposalPipeLine()
     this.getActivitiesList(this.model)
@@ -197,7 +215,6 @@ export default {
         })
         .then((res) => {
           console.log('loadData', res)
-          debugger
           this.tableParams.dataSource = res.data
           this.tableParams.loading = false
         })
@@ -249,7 +266,6 @@ export default {
         }
       })
     },
-  
   },
   created() {
     // this.refresh()

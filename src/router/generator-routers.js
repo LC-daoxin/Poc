@@ -25,6 +25,7 @@ const constantRouterComponents = {
   ProposalTemplate: () => import('@/views/masterdata/ProposalTemplate'),
   ContractTemplate: () => import('@/views/masterdata/ContractTemplate'),
   MasterBase: () => import('@/views/masterdata/MasterBase'),
+  WordLog: () => import('@/views/masterdata/WordLog'),
   
   
   // form

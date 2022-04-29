@@ -40,7 +40,7 @@
       class="table"
       :pagination="false"
       :params="tableParams"
-      :rowSelection="false"
+      :rowSelection="true"
       :draggableRow="true"
       @pageChange="loadData"
       @changeRow="changeRow"
@@ -246,9 +246,6 @@ export default {
           params: this.model,
         })
         .then((res) => {
-          debugger
-          console.log('loadData', res)
-      
           console.log(res.data)
           this.setSubActivitiesAll(res.data)
           this.tableParams.dataSource = res.data
