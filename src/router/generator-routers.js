@@ -28,6 +28,8 @@ const constantRouterComponents = {
   PropertyMapping: () => import('@/views/masterdata/PropertyMapping'),
   SplitRuleManagement: () => import('@/views/masterdata/SplitRuleManagement'),
   WordLog: () => import('@/views/masterdata/WordLog'),
+  ActivityMapping: () => import('@/views/masterdata/ActivityMapping'),
+  
   
   // form
   BasicForm: () => import('@/views/form/basicForm'),
