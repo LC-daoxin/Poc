@@ -41,7 +41,7 @@ export default {
         this.tableList = res.data;
 
 
-        
+
 
       })
     },
