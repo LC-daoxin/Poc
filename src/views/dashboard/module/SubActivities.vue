@@ -353,6 +353,9 @@
 </script>
 
 <style lang="less" scoped>
+/deep/ .ant-table-row-level-0 {
+  height: 41px;
+}
 .activities {
   margin-top: 20px;
   padding: 0 20px;

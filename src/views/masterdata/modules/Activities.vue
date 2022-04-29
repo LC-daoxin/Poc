@@ -94,7 +94,7 @@
       :pagination="false"
       :params="tableParams"
       :rowSelection="true"
-      :rowKey="(record) => record.ActivityID"
+      :rowKey="(record) => record.ID"
       @pageChange="loadData"
       @changeColumns="changeColumns"
       @selectionChange="selectionChange"
@@ -267,7 +267,7 @@
               scopedSlots: { customRender: 'action' },
               align: 'center',
               fixed: 'right',
-              width: 180,
+              width: 240,
               customRender: (text, record) => {
                 const renderElement = []
                 const { status } = record
@@ -282,6 +282,20 @@
                   >
                     Edit Split Rule
                   </a-button>
+                )
+                renderElement.push(
+                  <a-popconfirm
+                    title="Are you sure you want to delete this item?"
+                    okText="Ok"
+                    cancelText="Cancel"
+                    onConfirm={() => {
+                      this.deleteRule(record)
+                    }}
+                  >
+                    <a-button icon="delete" type="danger" size="small">
+                      Delete
+                    </a-button>
+                  </a-popconfirm>
                 )
                 return <a-space>{renderElement}</a-space>
               },
@@ -351,16 +365,18 @@
       addActivity() {
         if (this.model.SubActivity) {
           axios
-            .post('http://123.56.242.202:8080/api/BaseData/SplitRuleCreate', [{
-              ActivityID: this.model.SubActivity,
-              Effictive: null,
-              Sort: this.tableParams.dataSource.length,
-              SplitDesc: 'Split Desc',
-              SplitName: 'Split Name',
-              SplitType: 1,
-              Status: 1,
-              Version: this.model.Version,
-            }])
+            .post('http://123.56.242.202:8080/api/BaseData/SplitRuleCreate', [
+              {
+                ActivityID: this.model.SubActivity,
+                Effictive: this.$moment().format('YYYY-MM-DD'),
+                Sort: this.tableParams.dataSource.length,
+                SplitDesc: 'Split Desc' + this.tableParams.dataSource.length,
+                SplitName: 'Split Name' + this.tableParams.dataSource.length,
+                SplitType: 1,
+                Status: 1,
+                Version: this.model.Version,
+              },
+            ])
             .then((res) => {
               console.log('SplitRuleCreate', res.data)
               this.loadData()
@@ -400,6 +416,7 @@
               this.tableParams.dataSource = res.data
             } else {
               this.$message.warning('No data！')
+              this.tableParams.dataSource = []
             }
           }
           this.tableParams.loading = false
@@ -469,6 +486,16 @@
       },
       editRule(record) {
         this.$refs.ruleModal.open(record)
+      },
+      deleteRule(record) {
+        console.log(record)
+        axios
+          .post(`http://123.56.242.202:8080/api/BaseData/SplitRuleDelete?ruleID=${record.ID}`)
+          .then((res) => {
+            console.log('SplitRuleDelete', res)
+            this.loadData()
+            this.$message.success('已删除！')
+          })
       },
     },
   }

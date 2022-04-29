@@ -25,6 +25,7 @@
       class="rule"
       ref="rule"
       :group-list="rules"
+      :ActivityID="currentRow.ActivityID"
     />
     <template slot="footer">
       <a-button
@@ -44,6 +45,7 @@
   import rule from './rule'
   import clonedeep from 'lodash.clonedeep'
   import { randomUUID } from '@/utils/util'
+  import axios from 'axios'
   export default {
     name: 'EditRuleModal',
     props: {
@@ -111,28 +113,31 @@
         },
       }
     },
-    watch: {
-      visible(val) {
-        if (val) {
-          // 打开时
-          this.$nextTick(() => {
-            this.rules = clonedeep(this.Rules1)
-            this.rules.ActivityID = this.currentRow.ActivityID
-          })
-        }
-      },
-    },
     methods: {
       open(record) {
         this.currentRow = record
         this.visible = true
-        this.isEdit = false
+        axios.post(`http://123.56.242.202:8080/api/BaseData/GetDataSplit?activityID=${record.ID}`).then((res) => {
+          console.log('GetDataSplit', res)
+          if (res.data == '[]') {
+            this.rules = clonedeep(this.Rules1)
+            this.rules.ActivityID = this.currentRow.ActivityID
+            this.isEdit = false
+          } else {
+            this.rules = clonedeep(this.Rules1)
+            this.rules.ActivityID = this.currentRow.ActivityID
+            this.rules.Then = JSON.parse(res.data)
+            this.isEdit = true
+          }
+        })
       },
       changeSeparateType(val) {
         if (val == 1) {
           this.rules = clonedeep(this.Rules1)
         } else if (val == 2) {
           this.rules = clonedeep(this.Rules2)
+          this.rules.Then[0].ActivityID = this.currentRow.ActivityID
+          this.rules.Then[1].ActivityID = this.currentRow.ActivityID
         } else if (val == 3) {
         }
         this.rules.ActivityID = this.currentRow.ActivityID
@@ -145,10 +150,19 @@
         if (this.rules.Then.length === 0) {
           this.$message.warning('请配置拆分规则！')
         } else {
-          // this.currentRow.rule = this.rules;
-          console.log(this.currentRow)
-          this.rules = {}
-          this.handleCancel()
+          if (!this.isEdit) { // 创建
+            axios.post(`http://123.56.242.202:8080/api/BaseData/DataSplitCreate`, this.rules.Then).then((res) => {
+              console.log('DataSplitCreate', res)
+              this.rules = {}
+              this.handleCancel()
+            })
+          } else { // 更新
+            axios.post(`http://123.56.242.202:8080/api/BaseData/DataSplitUpdate`, this.rules.Then).then((res) => {
+              console.log('DataSplitUpdate', res)
+              this.rules = {}
+              this.handleCancel()
+            })
+          }
         }
       },
     },

@@ -19,6 +19,10 @@
       }
     },
     props: {
+      ActivityID: {
+        type: String,
+        default: ''
+      },
       groupList: {
         type: Object
         // required: true
@@ -36,6 +40,7 @@
         if (groupList.tierIndex === index && groupList.id === id) {
           if (type === 'fixed') {
             groupList.Then.push({
+              ActivityID: this.ActivityID,
 	            id: `${randomUUID(10)}`,
 	            type: 'fixed',
               leftOperatorExpression: undefined,

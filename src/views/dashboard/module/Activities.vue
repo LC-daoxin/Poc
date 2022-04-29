@@ -284,6 +284,9 @@ export default {
 /deep/ .ant-table {
   background: #fff;
 }
+/deep/ .ant-table-row-level-0 {
+  height: 41px;
+}
 .processCenter {
   .ant-form-item {
     width: calc(25% - 16px);
