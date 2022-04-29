@@ -90,14 +90,15 @@ export default {
       tableParams: {
         loading: false,
         dataSource: [],
-        scroll: { x: 1050 },
+        scroll: { x: 920 },
         bordered: true,
         columns: [
           {
             title: 'Activity Name',
             dataIndex: 'ActivityName',
             align: 'center',
-            width: 500,
+            width: 200,
+            ellipsis: true,
             customRender: (text, row, index) => {
               return <b>{text}</b>
             },
@@ -105,7 +106,9 @@ export default {
           {
             title: 'Activity Short Desc',
             dataIndex: 'ActivityDesc',
+            width: 200,
             align: 'center',
+            ellipsis: true,
           },
           {
             title: 'DisCount',

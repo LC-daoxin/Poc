@@ -219,6 +219,15 @@ export function scorePassword (pass) {
   }
 }
 
+/**
+ * 随机生成uuid
+ * @return string 生成的uuid
+ */
+ export function randomUUID(num = 32) {
+  let chats = '0123456789abcdef'
+  return randomString(num, chats)
+}
+
 export const fileExport = (res, name) => {
 	let link = document.createElement('a');
 	link.href = window.URL.createObjectURL(new Blob([res]));

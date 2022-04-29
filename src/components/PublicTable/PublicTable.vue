@@ -4,6 +4,10 @@
     props: {
       params: Object,
       rowSelection: Boolean | Object,
+      rowKey: {
+        type: Function,
+        default: (record) => record.id
+      },
 			draggableColumn: {
 				type: Boolean,
         default: false
@@ -134,9 +138,8 @@
             size,
             rowSelection,
             pagination: false,
-            rowKey: (record) => record.id,
+            rowKey: this.rowKey,
             customHeaderRow: (column) => {
-              console.log(column)
               return {
                 class: {
                   'sort-th': true,
@@ -199,7 +202,6 @@
         },
         [this.renderPagination(createElement)]
       )
-			console.log('this.pagination', this.pagination)
       return createElement('div', [
         this.renderAlert(createElement),
         this.renderTable(createElement),
