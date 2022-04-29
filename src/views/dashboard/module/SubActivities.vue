@@ -8,10 +8,19 @@
       :labelCol="{ span: searchLabelCol }"
       :wrapperCol="{ span: searchWrapperCol }"
     >
-      <a-form-model-item label="Key Words" class="form-item">
-        <a-input allowClear v-model="model.keyWords"></a-input>
+      <a-form-model-item
+        label="Key Words"
+        class="form-item"
+      >
+        <a-input
+          allowClear
+          v-model="model.keyWords"
+        ></a-input>
       </a-form-model-item>
-      <a-form-model-item label="Checked Activity" prop="activityID">
+      <a-form-model-item
+        label="Checked Activity"
+        prop="activityID"
+      >
         <a-select
           allowClear
           style="width: 400px"
@@ -20,21 +29,34 @@
           v-model="selectActivityID"
           @change="changePipeline"
         >
-          <a-select-option :value="item.ActivityID" :key="item.ActivityID" v-for="item in activitiesSelect">{{
+          <a-select-option
+            :value="item.ActivityID"
+            :key="item.ActivityID"
+            v-for="item in activitiesSelect"
+          >{{
             item.ActivityName
           }}</a-select-option>
         </a-select>
       </a-form-model-item>
     </a-form-model>
     <div class="search-approval-wrapper">
-      <a-button class="search_btn" type="primary" icon="search" @click="loadData()">Search</a-button>
+      <a-button
+        class="search_btn"
+        type="primary"
+        icon="search"
+        @click="loadData()"
+      >Search</a-button>
       <!-- <a-button
         class="search_btn"
         icon="plus"
         type="primary"
         @click="openAddModal"
       > {{this.$t('add')}} </a-button> -->
-      <a-button class="search_btn" icon="delete" @click="refresh(false)">Reset</a-button>
+      <a-button
+        class="search_btn"
+        icon="delete"
+        @click="refresh(false)"
+      >Reset</a-button>
     </div>
     <public-table
       class="table"
@@ -50,257 +72,284 @@
 </template>
 
 <script>
-import { PageHeaderWrapper } from '@ant-design-vue/pro-layout'
-import { PublicTable } from '@/components'
-import _ from 'lodash'
-import axios from 'axios'
-import { mapState, mapMutations } from 'vuex'
+  import { PageHeaderWrapper } from '@ant-design-vue/pro-layout'
+  import { PublicTable } from '@/components'
+  import _ from 'lodash'
+  import axios from 'axios'
+  import { mapState, mapMutations } from 'vuex'
 
-export default {
-  name: 'SubActivities',
-  components: {
-    PageHeaderWrapper,
-    PublicTable,
-  },
-  data() {
-    return {
-      // data
-      searchLabelCol: 9,
-      searchWrapperCol: 15,
-      selectionKeys: [],
-      selectionRows: [],
-      selectActivityID: [],
-      model: {
-        activityID: [],
-        keyWords: '',
-      },
-      pipelineOptions: [],
-      projectType1Disabled: true,
-      projectType1Options: [],
-      projectType2Disabled: true,
-      projectType2Options: [],
-      pagination: {
-        total: 0,
-        current: 1,
-        pageSize: 10,
-      },
-      tableParams: {
-        loading: false,
-        dataSource: [],
-        scroll: { x: 1200 },
-        bordered: true,
-        columns: [
-          {
-            title: 'Activity Name',
-            dataIndex: 'ActivityName',
-            align: 'center',
-            width: 300,
-            customRender: (text, row, index) => {
-              return <b>{text}</b>
+  export default {
+    name: 'SubActivities',
+    components: {
+      PageHeaderWrapper,
+      PublicTable,
+    },
+    data() {
+      return {
+        // data
+        searchLabelCol: 9,
+        searchWrapperCol: 15,
+        selectionKeys: [],
+        selectionRows: [],
+        selectActivityID: [],
+        model: {
+          activityID: [],
+          keyWords: '',
+        },
+        pipelineOptions: [],
+        projectType1Disabled: true,
+        projectType1Options: [],
+        projectType2Disabled: true,
+        projectType2Options: [],
+        pagination: {
+          total: 0,
+          current: 1,
+          pageSize: 10,
+        },
+        tableParams: {
+          loading: false,
+          dataSource: [],
+          scroll: { x: 1200 },
+          bordered: true,
+          columns: [
+            {
+              title: 'Activity Name',
+              dataIndex: 'ActivityName',
+              align: 'center',
+              width: 300,
+              ellipsis: true,
+              customRender: (text, row, index) => {
+                return <b>{text}</b>
+              },
             },
-          },
-          {
-            title: 'Sub Activity Name',
-            dataIndex: 'SubActivityName',
-            align: 'center',
-            width: 150,
-            ellipsis: true,
-          },
-          {
-            title: 'Sub Activity Desc',
-            dataIndex: 'ActivityDesc',
-            align: 'center',
-            width: 150,
-            ellipsis: true,
-          },
-          {
-            title: 'Service Price',
-            dataIndex: 'Price',
-            align: 'center',
-            width: 100,
-            ellipsis: true,
-            customRender: (text, row, index) => (
-              <a-input
-                v-model:value={text}
-                onChange={(e) => this.onChangeServicePrice(e, row)}
-                style="margin: -5px 0"
-                value={text}
-              />
-            ),
-          },
-          {
-            title: 'Pass Though Price',
-            dataIndex: 'PassThroughPrice',
-            align: 'center',
-            width: 100,
-            ellipsis: true,
-            customRender: (text, row, index) => (
-              <a-input v-model:value={text} onChange={(e) => this.onChangePassPrice(e, row)} style="margin: -5px 0"  value={text}/>
-            ),
-          },
-          {
-            title: 'Duration',
-            dataIndex: 'Duration',
-            width: 100,
-            align: 'center',
-            ellipsis: true,
-            customRender: (text, row, index) => (
-              <a-input v-model:value={text} onChange={(e) => this.onChangeDuration(e, row)} style="margin: -5px 0"  value={text}/>
-            ),
-          },
-          {
-            title: 'DisCount',
-            dataIndex: 'DisCount',
-            width: 100,
-            align: 'center',
-            ellipsis: true,
-            customRender: (text, row, index) => (
-              <a-input v-model:value={text} onChange={(e) => this.onChangeDisCount(e, row)} style="margin: -5px 0"  value={text}/>
-            ),
-          },
-          {
-            title: 'Scale',
-            dataIndex: 'Scale',
-            align: 'center',
-            width: 100,
-            ellipsis: true,
-            customRender: (text, row, index) => (
-              <a-input v-model:value={text} onChange={(e) => this.onChangeScale(e, row)} style="margin: -5px 0" value={text} />
-            ),
-          },
-        ],
-      },
-    }
-  },
-  computed: {
-    ...mapState({
-      lang: (state) => state.app.lang,
-      activitiesSelect: (state) => state.poc.activitiesSelect,
-    }),
-  },
-  watch: {
-    lang(val) {
-      this.setColumns(val)
+            {
+              title: 'Sub Activity Name',
+              dataIndex: 'SubActivityName',
+              align: 'center',
+              width: 200,
+              ellipsis: true,
+            },
+            {
+              title: 'Sub Activity Desc',
+              dataIndex: 'ActivityDesc',
+              align: 'center',
+              width: 200,
+              ellipsis: true,
+            },
+            {
+              title: 'Service Price',
+              dataIndex: 'Price',
+              align: 'center',
+              width: 100,
+              ellipsis: true,
+              customRender: (text, row, index) => (
+                <a-input
+                  size="small"
+                  v-model:value={text}
+                  onChange={(e) => this.onChangeServicePrice(e, row)}
+                  value={text}
+                />
+              ),
+            },
+            {
+              title: 'Pass Though Price',
+              dataIndex: 'PassThroughPrice',
+              align: 'center',
+              width: 100,
+              ellipsis: true,
+              customRender: (text, row, index) => (
+                <a-input
+                  size="small"
+                  v-model:value={text}
+                  onChange={(e) => this.onChangePassPrice(e, row)}
+                  value={text}
+                />
+              ),
+            },
+            {
+              title: 'Duration',
+              dataIndex: 'Duration',
+              width: 100,
+              align: 'center',
+              ellipsis: true,
+              customRender: (text, row, index) => (
+                <a-input
+                  size="small"
+                  v-model:value={text}
+                  onChange={(e) => this.onChangeDuration(e, row)}
+                  value={text}
+                />
+              ),
+            },
+            {
+              title: 'DisCount',
+              dataIndex: 'DisCount',
+              width: 100,
+              align: 'center',
+              ellipsis: true,
+              customRender: (text, row, index) => (
+                <a-input
+                  size="small"
+                  v-model:value={text}
+                  onChange={(e) => this.onChangeDisCount(e, row)}
+                  value={text}
+                />
+              ),
+            },
+            {
+              title: 'Scale',
+              dataIndex: 'Scale',
+              align: 'center',
+              width: 100,
+              ellipsis: true,
+              customRender: (text, row, index) => (
+                <a-input
+                  size="small"
+                  v-model:value={text}
+                  onChange={(e) => this.onChangeScale(e, row)}
+                  value={text}
+                />
+              ),
+            },
+          ],
+        },
+      }
     },
-    activitiesSelect(list) {
-      this.selectActivityID = []
-      if (list.length > 0) {
-        list.forEach((item) => {
-          this.selectActivityID.push(item.ActivityID)
+    computed: {
+      ...mapState({
+        lang: (state) => state.app.lang,
+        activitiesSelect: (state) => state.poc.activitiesSelect,
+      }),
+    },
+    watch: {
+      lang(val) {
+        this.setColumns(val)
+      },
+      activitiesSelect(list) {
+        this.selectActivityID = []
+        if (list.length > 0) {
+          list.forEach((item) => {
+            this.selectActivityID.push(item.ActivityID)
+          })
+          this.model.activityID = this.selectActivityID.join(',')
+          this.loadData()
+        }
+      },
+    },
+    mounted() {},
+    methods: {
+      ...mapMutations({
+        setSubActivitiesAll(commit, select) {
+          console.log('setSubActivitiesAll', select)
+          return commit('poc/setSubActivitiesAll', select)
+        },
+      }),
+      // 拖拽列
+      changeColumns(evt) {
+        console.log(evt, 'oldIndex', evt.oldIndex, 'newIndex', evt.newIndex)
+        let oldColumnsItem = _.cloneDeep(this.tableParams.columns[evt.oldIndex])
+        this.tableParams.columns.splice(evt.oldIndex, 1)
+        this.tableParams.columns.splice(evt.newIndex, 0, oldColumnsItem)
+        console.log('changeColumns', this.tableParams.columns)
+      },
+      // 拖拽行
+      changeRow(evt) {
+        // let list = _.cloneDeep(this.tableParams.dataSource)
+        console.log(evt, 'oldIndex', evt.oldIndex, 'newIndex', evt.newIndex)
+        // let oldRowsItem = _.cloneDeep(list[evt.oldIndex])
+        // list.splice(evt.oldIndex, 1)
+        // list.splice(evt.newIndex, 0, oldRowsItem)
+        // this.tableParams.dataSource = list
+        console.log('changeRow', this.tableParams.dataSource)
+      },
+      // 选择Pipeline
+      changePipeline(list) {
+        console.log(list)
+        if (list.length > 0) {
+          this.model.activityID = list.join(',')
+        }
+      },
+      setColumns(lang) {
+        console.log(lang)
+        this.tableParams.columns.forEach((item) => {
+          item.i18n ? (item.title = this.$t(item.i18n)) : ''
         })
-        this.model.activityID = this.selectActivityID.join(',')
+      },
+      refresh() {
+        this.model = {
+          activityID: [],
+          keyWords: '',
+        }
         this.loadData()
-      }
-    },
-  },
-  mounted() {},
-  methods: {
-    ...mapMutations({
-      setSubActivitiesAll(commit, select) {
-        console.log('setSubActivitiesAll', select)
-        return commit('poc/setSubActivitiesAll', select)
       },
-    }),
-    // 拖拽列
-    changeColumns(evt) {
-      console.log(evt, 'oldIndex', evt.oldIndex, 'newIndex', evt.newIndex)
-      let oldColumnsItem = _.cloneDeep(this.tableParams.columns[evt.oldIndex])
-      this.tableParams.columns.splice(evt.oldIndex, 1)
-      this.tableParams.columns.splice(evt.newIndex, 0, oldColumnsItem)
-      console.log('changeColumns', this.tableParams.columns)
-    },
-    // 拖拽行
-    changeRow(evt) {
-      // let list = _.cloneDeep(this.tableParams.dataSource)
-      console.log(evt, 'oldIndex', evt.oldIndex, 'newIndex', evt.newIndex)
-      // let oldRowsItem = _.cloneDeep(list[evt.oldIndex])
-      // list.splice(evt.oldIndex, 1)
-      // list.splice(evt.newIndex, 0, oldRowsItem)
-      // this.tableParams.dataSource = list
-      console.log('changeRow', this.tableParams.dataSource)
-    },
-    // 选择Pipeline
-    changePipeline(list) {
-      console.log(list)
-      if (list.length > 0) {
-        this.model.activityID = list.join(',')
-      }
-    },
-    setColumns(lang) {
-      console.log(lang)
-      this.tableParams.columns.forEach((item) => {
-        item.i18n ? (item.title = this.$t(item.i18n)) : ''
-      })
-    },
-    refresh() {
-      this.model = {
-        activityID: [],
-        keyWords: '',
-      }
-      this.loadData()
-    },
-    loadData() {
-      this.tableParams.loading = true
-      axios
-        .get('http://123.56.242.202:8080/api/poc/GetSubActivitiesList', {
-          params: this.model,
+      loadData() {
+        this.tableParams.loading = true
+        axios
+          .get('http://123.56.242.202:8080/api/poc/GetSubActivitiesList', {
+            params: this.model,
+          })
+          .then((res) => {
+            console.log(res.data)
+            // this.setSubActivitiesAll(res.data)
+            this.tableParams.dataSource = res.data
+            this.tableParams.loading = false
+          })
+      },
+      onChangePassPrice(e, row) {
+        this.tableParams.dataSource.forEach((item, i) => {
+          if (item.SubActivityID == row.SubActivityID) {
+            this.$set(this.tableParams.dataSource[i], 'PassThroughPrice', e.target.value)
+            // this.setSubActivitiesAll(this.tableParams.dataSource)
+            this.setSubActivitiesAll(this.selectionRows)
+          }
         })
-        .then((res) => {
-          console.log(res.data)
-          this.setSubActivitiesAll(res.data)
-          this.tableParams.dataSource = res.data
-          this.tableParams.loading = false
+      },
+      onChangeServicePrice(e, row) {
+        this.tableParams.dataSource.forEach((item, i) => {
+          if (item.SubActivityID == row.SubActivityID) {
+            this.$set(this.tableParams.dataSource[i], 'ServicePrice', e.target.value)
+            // this.setSubActivitiesAll(this.tableParams.dataSource)
+            this.setSubActivitiesAll(this.selectionRows)
+          }
         })
+      },
+      onChangeDuration(e, row) {
+        this.tableParams.dataSource.forEach((item, i) => {
+          if (item.SubActivityID == row.SubActivityID) {
+            this.$set(this.tableParams.dataSource[i], 'Duration', e.target.value)
+            // this.setSubActivitiesAll(this.tableParams.dataSource)
+            this.setSubActivitiesAll(this.selectionRows)
+          }
+        })
+      },
+      onChangeScale(e, row) {
+        this.tableParams.dataSource.forEach((item, i) => {
+          if (item.SubActivityID == row.SubActivityID) {
+            this.$set(this.tableParams.dataSource[i], 'Scale', e.target.value)
+            // this.setSubActivitiesAll(this.tableParams.dataSource)
+            this.setSubActivitiesAll(this.selectionRows)
+          }
+        })
+      },
+      onChangeDisCount(e, row) {
+        this.tableParams.dataSource.forEach((item, i) => {
+          if (item.SubActivityID == row.SubActivityID) {
+            this.$set(this.tableParams.dataSource[i], 'DisCount', e.target.value)
+            // this.setSubActivitiesAll(this.tableParams.dataSource)
+            this.setSubActivitiesAll(this.selectionRows)
+          }
+        })
+      },
+      selectionChange(keys, rows) {
+        this.selectionKeys = keys
+        this.selectionRows = rows
+        this.setSubActivitiesAll(this.selectionRows)
+      },
     },
-    onChangePassPrice(e, row) {
-      this.tableParams.dataSource.forEach((item, i) => {
-        if (item.SubActivityID == row.SubActivityID) {
-          this.$set(this.tableParams.dataSource[i], 'PassThroughPrice', e.target.value)
-          this.setSubActivitiesAll(this.tableParams.dataSource)
-        }
-      })
+    created() {
+      // this.refresh()
     },
-    onChangeServicePrice(e, row) {
-      this.tableParams.dataSource.forEach((item, i) => {
-        if (item.SubActivityID == row.SubActivityID) {
-          this.$set(this.tableParams.dataSource[i], 'ServicePrice', e.target.value)
-          this.setSubActivitiesAll(this.tableParams.dataSource)
-        }
-      })
-    },
-    onChangeDuration(e, row) {
-      this.tableParams.dataSource.forEach((item, i) => {
-        if (item.SubActivityID == row.SubActivityID) {
-          this.$set(this.tableParams.dataSource[i], 'Duration', e.target.value)
-          this.setSubActivitiesAll(this.tableParams.dataSource)
-        }
-      })
-    },
-    onChangeScale(e, row) {
-      this.tableParams.dataSource.forEach((item, i) => {
-        if (item.SubActivityID == row.SubActivityID) {
-          this.$set(this.tableParams.dataSource[i], 'Scale', e.target.value)
-          this.setSubActivitiesAll(this.tableParams.dataSource)
-        }
-      })
-    },
-    onChangeDisCount(e, row) {
-      this.tableParams.dataSource.forEach((item, i) => {
-        if (item.SubActivityID == row.SubActivityID) {
-          this.$set(this.tableParams.dataSource[i], 'DisCount', e.target.value)
-          this.setSubActivitiesAll(this.tableParams.dataSource)
-        }
-      })
-    },
-    selectionChange(keys, rows) {
-      this.selectionKeys = keys
-      this.selectionRows = rows
-    },
-  },
-  created() {
-    // this.refresh()
-  },
-}
+  }
 </script>
 
 <style lang="less" scoped>

@@ -90,7 +90,7 @@ export default {
       tableParams: {
         loading: false,
         dataSource: [],
-        scroll: { x: 920 },
+        scroll: { x: 1020 },
         bordered: true,
         columns: [
           {
@@ -99,14 +99,13 @@ export default {
             align: 'center',
             width: 200,
             ellipsis: true,
-            customRender: (text, row, index) => {
-              return <b>{text}</b>
-            },
+            // customRender: (text, row, index) => {
+            //   return <b>{text}</b>
+            // },
           },
           {
             title: 'Activity Short Desc',
             dataIndex: 'ActivityDesc',
-            width: 200,
             align: 'center',
             ellipsis: true,
           },
@@ -118,9 +117,9 @@ export default {
             ellipsis: true,
             customRender: (text, row, index) => (
               <a-input
+                size="small"
                 v-model:value={text}
                 onChange={(e) => this.onChangeServicePrice(e, row)}
-                style="margin: -5px 0"
                 value={text}
               />
             ),
@@ -131,6 +130,7 @@ export default {
             align: 'center',
             customRender: (text, row, index) => (
               <a-range-picker
+                size="small"
                 format="YYYY-MM-DD"
                 placeholder={['Start Time', 'End Time']}
                 onChange={(val) => this.onChangeTime(val, row)}
