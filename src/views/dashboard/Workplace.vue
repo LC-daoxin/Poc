@@ -332,6 +332,37 @@ export default {
           Sort: item.Sort,
         }
       })
+      this.activitiesSelect.forEach((item, i) => {
+        ProposalJson.push({
+          ActivityID: item.ActivityID,
+          TemplateID: this.templateSelect[0].ID || item.TemplateID,
+          Price: item.Price,
+          ServicePrice: item.ServicePrice,
+          PassThroughPrice: item.PassThroughPrice,
+          Duration: item.Duration,
+          Property1: item.Property1,
+          Property2: item.Property2,
+          Property3: item.Property3,
+          Property4: item.Property4,
+          Property5: item.Property5,
+          Property6: item.Property6,
+          Property7: item.Property7,
+          Property8: item.Property8,
+          Property9: item.Property9,
+          Property10: item.Property10,
+          Property11: item.Property11,
+          Property12: item.Property12,
+          Property13: item.Property13,
+          Property14: item.Property14,
+          Property15: item.Property15,
+          Property16: item.Property16,
+          Property17: item.Property17,
+          Property18: item.Property18,
+          Property19: item.Property19,
+          Property20: item.Property20,
+          Sort: item.Sort,
+        })
+      })
       axios.post('http://123.56.242.202:8080/api/poc/SaveProposal', ProposalJson).then((res) => {
         console.log('SaveProposal', res)
         axios
