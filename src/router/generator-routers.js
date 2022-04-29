@@ -26,8 +26,8 @@ const constantRouterComponents = {
   ContractTemplate: () => import('@/views/masterdata/ContractTemplate'),
   MasterBase: () => import('@/views/masterdata/MasterBase'),
   PropertyMapping: () => import('@/views/masterdata/PropertyMapping'),
+  SplitRuleManagement: () => import('@/views/masterdata/SplitRuleManagement'),
   WordLog: () => import('@/views/masterdata/WordLog'),
-
   
   // form
   BasicForm: () => import('@/views/form/basicForm'),

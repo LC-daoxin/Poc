@@ -569,6 +569,17 @@ const userNav = options => {
       path: '/masterdata/MasterBase'
     },
     {
+      name: 'SplitRuleManagement',
+      parentId: 1,
+      id: 3.4,
+      meta: {
+        title: 'Split Rule Management',
+        show: true
+      },
+      component: 'SplitRuleManagement',
+      path: '/masterdata/SplitRuleManagement'
+    },
+    {
       name: 'WordLog',
       parentId: 1,
       id: 3.5,
@@ -579,7 +590,6 @@ const userNav = options => {
       component: 'WordLog',
       path: '/masterdata/WordLog'
     },
-    
     {
       name: 'PropertyMapping',
       parentId: 1,
