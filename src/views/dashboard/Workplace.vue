@@ -342,7 +342,7 @@ export default {
             console.log('CreateProposalInstance', val)
             axios
               .get('http://localhost:44372/api/poc/GetDocumentsName', {
-                params: { batchID: res.data.Data },
+                params: { batchID: res.data.Data }, 
               })
               .then((res) => {
                 console.log('GetDocumentsName', res.data)
