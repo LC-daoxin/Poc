@@ -36,6 +36,7 @@
     </style>
 
     <script language="javascript" type="text/javascript" src="http://116.62.116.60:8000/web/editors/api/documenteditor.js"></script>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 
     <script type="text/javascript" language="javascript">
 
@@ -46,6 +47,7 @@
         var token = null;
         var appid = null;
         var appkey = null;
+        var user = JSON.parse(sessionStorage.getItem("LoginUser"))  
 
         var innerAlert = function (message) {
             if (console && console.log)
@@ -111,37 +113,23 @@
             }
         }
         var callbackfn = function (result) {
+            debugger
             if (result && result.data) {
                 var data = result.data,
                     fileName = data[0],
                     url = data[1];
                 if (fileName.indexOf('=') > -1)
                     fileName = fileName.split('=')[1];
-                // var host = 'http://116.62.116.60:8000';
-                // ajax({
-                //     url: host + '/webeditor.ashx?type=save',
-                //     type: 'jsonp',
-                //     data: { 'filename': fileName, 'fileuri': url },
-                //     dataType: 'json',
-                //     async: false,
-                //     success: function (json) {
-                //         if (json.code == 200 || json.code == '200') {
-                //             alert('保存成功');
-                //         } else {
-                //             this.error(json, '保存失败');
-                //         }
-                //     },
-                //     error: function (json, msg) {
-                //         alert(msg);
-                //     }
-                // });
-                var host = 'http://123.56.242.202:8080/api/poc/Save?filename=' + fileName + '&fileuri=' + url + '';
-                ajax({
+                
+                var host = 'http://localhost:44372/api/poc/Save';
+
+                $.ajax({
                     url: host,
-                    type: 'get',
-                    dataType: 'json',
+                    type: 'post',
+                    data: { 'filename': fileName, 'fileuri': url, 'userid': user.UserID },
+                    async: false,
                     success: function (json) {
-                        if (json.Code == 200) {
+                        if (json.Code == 200 || json.Code == '200') {
                             alert('保存成功');
                         } else {
                             this.error(json, '保存失败');
@@ -154,6 +142,7 @@
             }
         };
         function connectEditor(name) {
+     
             var type = 'desktop';
             if (type == "desktop") {
                 var app = navigator.appVersion;
@@ -165,7 +154,7 @@
             };
             var urlString = ''
             if (name) {
-              urlString = "http://116.62.116.60:3000/files/123.56.242.202/default/" + name;
+              urlString = "http://116.62.116.60:3000/files/223.72.84.204/default/"+name;
             } else {
               urlString = "http://116.62.116.60:3000/files/123.56.242.202/default/abb.docx";
             }
@@ -228,9 +217,9 @@
                         lang: lang,
                         callbackUrl: "",
                         user: {
-                            id: "",
-                            name: "e-iceblue",
-                            token: token,
+                            id: user.UserID,
+                            name: user.UserName,
+                            token: user.Token,
                             appid: appid,
                             appkey: appkey
                         },

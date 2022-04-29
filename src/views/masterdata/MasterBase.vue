@@ -293,7 +293,6 @@ export default {
       this.$XModal.confirm('确定保存？').then((type) => {
         if (type === 'confirm') {
           this.$XModal.message({ id: 'loding', content: '数据处理中...', status: 'loading' })
-          debugger;
           if (this.formData.MasterID == null) {
             axios.post('http://123.56.242.202:8080/api/BaseData/MasterDataCreate', [this.formData]).then((res) => {
               this.$XModal.close('loding')

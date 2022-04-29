@@ -556,6 +556,7 @@ const userNav = options => {
       component: 'ContractTemplate',
       path: '/masterdata/ContractTemplate'
     },
+  
     {
       name: 'MasterBase',
       parentId: 1,
@@ -577,6 +578,17 @@ const userNav = options => {
       },
       component: 'SplitRuleManagement',
       path: '/masterdata/SplitRuleManagement'
+    },
+    {
+      name: 'WordLog',
+      parentId: 1,
+      id: 3.5,
+      meta: {
+        title: 'WordLog',
+        show: true
+      },
+      component: 'WordLog',
+      path: '/masterdata/WordLog'
     },
     {
       name: 'PropertyMapping',
