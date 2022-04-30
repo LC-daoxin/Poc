@@ -6,6 +6,7 @@
     @deleteCondition="deleteCondition(arguments, groupList)"
     @setCondition="setCondition(arguments, groupList)"
     :group-list="groupList"
+    :optionsList="optionsList"
   />
 </template>
 
@@ -22,6 +23,13 @@
       ActivityID: {
         type: String,
         default: ''
+      },
+      SplitRuleID: {
+        type: String,
+        default: ''
+      },
+      optionsList: {
+        type: Object
       },
       groupList: {
         type: Object
@@ -41,9 +49,10 @@
           if (type === 'fixed') {
             groupList.Then.push({
               ActivityID: this.ActivityID,
+              SplitRuleID: this.SplitRuleID,
 	            id: `${randomUUID(10)}`,
 	            type: 'fixed',
-              leftOperatorExpression: undefined,
+              leftOperatorExpression: {type: 1, value: '', valueArr: []},
               compareOperation: '=',
               rightOperatorExpression: {type: 1, value: ''},
               // describe: ''

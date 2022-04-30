@@ -63,7 +63,7 @@
   import { PageHeaderWrapper } from '@ant-design-vue/pro-layout'
   import { STable } from '@/components'
   import Activities from './modules/Activities.vue'
-  import SubActivities from '@/views/dashboard/module/SubActivities'
+  import SubActivities from './modules/SubActivities.vue'
   import axios from 'axios'
 
   export default {
@@ -99,60 +99,6 @@
           }
         ],
         stepStyle: {},
-        columns: [
-          {
-            title: '任务/数据状态',
-            dataIndex: 'name',
-            width: 200,
-            align: 'center',
-          },
-          {
-            title: '任务状态汇总',
-            dataIndex: 'status',
-            width: 140,
-            align: 'center',
-            customRender: (status) => {
-              const renderElement = []
-              switch (status) {
-                case 'Successded':
-                  renderElement.push(<a-tag color="green">Successded</a-tag>)
-                  break
-                case 'Idle':
-                  renderElement.push(<a-tag color="orange">Idle</a-tag>)
-                  break
-                case 'Not Started':
-                  renderElement.push(<a-tag color="blue">Not Started</a-tag>)
-                  break
-                case 'Running':
-                  renderElement.push(<a-tag color="green">Running</a-tag>)
-                  break
-                case 'Failed':
-                  renderElement.push(<a-tag color="red">Failed</a-tag>)
-                  break
-              }
-              return renderElement
-            },
-          },
-          {
-            title: '任务开始时间',
-            dataIndex: 'startTime',
-            width: 220,
-            align: 'center',
-          },
-          {
-            title: '任务结束时间',
-            dataIndex: 'endTime',
-            width: 220,
-            align: 'center',
-          },
-          {
-            title: '说明',
-            width: 240,
-            align: 'center',
-            dataIndex: 'description',
-            // scopedSlots: { customRender: 'action' }
-          },
-        ],
         listData: [],
       }
     },

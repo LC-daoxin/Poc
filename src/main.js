@@ -10,7 +10,7 @@ import i18n from './locales'
 import { VueAxios } from './utils/request'
 import ProLayout, { PageHeaderWrapper } from '@ant-design-vue/pro-layout'
 import themePluginConfig from '../config/themePluginConfig'
-import { Pagination, FormModel, Select, Empty,Tree } from 'ant-design-vue'
+import { Pagination, FormModel, Select, Empty,Tree, Cascader } from 'ant-design-vue'
 import moment from 'moment'
 Vue.prototype.$moment = moment;
 Vue.use(Select)
@@ -18,6 +18,7 @@ Vue.use(Pagination)
 Vue.use(FormModel)
 Vue.use(Empty)
 Vue.use(Tree)
+Vue.use(Cascader)
 import VXETable from 'vxe-table'
 import 'vxe-table/lib/style.css'
 Vue.prototype.$XModal = VXETable.modal;

@@ -16,25 +16,6 @@
         >
           <a-icon type="plus-circle" /> 添加拆分规则
         </a-button>
-        <!-- <a-button
-          type="primary"
-          size="small"
-          class="toolbtn"
-          :disabled="!isEdit"
-          @click.stop="addCondition('symbol')"
-        >
-          <a-icon type="plus-circle" /> 添加逻辑符号
-        </a-button> -->
-        <!-- <a-button
-          v-if="groupList.SeparateType != 1"
-          type="primary"
-          size="small"
-          class="toolbtn"
-          :disabled="!isEdit"
-          @click.stop="addCondition('THEN')"
-        >
-          <a-icon type="folder-add" /> 添加条件组
-        </a-button> -->
         <a-button
           v-if="type !== 'children'"
           size="small"
@@ -58,9 +39,15 @@
           v-if="['fixed', 'IF', 'ELSE'].includes(item.type)"
         >
           <div class="input-group">
-            <span class="ifText" v-if="item.type == 'IF'">IF</span>
-            <span class="elseText" v-if="item.type == 'ELSE'">ELSE IF</span>
-            <a-select
+            <span
+              class="ifText"
+              v-if="item.type == 'IF'"
+            >IF</span>
+            <span
+              class="elseText"
+              v-if="item.type == 'ELSE'"
+            >ELSE IF</span>
+            <!-- <a-select
               class="left-select"
               @change="setCondition($event, item, 1)"
               placeholder="选择拆分对象"
@@ -77,7 +64,42 @@
                 <a-select-option value="2&&Property2">Property2</a-select-option>
                 <a-select-option value="2&&Property3">Property3</a-select-option>
               </a-select-opt-group>
-            </a-select>
+            </a-select> -->
+            <a-input-group compact>
+              <a-select
+                style="width: 100px"
+                v-model="item.leftOperatorExpression.type"
+                @change="changeLeftOperatorExpression($event, item)"
+              >
+                <a-select-option :value="1" v-if="!['IF', 'ELSE'].includes(item.type)">BU/SubBU</a-select-option>
+                <a-select-option :value="2">Property</a-select-option>
+              </a-select>
+              <!-- <a-select
+                style="width: 200px"
+                v-if="item.leftOperatorExpression.type == 1"
+                v-model="item.leftOperatorExpression.value"
+              >
+                <a-select-option v-for="v in optionsList.BuList" :key="v.ID" :value="v.ID">{{ v.DepartName }}</a-select-option>
+              </a-select> -->
+              <a-cascader
+                style="width: 200px"
+                v-if="item.leftOperatorExpression.type == 1"
+                :load-data="selectBULoadData"
+                :field-names="{ label: 'DepartName', value: 'ID', children: 'children' }"
+                v-model="item.leftOperatorExpression.valueArr"
+                :options="optionsList.BuList"
+                placeholder=""
+                change-on-select
+                @change="selectBU($event, item)"
+              />
+              <a-select
+                style="width: 200px"
+                v-if="item.leftOperatorExpression.type == 2"
+                v-model="item.leftOperatorExpression.value"
+              >
+                <a-select-option v-for="v in optionsList.Property" :key="v" :value="v">{{ v }}</a-select-option>
+              </a-select>
+            </a-input-group>
           </div>
           <a-select
             v-model="item.compareOperation"
@@ -95,9 +117,15 @@
           </a-select>
           <div class="input-group">
             <a-input-group compact>
-              <a-select style="width: 100px" v-model="item.rightOperatorExpression.type">
+              <a-select
+                style="width: 100px"
+                v-model="item.rightOperatorExpression.type"
+              >
                 <a-select-option :value="1">固定值</a-select-option>
-                <a-select-option v-if="!['IF', 'ELSE'].includes(item.type)" :value="2">公式</a-select-option>
+                <a-select-option
+                  v-if="!['IF', 'ELSE'].includes(item.type)"
+                  :value="2"
+                >公式</a-select-option>
               </a-select>
               <a-input
                 v-model="item.rightOperatorExpression.value"
@@ -134,9 +162,7 @@
           class="group"
           v-if="['IF', 'ELSE'].includes(item.type)"
         >
-          <div
-            class="group-box"
-          >
+          <div class="group-box">
             <div class="group-line"></div>
             <div class="group-content">
               <rule-blocks
@@ -162,6 +188,7 @@
 <script>
   import { operatorOptions, symbolOptions } from './config'
   import { randomUUID } from '@/utils/util'
+  import axios from 'axios'
   export default {
     name: 'rule-blocks',
     props: {
@@ -181,6 +208,9 @@
         type: String,
         default: '',
       },
+      optionsList: {
+        type: Object
+      },
       isEdit: {
         type: Boolean,
       },
@@ -197,15 +227,6 @@
       }
     },
     methods: {
-      // 选择条件值表达式
-      onSelectExpression(value, item, type) {
-        this.condition.conditionId = item.id
-        this.condition.conditionType = type
-        console.log(value, item, type)
-        // let Obj =
-        //   type === 1 ? item.leftOperatorExpression : item.rightOperatorExpression;
-        // this.$refs.selector.open(Obj);
-      },
       // 修改条件符号
       handleChangeSymbol(e) {
         console.log(e)
@@ -215,7 +236,41 @@
         // 设置选择的条件值
         this.condition.conditionId = item.id
         this.condition.conditionType = type
-        this.$emit('setCondition', { type: obj[0], value: obj[1] }, this.groupList.tierIndex, this.groupList.id, this.condition)
+        this.$emit(
+          'setCondition',
+          { type: obj[0], value: obj[1] },
+          this.groupList.tierIndex,
+          this.groupList.id,
+          this.condition
+        )
+      },
+      changeLeftOperatorExpression(val, item) {
+        item.leftOperatorExpression.value = ''
+      },
+      selectBU(val, item) {
+        console.log('selectBU', val)
+        item.leftOperatorExpression.value = val.length == 2 ? val[1] : val[0]
+      },
+      selectBULoadData(item) {
+        console.log('selectBULoadData', item[0])
+        item[0].loading = true
+        axios.get(`http://123.56.242.202:8080/api/SplitRule/GetSubBuList?departmentID=${item[0].ID}`).then(res => {
+          console.log('getSubBuList', res)
+          if (res.data.length > 0) {
+            let children = []
+            res.data.forEach(v => {
+              children.push({
+                ID: v.ID,
+                DepartName: v.DepartName,
+                isLeaf: true,
+              })
+            })
+            item[0].children = children
+          } else {
+            item[0].isLeaf = true
+          }
+          item[0].loading = false
+        })
       },
       addCondition(type) {
         // 添加条件或条件组
