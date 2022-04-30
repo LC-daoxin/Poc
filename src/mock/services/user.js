@@ -601,7 +601,17 @@ const userNav = options => {
       component: 'PropertyMapping',
       path: '/masterdata/PropertyMapping'
     },
-
+    {
+      name: 'ActivityMapping',
+      parentId: 1,
+      id: 3.4,
+      meta: {
+        title: 'Activity基础数据管理',
+        show: true
+      },
+      component: 'ActivityMapping',
+      path: '/masterdata/ActivityMapping'
+    },
     {
       name: 'Report',
       parentId: 1,

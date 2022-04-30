@@ -306,9 +306,14 @@ export default {
           ActivityID: item.SubActivityID,
           TemplateID: this.templateSelect[0].ID || item.TemplateID,
           Price: item.Price,
+          PriceMark: item.PriceMark,
           ServicePrice: item.ServicePrice,
           PassThroughPrice: item.PassThroughPrice,
           Duration: item.Duration,
+          ParentID:item.ActivityID,
+          ActivityName:item.ActivityName,
+          ProjectID: item.ProjectID,
+          ParentID:item.ParentID,
           Property1: item.Property1,
           Property2: item.Property2,
           Property3: item.Property3,
@@ -330,15 +335,20 @@ export default {
           Property19: item.Property19,
           Property20: item.Property20,
           Sort: item.Sort,
+          CreateUser:JSON.parse(sessionStorage.getItem("LoginUser")).UserID
         }
       })
       this.activitiesSelect.forEach((item, i) => {
         ProposalJson.push({
           ActivityID: item.ActivityID,
+          ParentID:item.ParentID,
           TemplateID: this.templateSelect[0].ID || item.TemplateID,
           Price: item.Price,
+          PriceMark: item.PriceMark,
           ServicePrice: item.ServicePrice,
           PassThroughPrice: item.PassThroughPrice,
+          ActivityName:item.ActivityName,
+          ProjectID: item.ProjectID,
           Duration: item.Duration,
           Property1: item.Property1,
           Property2: item.Property2,
@@ -361,8 +371,11 @@ export default {
           Property19: item.Property19,
           Property20: item.Property20,
           Sort: item.Sort,
+          CreateUser:JSON.parse(sessionStorage.getItem("LoginUser")).UserID
         })
       })
+      debugger  
+
       axios.post('http://123.56.242.202:8080/api/poc/SaveProposal', ProposalJson).then((res) => {
         console.log('SaveProposal', res)
         axios
