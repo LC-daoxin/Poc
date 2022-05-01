@@ -40,31 +40,13 @@
         >
           <div class="input-group">
             <span
-              class="ifText"
+              class="ifText Text"
               v-if="item.type == 'IF'"
             >IF</span>
             <span
-              class="elseText"
+              class="elseText Text"
               v-if="item.type == 'ELSE'"
             >ELSE IF</span>
-            <!-- <a-select
-              class="left-select"
-              @change="setCondition($event, item, 1)"
-              placeholder="选择拆分对象"
-            >
-              <a-select-opt-group v-if="!['IF', 'ELSE'].includes(item.type)">
-                <span slot="label">BU/SubBU</span>
-                <a-select-option value="1&&BU">BU</a-select-option>
-                <a-select-option value="1&&SubBU">SubBU</a-select-option>
-              </a-select-opt-group>
-              <a-select-opt-group>
-                <span slot="label">Property</span>
-                <a-select-option value="2&&Scale">Scale</a-select-option>
-                <a-select-option value="2&&Property1">Property1</a-select-option>
-                <a-select-option value="2&&Property2">Property2</a-select-option>
-                <a-select-option value="2&&Property3">Property3</a-select-option>
-              </a-select-opt-group>
-            </a-select> -->
             <a-input-group compact>
               <a-select
                 style="width: 100px"
@@ -74,13 +56,6 @@
                 <a-select-option :value="1" v-if="!['IF', 'ELSE'].includes(item.type)">BU/SubBU</a-select-option>
                 <a-select-option :value="2">Property</a-select-option>
               </a-select>
-              <!-- <a-select
-                style="width: 200px"
-                v-if="item.leftOperatorExpression.type == 1"
-                v-model="item.leftOperatorExpression.value"
-              >
-                <a-select-option v-for="v in optionsList.BuList" :key="v.ID" :value="v.ID">{{ v.DepartName }}</a-select-option>
-              </a-select> -->
               <a-cascader
                 style="width: 200px"
                 v-if="item.leftOperatorExpression.type == 1"
@@ -141,23 +116,6 @@
             @click="deleteCondition(item.id)"
           />
         </div>
-        <!-- <div class="condition-select" v-if="item.type === 'symbol'">
-          <a-select v-model="item.formulaRelation" style="width: 120px">
-            <a-select-option
-              v-for="item in operatorOptions"
-              :key="item.value"
-              :value="item.value"
-            >
-              {{ item.label }}
-            </a-select-option>
-          </a-select>
-          <a-icon
-            v-show="isEdit"
-            class="deleteBtn"
-            type="delete"
-            @click="deleteCondition(item.id)"
-          />
-        </div> -->
         <div
           class="group"
           v-if="['IF', 'ELSE'].includes(item.type)"
@@ -173,12 +131,6 @@
               />
             </div>
           </div>
-          <!-- <a-icon
-            v-show="isEdit"
-            class="deleteBtn"
-            type="delete"
-            @click="deleteCondition(item.id)"
-          /> -->
         </div>
       </div>
     </a-col>
@@ -189,6 +141,7 @@
   import { operatorOptions, symbolOptions } from './config'
   import { randomUUID } from '@/utils/util'
   import axios from 'axios'
+  import { mapState, mapMutations } from 'vuex'
   export default {
     name: 'rule-blocks',
     props: {
@@ -208,9 +161,6 @@
         type: String,
         default: '',
       },
-      optionsList: {
-        type: Object
-      },
       isEdit: {
         type: Boolean,
       },
@@ -225,6 +175,11 @@
           conditionType: null, // 1：左值表达式 2：右值表达式
         },
       }
+    },
+    computed: {
+      ...mapState({
+        optionsList: (state) => state.poc.optionsList,
+      }),
     },
     methods: {
       // 修改条件符号
@@ -274,6 +229,7 @@
       },
       addCondition(type) {
         // 添加条件或条件组
+        console.log('optionsList', this.optionsList)
         console.log('groupList', this.groupList)
         console.log('添加条件或条件组', this.groupList.tierIndex, this.groupList.id, type)
         this.$emit('addCondition', this.groupList.tierIndex, this.groupList.id, type)
@@ -350,11 +306,16 @@
       margin-right: 10px;
       vertical-align: bottom;
     }
+    .condition-select {
+      display: flex;
+      align-items: center;
+    }
     .input-group {
       vertical-align: middle;
       margin-top: -2px;
       margin-right: 10px;
-      display: inline-block;
+      display: flex;
+      align-items: center;
       .left-select {
         width: 200px;
       }
@@ -369,6 +330,7 @@
         font-size: 18px;
         font-weight: 500;
         margin-right: 10px;
+        width: 80px;
       }
     }
     .selectCondition {
@@ -381,6 +343,7 @@
     .symbol {
       width: 120px;
       margin-right: 10px;
+      margin-bottom: 2px;
     }
     .describe {
       width: 240px;

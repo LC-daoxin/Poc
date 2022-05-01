@@ -6,7 +6,6 @@
     @deleteCondition="deleteCondition(arguments, groupList)"
     @setCondition="setCondition(arguments, groupList)"
     :group-list="groupList"
-    :optionsList="optionsList"
   />
 </template>
 
@@ -27,9 +26,6 @@
       SplitRuleID: {
         type: String,
         default: ''
-      },
-      optionsList: {
-        type: Object
       },
       groupList: {
         type: Object

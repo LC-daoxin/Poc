@@ -3,7 +3,11 @@ export default {
   state: {
     activitiesSelect: [],
     subActivitiesAll: [],
-    templateSelect: []
+    templateSelect: [],
+    optionsList: {
+      BuList: [],
+      Property: []
+    }
   },
   mutations: {
     setActivitiesSelect (state, select) { //  保存Activities选择
@@ -15,6 +19,9 @@ export default {
     setTemplateSelect (state, select) {
       state.templateSelect = select
     },
+    setOptionsList (state, options) {
+      state.optionsList = options
+    },
   },
   actions: {
     setActivitiesSelect (context, ref) {
@@ -25,6 +32,9 @@ export default {
     },
     setTemplateSelect (context, ref) {
       context.commit('setTemplateSelect', ref)
+    },
+    setOptionsList (context, obj) {
+      context.commit('setOptionsList', obj)
     },
   }
 }

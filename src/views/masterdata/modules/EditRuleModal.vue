@@ -48,6 +48,7 @@
   import clonedeep from 'lodash.clonedeep'
   import { randomUUID } from '@/utils/util'
   import axios from 'axios'
+  import { mapState, mapMutations } from 'vuex'
   export default {
     name: 'EditRuleModal',
     props: {
@@ -124,6 +125,12 @@
     mounted() {
     },
     methods: {
+      ...mapMutations({
+        setOptionsList(commit, obj) {
+          console.log('setOptionsList', obj)
+          return commit('poc/setOptionsList', obj)
+        },
+      }),
       open(record) {
         this.currentRow = record
         this.visible = true
@@ -135,11 +142,17 @@
             this.rules.ActivityID = this.currentRow.ActivityID
             this.rules.SplitRuleID = this.currentRow.ID
             this.isEdit = false
+            this.Type = 1
           } else {
             this.rules = clonedeep(this.Rules1)
             this.rules.ActivityID = this.currentRow.ActivityID
             this.rules.SplitRuleID = this.currentRow.ID
             this.rules.Then = JSON.parse(res.data)
+            if (JSON.parse(res.data)[0].type == 'IF') {
+              this.Type = 2
+            } else {
+              this.Type = 1
+            }
             this.isEdit = true
           }
         })
@@ -158,6 +171,7 @@
               BuList: res1.data,
               Property: res2.data
             }
+            this.setOptionsList(clonedeep(this.optionsList))
           })
         )
       },
@@ -180,6 +194,7 @@
         }
         this.rules.ActivityID = this.currentRow.ActivityID
         this.rules.SplitRuleID = this.currentRow.ID
+        console.log(this.optionsList)
       },
       handleCancel() {
         this.visible = false
