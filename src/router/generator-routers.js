@@ -23,6 +23,7 @@ const constantRouterComponents = {
   DeptList: () => import('@/views/masterdata/DeptList'),
   ActivityList: () => import('@/views/masterdata/ActivityList'),
   ProposalTemplate: () => import('@/views/masterdata/ProposalTemplate'),
+  Proposal: () => import('@/views/masterdata/Proposal'),
   ContractTemplate: () => import('@/views/masterdata/ContractTemplate'),
   MasterBase: () => import('@/views/masterdata/MasterBase'),
   PropertyMapping: () => import('@/views/masterdata/PropertyMapping'),

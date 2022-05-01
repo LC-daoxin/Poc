@@ -490,6 +490,17 @@ const userNav = options => {
       },
       component: 'Workplace'
     },
+    {
+      name: 'Proposal',
+      parentId: 1,
+      id: 2,
+      meta: {
+        title: 'Proposal',
+        show: true
+      },
+      component: 'Proposal',
+      path: '/masterdata/Proposal'
+    },
     // {
     //   name: 'monitor',
     //   path: 'https://www.baidu.com/',
