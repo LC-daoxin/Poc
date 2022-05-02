@@ -1,4 +1,5 @@
 ﻿<html xmlns="http://www.w3.org/1999/xhtml">
+
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta http-equiv="Access-Control-Allow-Origin" content="*">
@@ -15,7 +16,7 @@
         body {
             background: #fff;
             color: #333;
-            font-family: Arial, Tahoma,sans-serif;
+            font-family: Arial, Tahoma, sans-serif;
             font-size: 12px;
             font-weight: normal;
             height: 100%;
@@ -35,7 +36,8 @@
         }
     </style>
 
-    <script language="javascript" type="text/javascript" src="http://116.62.116.60:8000/web/editors/api/documenteditor.js"></script>
+    <script language="javascript" type="text/javascript"
+        src="http://116.62.116.60:8000/web/editors/api/documenteditor.js"></script>
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 
     <script type="text/javascript" language="javascript">
@@ -47,7 +49,7 @@
         var token = null;
         var appid = null;
         var appkey = null;
-        var user = JSON.parse(sessionStorage.getItem("LoginUser"))  
+        var user = JSON.parse(sessionStorage.getItem("LoginUser"))
 
         var innerAlert = function (message) {
             if (console && console.log)
@@ -120,7 +122,7 @@
                     url = data[1];
                 if (fileName.indexOf('=') > -1)
                     fileName = fileName.split('=')[1];
-                
+
                 var host = 'http://123.56.242.202:8080/api/poc/Save';
 
                 $.ajax({
@@ -142,7 +144,7 @@
             }
         };
         function connectEditor(name) {
-     
+
             var type = 'desktop';
             if (type == "desktop") {
                 var app = navigator.appVersion;
@@ -154,9 +156,9 @@
             };
             var urlString = ''
             if (name) {
-              urlString = "http://116.62.116.60:3000/files/223.72.84.204/default/"+name;
+                urlString = "http://116.62.116.60:3000/files/223.72.87.148/default/" + name;
             } else {
-              urlString = "http://116.62.116.60:3000/files/123.56.242.202/default/abb.docx";
+                urlString = "http://116.62.116.60:3000/files/123.56.242.202/default/abb.docx";
             }
 
             var arrfn = urlString.split(".");
@@ -247,18 +249,20 @@
         //     window.attachEvent("load", connectEditor);
         // }
         window.addEventListener('message', function (event) {
-          let { name } = event.data
-          if (name) {
-            console.log('message', name, event)
-            connectEditor(name)
-          }
+            let { name } = event.data
+            if (name) {
+                console.log('message', name, event)
+                connectEditor(name)
+            }
         })
     </script>
 </head>
+
 <body>
     <form name="form1" method="post" action="./docEditor.aspx?fileID=demo+(2).docx&lang=zh" id="form1">
         <div>
-            <input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="/wEPDwUKMTkyMjc5MTU4M2RkBQQQBsVcOHQbzTlwYapiES2Trc9Z/U4CC+r9rluZubc=" />
+            <input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE"
+                value="/wEPDwUKMTkyMjc5MTU4M2RkBQQQBsVcOHQbzTlwYapiES2Trc9Z/U4CC+r9rluZubc=" />
         </div>
 
         <div>
@@ -269,6 +273,5 @@
         </div>
     </form>
 </body>
+
 </html>
-
-

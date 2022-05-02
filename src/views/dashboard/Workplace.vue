@@ -308,6 +308,7 @@ export default {
           Price: item.Price,
           PriceMark: item.PriceMark,
           ServicePrice: item.ServicePrice,
+          StartTime:item.StartTime,
           PassThroughPrice: item.PassThroughPrice,
           Duration: item.Duration,
           ParentID:item.ActivityID,
@@ -348,6 +349,8 @@ export default {
           ServicePrice: item.ServicePrice,
           PassThroughPrice: item.PassThroughPrice,
           ActivityName:item.ActivityName,
+          StartTime:item.StartTime,
+  
           ProjectID: item.ProjectID,
           Duration: item.Duration,
           Property1: item.Property1,
