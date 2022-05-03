@@ -17,11 +17,13 @@
       :data="tableList"
       :radio-config="{ trigger: 'row' }"
     >
-      <vxe-column field="ProposalFileName" width="280" title="Proposal文件名称"></vxe-column>
-      <vxe-column field="ContractFileName" width="280" title="Contract文件名称"></vxe-column>
-      <vxe-column field="CreateDate" width="180" title="创建时间"></vxe-column>
-      <vxe-column field="UserName" width="140" title="创建人"></vxe-column>
-      <vxe-column field="Status" width="140" title="状态"></vxe-column>
+      <vxe-column field="ProjectID" width="180" title="项目编号"></vxe-column>
+      <vxe-column field="ProjectName" width="180" title="项目名称"></vxe-column>
+      <vxe-column field="ProposalFileName" width="180" title="Proposal文件名称"></vxe-column>
+      <vxe-column field="ContractFileName" width="180" title="Contract文件名称"></vxe-column>
+      <vxe-column field="CreateDate" width="160" title="创建时间"></vxe-column>
+      <vxe-column field="UserName" width="80" title="创建人"></vxe-column>
+      <vxe-column field="Status" width="80" title="状态"></vxe-column>
 
       <vxe-column type="seq" title="操作" width="400" :resizable="false" show-overflow>
         <template #default="{ row }">
@@ -32,7 +34,7 @@
       </vxe-column>
     </vxe-table>
 
-    <vxe-modal v-model="showDetails" title="英文合同信息" width="600" height="340" resize>
+    <vxe-modal v-model="showDetails" title="英文合同信息" width="600" height="440" resize>
       <template #default>
         <vxe-form :data="formData" title-align="right" title-width="80">
           <vxe-form-item title="Name" field="Name" span="16">
@@ -74,108 +76,103 @@
     <vxe-modal v-model="showDetailsCN" title="中文合同信息" width="1100" height="600" resize>
       <template #default>
         <vxe-form :data="formData" title-align="right" title-width="120">
-          <vxe-form-item title="项目名称" field="Name" span="10">
+          <vxe-form-item title="项目名称" field="ProjectName" span="20">
             <template #default>
-              <vxe-input v-model="formData.Name" placeholder="请输入"></vxe-input>
+              <vxe-input v-model="formData.ProjectName" placeholder="请输入项目名称"></vxe-input>
             </template>
           </vxe-form-item>
 
           <vxe-form-item title="客户（委托方）" field="Client" span="10">
             <template #default>
-              <vxe-input v-model="formData.Client" placeholder="请输入"></vxe-input>
+              <vxe-input v-model="formData.Client" placeholder="请输入客户（委托方）"></vxe-input>
             </template>
           </vxe-form-item>
 
-          <vxe-form-item title="研究开发方（受托方）" field="Title" span="10">
+          <vxe-form-item title="研究开发方（受托方）" field="Trustee" span="10">
             <template #default>
-              <vxe-input v-model="formData.Title" placeholder="请输入"></vxe-input>
+              <vxe-input v-model="formData.Trustee" placeholder="请输入"></vxe-input>
             </template>
           </vxe-form-item>
 
-          <vxe-form-item title="合同有效期" field="PaymentDate" span="10">
+          <vxe-form-item title="合同开始日期" field="BeginDate" span="10">
+            <vxe-input v-model="formData.BeginDate" placeholder="合同开始日期" type="date"></vxe-input>
+          </vxe-form-item>
+          <vxe-form-item title="合同结束日期" field="EndDate" span="10">
+            <vxe-input v-model="formData.EndDate" placeholder="合同结束日期" type="date"></vxe-input>
+          </vxe-form-item>
+
+          <vxe-form-item title="姓名" field="ClientName" span="10">
             <template #default>
-              <vxe-input v-model="formData.Title" placeholder="请输入"></vxe-input>
+              <vxe-input v-model="formData.ClientName" placeholder="请输入委托方项目姓名"></vxe-input>
             </template>
           </vxe-form-item>
-          <vxe-form-item title="委托方项目联系人" field="PaymentDate" span="10">
+          <vxe-form-item title="姓名" field="TrusteeName" span="10">
             <template #default>
-              <vxe-input v-model="formData.Title" placeholder="请输入"></vxe-input>
+              <vxe-input v-model="formData.TrusteeName" placeholder="请输入受托方项目姓名"></vxe-input>
             </template>
           </vxe-form-item>
-          <vxe-form-item title="姓名" field="PaymentDate" span="10">
+          <vxe-form-item title="工作电话" field="ClientTelephone" span="10">
             <template #default>
-              <vxe-input v-model="formData.Title" placeholder="请输入"></vxe-input>
+              <vxe-input v-model="formData.ClientTelephone" placeholder="请输入委托方项目工作电话"></vxe-input>
             </template>
           </vxe-form-item>
-          <vxe-form-item title="工作电话" field="PaymentDate" span="10">
+          <vxe-form-item title="工作电话" field="TrusteeTelephone" span="10">
             <template #default>
-              <vxe-input v-model="formData.Title" placeholder="请输入"></vxe-input>
+              <vxe-input v-model="formData.TrusteeTelephone" placeholder="请输入受托方项目工作电话"></vxe-input>
             </template>
           </vxe-form-item>
-          <vxe-form-item title="手机" field="PaymentDate" span="10">
+          <vxe-form-item title="手机" field="ClientPhone" span="10">
             <template #default>
-              <vxe-input v-model="formData.Title" placeholder="请输入"></vxe-input>
+              <vxe-input v-model="formData.ClientPhone" placeholder="请输入委托方项目手机"></vxe-input>
             </template>
           </vxe-form-item>
-          <vxe-form-item title="Email" field="PaymentDate" span="10">
+          <vxe-form-item title="手机" field="TrusteePhone" span="10">
             <template #default>
-              <vxe-input v-model="formData.Title" placeholder="请输入"></vxe-input>
+              <vxe-input v-model="formData.TrusteePhone" placeholder="请输入受托方项目手机"></vxe-input>
             </template>
           </vxe-form-item>
-          <vxe-form-item title="通信地址" field="PaymentDate" span="10">
+          <vxe-form-item title="Email" field="ClientEmail" span="10">
             <template #default>
-              <vxe-input v-model="formData.Title" placeholder="请输入"></vxe-input>
+              <vxe-input v-model="formData.ClientEmail" placeholder="请输入委托方项目Email"></vxe-input>
             </template>
           </vxe-form-item>
-          <vxe-form-item title="受托方项目联系人 " field="PaymentDate" span="10">
+          <vxe-form-item title="Email" field="TrusteeEmail" span="10">
             <template #default>
-              <vxe-input v-model="formData.Title" placeholder="请输入"></vxe-input>
+              <vxe-input v-model="formData.TrusteeEmail" placeholder="请输入受托方项目Email"></vxe-input>
             </template>
           </vxe-form-item>
-          <vxe-form-item title="姓名" field="PaymentDate" span="10">
+          <vxe-form-item title="通信地址" field="ClientAddress" span="10">
             <template #default>
-              <vxe-input v-model="formData.Title" placeholder="请输入"></vxe-input>
+              <vxe-input v-model="formData.ClientAddress" placeholder="请输入委托方项目通信地址"></vxe-input>
             </template>
           </vxe-form-item>
-          <vxe-form-item title="工作电话" field="PaymentDate" span="10">
+          <vxe-form-item title="通信地址" field="TrusteeAddress" span="10">
             <template #default>
-              <vxe-input v-model="formData.Title" placeholder="请输入"></vxe-input>
-            </template>
-          </vxe-form-item>
-          <vxe-form-item title="手机" field="PaymentDate" span="10">
-            <template #default>
-              <vxe-input v-model="formData.Title" placeholder="请输入"></vxe-input>
-            </template>
-          </vxe-form-item>
-          <vxe-form-item title="Email" field="PaymentDate" span="10">
-            <template #default>
-              <vxe-input v-model="formData.Title" placeholder="请输入"></vxe-input>
-            </template>
-          </vxe-form-item>
-          <vxe-form-item title="通信地址" field="PaymentDate" span="10">
-            <template #default>
-              <vxe-input v-model="formData.Title" placeholder="请输入"></vxe-input>
-            </template>
-          </vxe-form-item>
-          <vxe-form-item title="费用总额（人民币）" field="PaymentDate" span="10">
-            <template #default>
-              <vxe-input v-model="formData.Title" placeholder="请输入"></vxe-input>
-            </template>
-          </vxe-form-item>
-          <vxe-form-item title="一次性材料费用" field="PaymentDate" span="10">
-            <template #default>
-              <vxe-input v-model="formData.Title" placeholder="请输入"></vxe-input>
-            </template>
-          </vxe-form-item>
-          <vxe-form-item title="填料费用" field="PaymentDate" span="10">
-            <template #default>
-              <vxe-input v-model="formData.Title" placeholder="请输入"></vxe-input>
+              <vxe-input v-model="formData.TrusteeAddress" placeholder="请输入受托方项目通信地址"></vxe-input>
             </template>
           </vxe-form-item>
 
-          <vxe-form-item title="项目启动经费" field="PaymentDate" span="10">
+          <vxe-form-item title="费用总额（人民币）" field="Total" span="10">
             <template #default>
-              <vxe-input v-model="formData.Title" placeholder="请输入"></vxe-input>
+              <vxe-input v-model="formData.Total" placeholder="请输入费用总额（人民币）"></vxe-input>
+            </template>
+          </vxe-form-item>
+
+          <vxe-form-item title="项目启动经费" field="StartUpFunds" span="10">
+            <template #default>
+              <vxe-input v-model="formData.StartUpFunds" placeholder="请输入项目启动经费"></vxe-input>
+            </template>
+          </vxe-form-item>
+
+          <vxe-form-item title="一次性材料费用" field="OneFee" span="10">
+            <template #default>
+              <vxe-input v-model="formData.OneFee" placeholder="请输入费用总额（人民币）"></vxe-input>
+            </template>
+          </vxe-form-item>
+
+          <vxe-form-item title="填料费用" field="FillerCost" span="10">
+            <template #default>
+              <vxe-input v-model="formData.FillerCost" placeholder="请输入填料费用"></vxe-input>
             </template>
           </vxe-form-item>
 
@@ -214,6 +211,9 @@ export default {
   name: 'Proposal',
   data() {
     return {
+      value1: [new Date(2016, 9, 10, 8, 40), new Date(2016, 9, 10, 9, 40)],
+      value2: [new Date(2016, 9, 10, 8, 40), new Date(2016, 9, 10, 9, 40)],
+
       showDetails: false,
       showDetailsCN: false,
       showDetails11: false,
@@ -277,6 +277,8 @@ export default {
       )
     },
     showDetailEvent(row) {
+      this.formData = {}
+
       if (row.Status == '已生成') {
         this.$XModal.message({ content: '此合同已经生成，无法再次进行生成。', status: 'warning' })
         return
@@ -285,11 +287,11 @@ export default {
       if (row.ProposalFileName.indexOf('EN') > 0) {
         this.selectRow = row
         this.showDetails = true
-        //this.showDetailsCN = true
-
         this.formData.BatchID = row.BatchID
       } else {
-        this.$XModal.message({ content: '开始生成中文合同', status: 'warning' })
+        this.selectRow = row
+        this.showDetailsCN = true
+        this.formData.BatchID = row.BatchID
         return
       }
     },
@@ -341,8 +343,6 @@ export default {
       this.$XModal.confirm('确定保存？').then((type) => {
         if (type === 'confirm') {
           this.$XModal.message({ id: 'loding', content: '数据处理中...', status: 'loading' })
-          debugger
-          this.formData.DepartmentName = this.getDepName(this.formData.DepartmentID).replace(/\|\-\-/g, '')
 
           axios.post('http://123.56.242.202:8080/api/Contract/DataContractCreate', [this.formData]).then((res) => {
             this.$XModal.close('loding')
