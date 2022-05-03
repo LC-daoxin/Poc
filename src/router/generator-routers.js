@@ -24,6 +24,7 @@ const constantRouterComponents = {
   ActivityList: () => import('@/views/masterdata/ActivityList'),
   ProposalTemplate: () => import('@/views/masterdata/ProposalTemplate'),
   Proposal: () => import('@/views/masterdata/Proposal'),
+  Proposal2: () => import('@/views/masterdata/Proposal2'),
   ContractTemplate: () => import('@/views/masterdata/ContractTemplate'),
   MasterBase: () => import('@/views/masterdata/MasterBase'),
   PropertyMapping: () => import('@/views/masterdata/PropertyMapping'),

@@ -501,6 +501,17 @@ const userNav = options => {
       component: 'Proposal',
       path: '/masterdata/Proposal'
     },
+    {
+      name: 'Proposal2',
+      parentId: 1,
+      id: 2,
+      meta: {
+        title: 'Proposal2',
+        show: true
+      },
+      component: 'Proposal2',
+      path: '/masterdata/Proposal2'
+    },
     // {
     //   name: 'monitor',
     //   path: 'https://www.baidu.com/',
@@ -582,7 +593,7 @@ const userNav = options => {
     {
       name: 'SplitRuleManagement',
       parentId: 1,
-      id: 3.4,
+      id: 3.5,
       meta: {
         title: 'Split Rule Management',
         show: true
@@ -593,7 +604,7 @@ const userNav = options => {
     {
       name: 'WordLog',
       parentId: 1,
-      id: 3.5,
+      id: 3.7,
       meta: {
         title: 'WordLog',
         show: true
@@ -604,7 +615,7 @@ const userNav = options => {
     {
       name: 'PropertyMapping',
       parentId: 1,
-      id: 3.4,
+      id: 3.8,
       meta: {
         title: 'Property字段管理',
         show: true
@@ -615,7 +626,7 @@ const userNav = options => {
     {
       name: 'ActivityMapping',
       parentId: 1,
-      id: 3.4,
+      id: 3.9,
       meta: {
         title: 'Activity基础数据管理',
         show: true

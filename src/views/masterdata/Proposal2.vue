@@ -63,14 +63,12 @@
       <vxe-column
         type="seq"
         title="操作"
-        width="400"
+        width="180"
         :resizable="false"
         show-overflow
       >
         <template #default="{ row }">
-          <vxe-button @click="showDetailEvent(row)">生成合同{{ row.batchID }}</vxe-button>
-          <vxe-button @click="SelectProposal(row.ProposalFileName)">查看Proposal{{ row.batchID }}</vxe-button>
-          <vxe-button @click="SelectContract(row.ContractFileName, row)">查看Contract{{ row.batchID }}</vxe-button>
+          <vxe-button @click="showSplitResult(row)">Activity Split Result</vxe-button>
         </template>
       </vxe-column>
     </vxe-table>
@@ -168,7 +166,21 @@
         </vxe-form>
       </template>
     </vxe-modal>
-
+    <vxe-modal
+      v-model="showSplit"
+      title="Activity Split Result"
+      width="1100"
+      height="600"
+      @show="openSplit"
+      fullscreen
+      resize
+      show-zoom
+      remember
+    >
+      <template #default>
+        <activity-split-result ref="ActivitySplitResult"/>
+      </template>
+    </vxe-modal>
     <vxe-modal
       v-model="showDetailsCN"
       title="中文合同信息"
@@ -436,26 +448,6 @@
         </vxe-form>
       </template>
     </vxe-modal>
-
-    <vxe-modal
-      v-model="showDetails11"
-      title="文件信息"
-      width="1200"
-      height="800"
-      resize
-    >
-      <template #default>
-        <div class="Generate">
-          <iframe
-            v-if="iframeShow"
-            sandbox="allow-forms allow-modals allow-popups allow-scripts allow-same-origin allow-downloads"
-            id="Generate"
-            :src="url"
-            class="iframe"
-          />
-        </div>
-      </template>
-    </vxe-modal>
   </div>
 </template>
 
@@ -464,16 +456,19 @@
   import _ from 'lodash'
   import axios from 'axios'
   import XEUtils from 'xe-utils'
+  import ActivitySplitResult from './modules/ActivitySplitResult.vue'
   export default {
-    name: 'Proposal',
+    name: 'Proposal2',
+    components: {
+      ActivitySplitResult
+    },
     data() {
       return {
         value1: [new Date(2016, 9, 10, 8, 40), new Date(2016, 9, 10, 9, 40)],
         value2: [new Date(2016, 9, 10, 8, 40), new Date(2016, 9, 10, 9, 40)],
-
         showDetails: false,
         showDetailsCN: false,
-        showDetails11: false,
+        showSplit: false,
         title: '',
         formData: {},
         selectRow: {},
@@ -509,54 +504,12 @@
         }
         return name
       },
-      SelectProposal(name) {
-        this.showDetails11 = true
-        setTimeout(() => {
-          document.getElementById('Generate').contentWindow.postMessage(
-            {
-              name
-            },
-            '*'
-          )
-        }, 500)
+      showSplitResult(row) {
+        console.log(row)
+        this.showSplit = true
       },
-      SelectContract(name, row) {
-        if (row.Status == '未生成') {
-          this.$XModal.message({ content: '此合同未生成，无法查看', status: 'warning' })
-          return
-        }
-        this.showDetails11 = true
-        this.iframeShow = false
-        this.$nextTick(() => {
-          this.iframeShow = true
-        })
-        setTimeout(() => {
-          document.getElementById('Generate').contentWindow.postMessage(
-            {
-              name
-            },
-            '*'
-          )
-        }, 500)
-      },
-      showDetailEvent(row) {
-        this.formData = {}
-
-        if (row.Status == '已生成') {
-          this.$XModal.message({ content: '此合同已经生成，无法再次进行生成。', status: 'warning' })
-          return
-        }
-
-        if (row.ProposalFileName.indexOf('EN') > 0) {
-          this.selectRow = row
-          this.showDetails = true
-          this.formData.BatchID = row.BatchID
-        } else {
-          this.selectRow = row
-          this.showDetailsCN = true
-          this.formData.BatchID = row.BatchID
-          return
-        }
+      openSplit() {
+        this.$refs.ActivitySplitResult.loadData()
       },
       arrayToTree(data, id, pid, data2) {
         if (!data || !data.length) return []

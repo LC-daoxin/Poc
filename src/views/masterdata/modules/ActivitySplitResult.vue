@@ -1,73 +1,43 @@
 <template>
   <div class="activities">
-    <a-form-model
-      class="processCenter"
-      ref="form"
-      layout="inline"
-      :model="model"
-      :labelCol="{ span: searchLabelCol }"
-      :wrapperCol="{ span: searchWrapperCol }"
-    >
-      <a-form-model-item
-        label="Key Words"
-        class="form-item"
-      >
-        <a-input
-          allowClear
-          v-model="model.keyWords"
-        ></a-input>
-      </a-form-model-item>
-      <a-form-model-item
-        label="Checked Activity"
-        prop="activityID"
-      >
-        <a-select
-          allowClear
-          style="width: 400px"
-          :maxTagCount="3"
-          mode="multiple"
-          v-model="selectActivityID"
-          @change="changePipeline"
-        >
-          <a-select-option
-            :value="item.ActivityID"
-            :key="item.ActivityID"
-            v-for="item in activitiesSelect"
-          >{{
-            item.ActivityName
-          }}</a-select-option>
-        </a-select>
-      </a-form-model-item>
-    </a-form-model>
     <div class="search-approval-wrapper">
+      <!-- <a-button
+        class="search_btn"
+        type="primary"
+        icon="plus"
+        @click="addRow"
+      >Add Row</a-button> -->
       <a-button
         class="search_btn"
         type="primary"
-        icon="search"
+        icon="redo"
         @click="loadData()"
-      >Search</a-button>
+      >Refresh</a-button>
       <!-- <a-button
         class="search_btn"
         icon="plus"
         type="primary"
         @click="openAddModal"
       > {{this.$t('add')}} </a-button> -->
-      <a-button
+      <!-- <a-button
         class="search_btn"
         icon="delete"
         @click="refresh(false)"
-      >Reset</a-button>
+      >Reset</a-button> -->
     </div>
     <public-table
       class="table"
       :pagination="false"
       :params="tableParams"
+      :rowKey="(record) => record.ID"
       :rowSelection="true"
-      :draggableRow="true"
+      :draggableRow="false"
       @pageChange="loadData"
       @changeRow="changeRow"
       @selectionChange="selectionChange"
     ></public-table>
+    <result-edit-rule-modal ref="ResultEditRuleModal" @refresh="loadData"/>
+    <add-result-row-modal ref="AddResultRowModal" @refresh="loadData"/>
   </div>
 </template>
 
@@ -77,12 +47,16 @@
   import _ from 'lodash'
   import axios from 'axios'
   import { mapState, mapMutations } from 'vuex'
+  import AddResultRowModal from './AddResultRowModal'
+  import ResultEditRuleModal from './ResultEditRuleModal.vue'
 
   export default {
     name: 'SubActivities',
     components: {
       PageHeaderWrapper,
       PublicTable,
+      AddResultRowModal,
+      ResultEditRuleModal
     },
     data() {
       return {
@@ -116,7 +90,7 @@
               title: 'ActivityNo',
               dataIndex: 'ActivityNo',
               align: 'center',
-              width: 200,
+              width: 100,
               ellipsis: true,
               customRender: (text, row, index) => {
                 return <b>{text}</b>
@@ -126,14 +100,14 @@
               title: 'Description',
               dataIndex: 'Description',
               align: 'center',
-              width: 200,
+              width: 350,
               ellipsis: true,
             },
             {
               title: 'Revenue',
               dataIndex: 'Revenue',
               align: 'center',
-              width: 200,
+              width: 150,
               ellipsis: true,
             },
             {
@@ -142,29 +116,13 @@
               align: 'center',
               width: 100,
               ellipsis: true,
-              customRender: (text, row, index) => (
-                <a-input
-                  size="small"
-                  v-model:value={text}
-                  onChange={(e) => this.onChangeServicePrice(e, row)}
-                  value={text}
-                />
-              ),
             },
             {
               title: 'ActualRevenue',
               dataIndex: 'ActualRevenue',
               align: 'center',
-              width: 100,
+              width: 150,
               ellipsis: true,
-              customRender: (text, row, index) => (
-                <a-input
-                  size="small"
-                  v-model:value={text}
-                  onChange={(e) => this.onChangePassPrice(e, row)}
-                  value={text}
-                />
-              ),
             },
             {
               title: 'BU',
@@ -172,14 +130,6 @@
               width: 100,
               align: 'center',
               ellipsis: true,
-              customRender: (text, row, index) => (
-                <a-input
-                  size="small"
-                  v-model:value={text}
-                  onChange={(e) => this.onChangeDuration(e, row)}
-                  value={text}
-                />
-              ),
             },
             {
               title: 'SubBU',
@@ -187,14 +137,6 @@
               width: 100,
               align: 'center',
               ellipsis: true,
-              customRender: (text, row, index) => (
-                <a-input
-                  size="small"
-                  v-model:value={text}
-                  onChange={(e) => this.onChangeDisCount(e, row)}
-                  value={text}
-                />
-              ),
             },
             {
               title: 'MilestoneCode',
@@ -202,14 +144,6 @@
               align: 'center',
               width: 100,
               ellipsis: true,
-              customRender: (text, row, index) => (
-                <a-input
-                  size="small"
-                  v-model:value={text}
-                  onChange={(e) => this.onChangeScale(e, row)}
-                  value={text}
-                />
-              ),
             },
             {
               title: 'Batch',
@@ -222,14 +156,14 @@
               title: 'StartDate',
               dataIndex: 'StartDate',
               align: 'center',
-              width: 100,
+              width: 180,
               ellipsis: true,
             },
             {
               title: 'ReportDeliverDate',
               dataIndex: 'ReportDeliverDate',
               align: 'center',
-              width: 100,
+              width: 180,
               ellipsis: true,
             },
             {
@@ -253,6 +187,55 @@
               width: 100,
               ellipsis: true,
             },
+            {
+  						title: 'Operation', // 操作
+  						scopedSlots: {customRender: 'action'},
+  						fixed: 'right',
+  						width: 260,
+  						align: 'center',
+  						customRender: (text, record) => {
+  							const renderElement = [];
+                renderElement.push(
+                  <a-button
+                    icon="edit"
+                    type="primary"
+                    size="small"
+                    onClick={() => {
+                      this.edit(record);
+                    }}
+                  >
+                    Edit Info
+                  </a-button>
+                );
+                renderElement.push(
+                  <a-button
+                    icon="edit"
+                    type="primary"
+                    size="small"
+                    onClick={() => {
+                      this.editSplitRule(record);
+                    }}
+                  >
+                    Split Rule
+                  </a-button>
+                );
+  							// renderElement.push(
+                //   <a-popconfirm
+                //     title="是否确认删除此项?"
+                //     okText="确定"
+                //     cancelText="取消"
+                //     onConfirm={() => {
+                //       this.handleDelete(id);
+                //     }}
+                //   >
+                //     <a-button icon="delete" type="danger" size="small">
+                //       Delete
+                //     </a-button>
+                //   </a-popconfirm>
+                // );
+  							return <a-space>{renderElement}</a-space>;
+  						}
+						}
           ],
         },
       }
@@ -278,7 +261,8 @@
         }
       },
     },
-    mounted() {},
+    mounted() {
+    },
     methods: {
       ...mapMutations({
         setSubActivitiesAll(commit, select) {
@@ -286,6 +270,15 @@
           return commit('poc/setSubActivitiesAll', select)
         },
       }),
+      addRow() {
+        this.$refs.AddResultRowModal.open()
+      },
+      edit(record) {
+        this.$refs.AddResultRowModal.edit(record)
+      },
+      handleDelete() {
+
+      },
       // 拖拽列
       changeColumns(evt) {
         console.log(evt, 'oldIndex', evt.oldIndex, 'newIndex', evt.newIndex)
@@ -311,6 +304,9 @@
           this.model.activityID = list.join(',')
         }
       },
+      editSplitRule(record) {
+        this.$refs.ResultEditRuleModal.open(record)
+      },
       setColumns(lang) {
         console.log(lang)
         this.tableParams.columns.forEach((item) => {
@@ -327,60 +323,13 @@
       loadData() {
         this.tableParams.loading = true
         axios
-          .get('http://123.56.242.202:8080/api/poc/GetSubActivitiesList', {
-            params: this.model,
-          })
+          .post(`http://123.56.242.202:8080/api/SplitRule/GetPMSDataSplitResult?BatchID=8B3FDE19-4BF2-42CA-BB03-D3366E4AD14A`)
           .then((res) => {
             console.log(res.data)
             // this.setSubActivitiesAll(res.data)
             this.tableParams.dataSource = res.data
             this.tableParams.loading = false
           })
-      },
-      onChangePassPrice(e, row) {
-        this.tableParams.dataSource.forEach((item, i) => {
-          if (item.SubActivityID == row.SubActivityID) {
-            this.$set(this.tableParams.dataSource[i], 'PassThroughPrice', e.target.value)
-            // this.setSubActivitiesAll(this.tableParams.dataSource)
-            this.setSubActivitiesAll(this.selectionRows)
-          }
-        })
-      },
-      onChangeServicePrice(e, row) {
-        this.tableParams.dataSource.forEach((item, i) => {
-          if (item.SubActivityID == row.SubActivityID) {
-            this.$set(this.tableParams.dataSource[i], 'ServicePrice', e.target.value)
-            // this.setSubActivitiesAll(this.tableParams.dataSource)
-            this.setSubActivitiesAll(this.selectionRows)
-          }
-        })
-      },
-      onChangeDuration(e, row) {
-        this.tableParams.dataSource.forEach((item, i) => {
-          if (item.SubActivityID == row.SubActivityID) {
-            this.$set(this.tableParams.dataSource[i], 'Duration', e.target.value)
-            // this.setSubActivitiesAll(this.tableParams.dataSource)
-            this.setSubActivitiesAll(this.selectionRows)
-          }
-        })
-      },
-      onChangeScale(e, row) {
-        this.tableParams.dataSource.forEach((item, i) => {
-          if (item.SubActivityID == row.SubActivityID) {
-            this.$set(this.tableParams.dataSource[i], 'Scale', e.target.value)
-            // this.setSubActivitiesAll(this.tableParams.dataSource)
-            this.setSubActivitiesAll(this.selectionRows)
-          }
-        })
-      },
-      onChangeDisCount(e, row) {
-        this.tableParams.dataSource.forEach((item, i) => {
-          if (item.SubActivityID == row.SubActivityID) {
-            this.$set(this.tableParams.dataSource[i], 'DisCount', e.target.value)
-            // this.setSubActivitiesAll(this.tableParams.dataSource)
-            this.setSubActivitiesAll(this.selectionRows)
-          }
-        })
       },
       selectionChange(keys, rows) {
         this.selectionKeys = keys

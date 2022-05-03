@@ -15,41 +15,7 @@
             :bordered="false"
             :body-style="{ padding: 0 }"
           >
-            <div class="steps-action">
-              <a-button
-                v-if="current < Steps.length - 1"
-                :loading="btnLoading"
-                type="primary"
-                @click="next"
-              >Next Step</a-button>
-              <a-button
-                v-if="current == Steps.length - 1"
-                type="primary"
-                @click="message.success('Processing complete!')"
-              >
-                Done
-              </a-button>
-              <a-button
-                v-if="current > 0"
-                style="margin-left: 8px"
-                @click="prev"
-              >Previous Step</a-button>
-            </div>
-            <a-steps v-model="current">
-              <a-step
-                v-for="node in Steps"
-                :key="node.id"
-                @click="handleNode(node)"
-                :title="node.title"
-                :style="stepStyle"
-                :description="node.time"
-              />
-            </a-steps>
-            <activities v-show="current == 0" @updateSub="subActivitiesloadData"/>
-            <sub-activities
-              ref="subActivities"
-              v-show="current == 1"
-            />
+            <activities/>
           </a-card>
         </a-col>
       </a-row>
@@ -63,16 +29,14 @@
   import { PageHeaderWrapper } from '@ant-design-vue/pro-layout'
   import { STable } from '@/components'
   import Activities from './modules/Activities.vue'
-  import SubActivities from './modules/SubActivities.vue'
   import axios from 'axios'
 
   export default {
-    name: 'Workplace',
+    name: 'SplitRuleManagement',
     components: {
       PageHeaderWrapper,
       STable,
       Activities,
-      SubActivities,
     },
     data() {
       return {
@@ -86,18 +50,6 @@
         // data
         selectedRowKeys: [],
         selectedRows: [],
-        Steps: [
-          {
-            id: 1,
-            title: 'Activity Split Rule Management',
-            status: 'success',
-          },
-          {
-            id: 2,
-            title: 'Activity Split Result',
-            status: 'success',
-          }
-        ],
         stepStyle: {},
         listData: [],
       }
@@ -127,49 +79,17 @@
     mounted() {
       // this.getTest()
     },
-    watch: {
-      current(val) {
-        if (val == 1 && this.selectedRows.length > 0) {
-          this.subActivitiesloadData()
-        }
-      },
-    },
+    // watch: {
+    //   current(val) {
+    //     if (val == 1 && this.selectedRows.length > 0) {
+    //       this.$refs.subActivities.loadData()
+    //     }
+    //   },
+    // },
     methods: {
       loadData(parameter) {
         // 加载数据方法
         return this.listData
-      },
-      subActivitiesloadData() {
-        this.$refs.subActivities.loadData()
-      },
-      setStatus(status) {
-        let stepStatus = ''
-        switch (status) {
-          case 'success':
-            stepStatus = 'finish'
-            break
-          case 'error':
-            stepStatus = 'error'
-            break
-          case 'current':
-            stepStatus = 'process'
-            break
-          default:
-            stepStatus = 'wait'
-            break
-        }
-        return stepStatus
-      },
-      next() {
-        if (this.current == 2) {
-          this.$refs.template.checkSelect().then((val) => {
-            if (val) {
-              this.SaveProposal()
-            }
-          })
-        } else {
-          this.current++
-        }
       },
       SaveProposal() {
         this.btnLoading = true
@@ -230,9 +150,6 @@
             })
         })
       },
-      prev() {
-        this.current--
-      },
       setCss(status) {
         let css = ''
         switch (status) {
@@ -250,12 +167,6 @@
             break
         }
         return css
-      },
-      handleNode(node) {
-        console.log(node)
-        console.log(this.listData)
-        this.listData = node.list
-        // this.$refs.table.refresh()
       },
       selectMonth(dates, dateStrings) {
         this.systemComputedTime = dates
