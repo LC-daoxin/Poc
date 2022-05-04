@@ -196,9 +196,12 @@ export default {
           axios
             .post('http://123.56.242.202:8080/api/User/UserLogin?userName='+values.username+'&password='+values.password )
             .then((res) => {
+              console.log("666666666666666666666");
+              console.log(res);
               if (res.data.Code == 200) {
                 sessionStorage.setItem("Access-Token",res.data.Data.Token);
                 sessionStorage.setItem("LoginUser",JSON.stringify(res.data.Data));
+                sessionStorage.setItem("UserMenu",JSON.stringify(res.data.Data.Menu));
                 //state.loginBtn = false
                 this.loginSuccess(res)
               } else {

@@ -466,7 +466,7 @@ const info = options => {
 }
 
 const userNav = options => {
-  const nav = [
+  let nav = [
     // dashboard
     {
       name: 'dashboard',
@@ -697,6 +697,11 @@ const userNav = options => {
       component: 'AdvanceForm'
     }
   ]
+  //菜单
+  let localMenu =  sessionStorage.getItem("UserMenu");
+  if(localMenu!=null && localMenu!= undefined && localMenu!="null"){
+    nav=JSON.parse(localMenu);
+  }
   const json = builder(nav)
   console.log('json', json)
   return json
