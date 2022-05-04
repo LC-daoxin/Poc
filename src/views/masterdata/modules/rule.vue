@@ -2,6 +2,7 @@
 	<rule-blocks
     v-if="groupList"
     :isEdit="isEdit"
+    :SeparateType="SeparateType"
     @addCondition="addCondition(arguments, groupList)"
     @deleteCondition="deleteCondition(arguments, groupList)"
     @setCondition="setCondition(arguments, groupList)"
@@ -27,6 +28,10 @@
         type: String,
         default: ''
       },
+      SeparateType: {
+        type: Number,
+        default: 1
+      },
       groupList: {
         type: Object
         // required: true
@@ -49,7 +54,7 @@
 	            id: `${randomUUID(10)}`,
 	            type: 'fixed',
               leftOperatorExpression: {type: '1', value: '', valueArr: []},
-              compareOperation: '=',
+              compareOperation: this.SeparateType == 3 ? 'forEach' : '=',
               rightOperatorExpression: {type: '1', value: ''},
               // describe: ''
             })

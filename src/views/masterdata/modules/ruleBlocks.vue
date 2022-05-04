@@ -77,6 +77,14 @@
             </a-input-group>
           </div>
           <a-select
+            v-if="SeparateType == 3"
+            v-model="item.compareOperation"
+            class="symbol"
+          >
+            <a-select-option value="forEach">forEach</a-select-option>
+          </a-select>
+          <a-select
+            v-else
             v-model="item.compareOperation"
             class="symbol"
             @change="handleChangeSymbol"
@@ -155,6 +163,10 @@
             Then: [],
           }
         },
+      },
+      SeparateType: {
+        type: Number,
+        default: 1
       },
       // 用于判断是不是显示删除条件组
       type: {

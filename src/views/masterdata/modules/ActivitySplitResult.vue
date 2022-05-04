@@ -36,8 +36,14 @@
       @changeRow="changeRow"
       @selectionChange="selectionChange"
     ></public-table>
-    <result-edit-rule-modal ref="ResultEditRuleModal" @refresh="loadData"/>
-    <add-result-row-modal ref="AddResultRowModal" @refresh="loadData"/>
+    <result-edit-rule-modal
+      ref="ResultEditRuleModal"
+      @refresh="loadData"
+    />
+    <add-result-row-modal
+      ref="AddResultRowModal"
+      @refresh="loadData"
+    />
   </div>
 </template>
 
@@ -56,7 +62,7 @@
       PageHeaderWrapper,
       PublicTable,
       AddResultRowModal,
-      ResultEditRuleModal
+      ResultEditRuleModal,
     },
     data() {
       return {
@@ -66,6 +72,7 @@
         selectionKeys: [],
         selectionRows: [],
         selectActivityID: [],
+        currentRow: null,
         model: {
           activityID: [],
           keyWords: '',
@@ -188,38 +195,38 @@
               ellipsis: true,
             },
             {
-  						title: 'Operation', // 操作
-  						scopedSlots: {customRender: 'action'},
-  						fixed: 'right',
-  						width: 260,
-  						align: 'center',
-  						customRender: (text, record) => {
-  							const renderElement = [];
+              title: 'Operation', // 操作
+              scopedSlots: { customRender: 'action' },
+              fixed: 'right',
+              width: 260,
+              align: 'center',
+              customRender: (text, record) => {
+                const renderElement = []
                 renderElement.push(
                   <a-button
                     icon="edit"
                     type="primary"
                     size="small"
                     onClick={() => {
-                      this.edit(record);
+                      this.edit(record)
                     }}
                   >
                     Edit Info
                   </a-button>
-                );
+                )
                 renderElement.push(
                   <a-button
                     icon="edit"
                     type="primary"
                     size="small"
                     onClick={() => {
-                      this.editSplitRule(record);
+                      this.editSplitRule(record)
                     }}
                   >
                     Split Rule
                   </a-button>
-                );
-  							// renderElement.push(
+                )
+                // renderElement.push(
                 //   <a-popconfirm
                 //     title="是否确认删除此项?"
                 //     okText="确定"
@@ -233,9 +240,9 @@
                 //     </a-button>
                 //   </a-popconfirm>
                 // );
-  							return <a-space>{renderElement}</a-space>;
-  						}
-						}
+                return <a-space>{renderElement}</a-space>
+              },
+            },
           ],
         },
       }
@@ -261,8 +268,7 @@
         }
       },
     },
-    mounted() {
-    },
+    mounted() {},
     methods: {
       ...mapMutations({
         setSubActivitiesAll(commit, select) {
@@ -276,9 +282,7 @@
       edit(record) {
         this.$refs.AddResultRowModal.edit(record)
       },
-      handleDelete() {
-
-      },
+      handleDelete() {},
       // 拖拽列
       changeColumns(evt) {
         console.log(evt, 'oldIndex', evt.oldIndex, 'newIndex', evt.newIndex)
@@ -320,10 +324,16 @@
         }
         this.loadData()
       },
+      openLoad(row) {
+        this.currentRow = row
+        this.loadData()
+      },
       loadData() {
         this.tableParams.loading = true
         axios
-          .post(`http://123.56.242.202:8080/api/SplitRule/GetPMSDataSplitResult?BatchID=CF0DFD39-3A3A-4C68-9062-043386497E2B`)
+          .post(
+            `http://123.56.242.202:8080/api/SplitRule/GetPMSDataSplitResult?BatchID=${this.currentRow.BatchID}`
+          )
           .then((res) => {
             console.log(res.data)
             // this.setSubActivitiesAll(res.data)

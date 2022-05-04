@@ -28,6 +28,7 @@
       class="rule"
       ref="rule"
       :group-list="rules"
+      :SeparateType="Type"
       :ActivityID="currentRow.ActivityID"
       :SplitRuleID="currentRow.ID"
       :optionsList="optionsList"
@@ -98,7 +99,7 @@
             value: 2,
           },
           {
-            label: '按批次拆分',
+            label: '按周期拆分',
             value: 3,
           },
         ],
@@ -177,9 +178,11 @@
             this.rules.SplitRuleID = this.currentRow.ID
             this.rules.Then = JSON.parse(res.data)
             if (JSON.parse(res.data)[0].type == 'IF') {
-              this.Type = 2
+              this.Type = 2 // 条件
+            } else if (JSON.parse(res.data)[0].compareOperation == 'forEach') {
+              this.Type = 3 // 周期
             } else {
-              this.Type = 1
+              this.Type = 1 // 固定比例
             }
             this.isEdit = true
           }
@@ -219,6 +222,7 @@
           this.rules.Then[1].ActivityID = this.currentRow.ActivityID
           this.rules.Then[1].SplitRuleID = this.currentRow.ID
         } else if (val == 3) {
+          this.rules = clonedeep(this.Rules1)
         }
         this.rules.ActivityID = this.currentRow.ActivityID
         this.rules.SplitRuleID = this.currentRow.ID
