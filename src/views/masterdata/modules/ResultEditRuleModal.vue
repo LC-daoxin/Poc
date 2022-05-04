@@ -159,7 +159,7 @@
       }),
       open(record) {
         this.currentRow = record
-        console.log(record, JSON.parse(sessionStorage.getItem("LoginUser")).UserID)
+        console.log(record)
         this.visible = true
         this.getOptionsAll()
         // ?ActivityID=${record.ActivityID}&&userID=${JSON.parse(sessionStorage.getItem("LoginUser")).UserID}
@@ -232,7 +232,13 @@
         if (this.rules.Then.length === 0) {
           this.$message.warning('请配置拆分规则！')
         } else {
-          axios.post(`http://123.56.242.202:8080/api/SplitRule/DataUserSplitUpdate`, this.rules.Then).then((res) => {
+          axios.post(`http://123.56.242.202:8080/api/SplitRule/DataUserSplitUpdate`, [{
+            ID: this.currentRow.ID,
+            // SplitRuleID: this.currentRow.SplitRuleID,
+            UserID: JSON.parse(sessionStorage.getItem("LoginUser")).UserID,
+            ActivityID: this.currentRow.ActivityID,
+            json: this.rules.Then
+          }]).then((res) => {
             console.log('DataUserSplitUpdate', res)
             this.rules = {}
             this.handleCancel()
