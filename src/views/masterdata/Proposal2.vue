@@ -559,7 +559,6 @@
         this.$XModal.confirm('确定保存？').then((type) => {
           if (type === 'confirm') {
             this.$XModal.message({ id: 'loding', content: '数据处理中...', status: 'loading' })
-
             axios.post('http://123.56.242.202:8080/api/Contract/DataContractCreate', [this.formData]).then((res) => {
               this.$XModal.close('loding')
               if (res.data.Code == 200) {

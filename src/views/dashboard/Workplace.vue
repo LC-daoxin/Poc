@@ -317,6 +317,8 @@ export default {
           ActivityNameCN:item.ActivityNameCN,
           ActivityDescCN:item.ActivityDescCN,
           ActivityShortNameCN:item.ActivityShortNameCN,
+          Stage:item.Stage,
+
           ParentID:item.ParentID,
           Property1: item.Property1,
           Property2: item.Property2,
@@ -356,6 +358,7 @@ export default {
           ActivityNameCN:item.ActivityNameCN,
           ActivityDescCN:item.ActivityDescCN,
           ActivityShortNameCN:item.ActivityShortNameCN,
+          Stage:item.Stage,
           ProjectID: item.ProjectID,
           Duration: item.Duration,
           Property1: item.Property1,
@@ -387,7 +390,7 @@ export default {
       axios.post('http://123.56.242.202:8080/api/poc/SaveProposal', ProposalJson).then((res) => {
         console.log('SaveProposal', res)
         axios
-          .get('http://localhost:44372/api/poc/CreateProposalInstance', {
+          .get('http://123.56.242.202:8080/api/poc/CreateProposalInstance', {
             params: { batchID: res.data.Data },
           })
           .then((val) => {

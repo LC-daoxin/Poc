@@ -130,6 +130,7 @@
 						StartDate: '',
 						ReportDeliverDate: '',
 						Comments: '',
+            Revenue,
 					}
 				}, 1000)
         this.$emit('refresh')
@@ -148,6 +149,7 @@
             ActivityNo: record.ActivityNo,
             Description: record.Description,
             Discount: record.Discount,
+            Revenue: record.Revenue,
             StartDate: this.$moment(record.StartDate, 'YYYY/MM/DD HH:mm:ss'),
             ReportDeliverDate: this.$moment(record.ReportDeliverDate, 'YYYY/MM/DD HH:mm:ss'),
             Comments: record.Comments,
