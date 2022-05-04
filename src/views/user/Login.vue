@@ -41,7 +41,7 @@
             </a-input-password>
           </a-form-item>
         </a-tab-pane>
-        <a-tab-pane key="tab2" :tab="$t('user.login.tab-login-mobile')">
+        <a-tab-pane key="tab2" :tab="$t('user.login.tab-login-mobile')" >
           <a-form-item>
             <a-input size="large" type="text" :placeholder="$t('user.login.mobile.placeholder')" v-decorator="['mobile', {rules: [{ required: true, pattern: /^1[34578]\d{9}$/, message: $t('user.login.mobile.placeholder') }], validateTrigger: 'change'}]">
               <a-icon slot="prefix" type="mobile" :style="{ color: 'rgba(0,0,0,.25)' }"/>
@@ -69,7 +69,7 @@
         </a-tab-pane>
       </a-tabs>
 
-      <a-form-item>
+      <a-form-item style="display:none">
         <a-checkbox v-decorator="['rememberMe', { valuePropName: 'checked' }]">{{ $t('user.login.remember-me') }}</a-checkbox>
         <router-link
           :to="{ name: 'recover', params: { user: 'aaa'} }"
@@ -78,7 +78,7 @@
         >{{ $t('user.login.forgot-password') }}</router-link>
       </a-form-item>
 
-      <a-form-item style="margin-top:24px">
+      <a-form-item>
         <a-button
           size="large"
           type="primary"
@@ -89,7 +89,7 @@
         >{{ $t('user.login.login') }}</a-button>
       </a-form-item>
 
-      <div class="user-login-other">
+      <div class="user-login-other"  style="display:none">
         <span>{{ $t('user.login.sign-in-with') }}</span>
         <a>
           <a-icon class="item-icon" type="alipay-circle"></a-icon>
@@ -199,7 +199,7 @@ export default {
               if (res.data.Code == 200) {
                 sessionStorage.setItem("Access-Token",res.data.Data.Token);
                 sessionStorage.setItem("LoginUser",JSON.stringify(res.data.Data));
-                state.loginBtn = false
+                //state.loginBtn = false
                 this.loginSuccess(res)
               } else {
                 this.$XModal.message({ content: '账号或密码不对', status: 'error' })
@@ -333,5 +333,8 @@ export default {
       float: right;
     }
   }
+}
+/deep/ .ant-tabs-nav-scroll{
+  visibility: hidden;
 }
 </style>
