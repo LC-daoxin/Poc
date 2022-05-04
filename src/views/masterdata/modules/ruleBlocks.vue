@@ -53,8 +53,8 @@
                 v-model="item.leftOperatorExpression.type"
                 @change="changeLeftOperatorExpression($event, item)"
               >
-                <a-select-option :value="1" v-if="!['IF', 'ELSE'].includes(item.type)">BU/SubBU</a-select-option>
-                <a-select-option :value="2">Property</a-select-option>
+                <a-select-option value="1" v-if="!['IF', 'ELSE'].includes(item.type)">BU/SubBU</a-select-option>
+                <a-select-option value="2">Property</a-select-option>
               </a-select>
               <a-cascader
                 style="width: 200px"
@@ -96,10 +96,10 @@
                 style="width: 100px"
                 v-model="item.rightOperatorExpression.type"
               >
-                <a-select-option :value="1">固定值</a-select-option>
+                <a-select-option value="1">固定值</a-select-option>
                 <a-select-option
                   v-if="!['IF', 'ELSE'].includes(item.type)"
-                  :value="2"
+                  value="2"
                 >公式</a-select-option>
               </a-select>
               <a-input

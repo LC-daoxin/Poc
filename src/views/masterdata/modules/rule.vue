@@ -48,9 +48,9 @@
               SplitRuleID: this.SplitRuleID,
 	            id: `${randomUUID(10)}`,
 	            type: 'fixed',
-              leftOperatorExpression: {type: 1, value: '', valueArr: []},
+              leftOperatorExpression: {type: '1', value: '', valueArr: []},
               compareOperation: '=',
-              rightOperatorExpression: {type: 1, value: ''},
+              rightOperatorExpression: {type: '1', value: ''},
               // describe: ''
             })
           } else if (type === 'THEN') {
