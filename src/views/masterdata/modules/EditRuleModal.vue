@@ -132,6 +132,7 @@
         },
       }),
       open(record) {
+        console.log(record)
         this.currentRow = record
         this.visible = true
         this.getOptionsAll()

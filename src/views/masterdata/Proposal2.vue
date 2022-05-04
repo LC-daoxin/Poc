@@ -469,6 +469,7 @@
         showDetails: false,
         showDetailsCN: false,
         showSplit: false,
+        currentRow: {},
         title: '',
         formData: {},
         selectRow: {},
@@ -506,10 +507,11 @@
       },
       showSplitResult(row) {
         console.log(row)
+        this.currentRow = row
         this.showSplit = true
       },
       openSplit() {
-        this.$refs.ActivitySplitResult.loadData()
+        this.$refs.ActivitySplitResult.openLoad(this.currentRow)
       },
       arrayToTree(data, id, pid, data2) {
         if (!data || !data.length) return []

@@ -254,9 +254,13 @@ export default {
     // this.getTest()
   },
   watch: {
-    current(val) {
+    current(val, oldval) {
+      console.log('watch-current', val, oldval)
       if (val == 1 && this.selectedRows.length > 0) {
         this.subActivitiesloadData()
+      }
+      if (oldval == 2) {
+        this.$refs.subActivities.saveSubActivitiesAll()
       }
     },
   },
@@ -432,8 +436,6 @@ export default {
       return css
     },
     handleNode(node) {
-      console.log(node)
-      console.log(this.listData)
       this.listData = node.list
       // this.$refs.table.refresh()
     },

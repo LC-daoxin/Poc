@@ -46,6 +46,7 @@
       :pagination="false"
       :params="tableParams"
       :rowSelection="true"
+      :rowKey="(record) => record.ActivityID"
       @pageChange="loadData"
       @changeColumns="changeColumns"
       @selectionChange="selectionChange"
@@ -90,23 +91,27 @@ export default {
       tableParams: {
         loading: false,
         dataSource: [],
-        scroll: { x: 1020 },
+        scroll: { x: 1060 },
         bordered: true,
         columns: [
           {
             title: 'Activity Name',
             dataIndex: 'ActivityName',
             align: 'center',
-            width: 200,
             ellipsis: true,
-            // customRender: (text, row, index) => {
-            //   return <b>{text}</b>
-            // },
+            customRender: (text, row, index) => {
+              if (this.templateSelect.length > 0) {
+                return this.templateSelect[0].Name == 'POCCN' ?  <b>{row.ActivityNameCN}</b> : <b>{text}</b>
+              } else {
+                return <b>{text}</b>
+              }
+            },
           },
           {
             title: 'Activity Short Desc',
             dataIndex: 'ActivityDesc',
             align: 'center',
+            width: 180,
             ellipsis: true,
           },
           {
@@ -140,7 +145,7 @@ export default {
           {
             title: 'Duration',
             dataIndex: 'Duration',
-            width: 120,
+            width: 150,
             align: 'center',
             customRender: (text, row, index) => <span>{text}</span>,
           },
@@ -151,6 +156,7 @@ export default {
   computed: {
     ...mapState({
       lang: (state) => state.app.lang,
+      templateSelect: (state) => state.poc.templateSelect,
     }),
   },
   watch: {
@@ -161,6 +167,12 @@ export default {
       console.log('model.proposalPipelineID', val)
       val ? (this.projectType1Disabled = false) : (this.projectType1Disabled = true)
     },
+    templateSelect(list) {
+      console.log('watch', list)
+      if (list.length > 0) {
+        this.loadData(this.model)
+      }
+    }
   },
   mounted() {
     this.model = {
@@ -169,7 +181,7 @@ export default {
     }
 
     this.getProposalPipeLine()
-    this.getActivitiesList(this.model)
+    this.loadData(this.model)
   },
   methods: {
     ...mapMutations({
@@ -212,20 +224,13 @@ export default {
     },
     loadData(model = {}) {
       this.tableParams.loading = true
+      let url = 'GetActivitiesList'
+      if (this.templateSelect.length > 0) {
+        this.templateSelect[0].Name == 'POCCN' ?  url = 'GetActivitiesListCN' : ''
+      }
+      console.log(1, `http://123.56.242.202:8080/api/poc/${url}`)
       axios
-        .get('http://123.56.242.202:8080/api/poc/GetActivitiesList', {
-          params: model,
-        })
-        .then((res) => {
-          console.log('loadData', res)
-          this.tableParams.dataSource = res.data
-          this.tableParams.loading = false
-        })
-    },
-    getActivitiesList(model) {
-      this.tableParams.loading = true
-      axios
-        .get('http://123.56.242.202:8080/api/poc/GetActivitiesList', {
+        .get(`http://123.56.242.202:8080/api/poc/${url}`, {
           params: model,
         })
         .then((res) => {

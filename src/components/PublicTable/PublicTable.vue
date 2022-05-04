@@ -16,6 +16,14 @@
 				type: Boolean,
         default: false
 			},
+      fixed: {
+        type: Boolean,
+        default: true
+      },
+      multiple: {
+        type: Boolean,
+        default: true
+      },
       pagination: {
         type: Object | Boolean,
         default: () => {
@@ -30,7 +38,8 @@
     data() {
       return {
         renderRowSelection: {
-          fixed: true,
+          fixed: this.fixed ? true : false,
+          type: this.multiple ? 'checkbox' : 'radio',
           selectedRowKeys: [],
           onChange: (selectedRowKeys, selectedRows) => {
             this.renderRowSelection.selectedRowKeys = selectedRowKeys

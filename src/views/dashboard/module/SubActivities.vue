@@ -64,6 +64,8 @@
       :params="tableParams"
       :rowSelection="true"
       :draggableRow="true"
+      :fixed="false"
+      :rowKey="(record) => record.SubActivityID"
       @pageChange="loadData"
       @changeRow="changeRow"
       @selectionChange="selectionChange"
@@ -85,6 +87,16 @@
       PublicTable,
     },
     data() {
+      const EstimateOptions = [
+        {
+          label: '无',
+          value: 'False',
+        },
+        {
+          label: 'Estimate',
+          value: 'True',
+        },
+      ]
       return {
         // data
         searchLabelCol: 9,
@@ -137,10 +149,34 @@
               ellipsis: true,
             },
             {
+              title: 'Estimate',
+              dataIndex: 'Property10',
+              align: 'center',
+              width: 200,
+              ellipsis: true,
+              customRender: (text, record, index) => {
+                let val = text && text == 'True' ? 'True' : 'False'
+                return (
+                  <a-select
+                    value={val}
+                    style="width: 100%"
+                    size="small"
+                    onChange={(val) => {
+                      this.changeEstimate(val, record)
+                    }}
+                  >
+                    {EstimateOptions.map((item) => {
+                      return <a-select-option value={item.value}>{item.label}</a-select-option>
+                    })}
+                  </a-select>
+                )
+              },
+            },
+            {
               title: 'Service Price',
               dataIndex: 'Price',
               align: 'center',
-              width: 100,
+              width: 150,
               ellipsis: true,
               customRender: (text, row, index) => (
                 <a-input
@@ -155,7 +191,7 @@
               title: 'Pass Though Price',
               dataIndex: 'PassThroughPrice',
               align: 'center',
-              width: 100,
+              width: 150,
               ellipsis: true,
               customRender: (text, row, index) => (
                 <a-input
@@ -173,12 +209,7 @@
               align: 'center',
               ellipsis: true,
               customRender: (text, row, index) => (
-                <a-input
-                  size="small"
-                  v-model:value={text}
-                  onChange={(e) => this.onChangeDuration(e, row)}
-                  value={text}
-                />
+                <a-input size="small" v-model:value={text} onChange={(e) => this.onChangeDuration(e, row)} value={text} />
               ),
             },
             {
@@ -188,12 +219,7 @@
               align: 'center',
               ellipsis: true,
               customRender: (text, row, index) => (
-                <a-input
-                  size="small"
-                  v-model:value={text}
-                  onChange={(e) => this.onChangeDisCount(e, row)}
-                  value={text}
-                />
+                <a-input size="small" v-model:value={text} onChange={(e) => this.onChangeDisCount(e, row)} value={text} />
               ),
             },
             {
@@ -203,12 +229,7 @@
               width: 100,
               ellipsis: true,
               customRender: (text, row, index) => (
-                <a-input
-                  size="small"
-                  v-model:value={text}
-                  onChange={(e) => this.onChangeScale(e, row)}
-                  value={text}
-                />
+                <a-input size="small" v-model:value={text} onChange={(e) => this.onChangeScale(e, row)} value={text} />
               ),
             },
           ],
@@ -254,12 +275,12 @@
       },
       // 拖拽行
       changeRow(evt) {
-        // let list = _.cloneDeep(this.tableParams.dataSource)
+        let list = _.cloneDeep(this.tableParams.dataSource)
         console.log(evt, 'oldIndex', evt.oldIndex, 'newIndex', evt.newIndex)
-        // let oldRowsItem = _.cloneDeep(list[evt.oldIndex])
-        // list.splice(evt.oldIndex, 1)
-        // list.splice(evt.newIndex, 0, oldRowsItem)
-        // this.tableParams.dataSource = list
+        let oldRowsItem = _.cloneDeep(list[evt.oldIndex])
+        list.splice(evt.oldIndex, 1)
+        list.splice(evt.newIndex, 0, oldRowsItem)
+        this.tableParams.dataSource = list
         console.log('changeRow', this.tableParams.dataSource)
       },
       // 选择Pipeline
@@ -283,33 +304,48 @@
         this.loadData()
       },
       loadData() {
-        this.tableParams.loading = true
-        axios
-          .get('http://123.56.242.202:8080/api/poc/GetSubActivitiesList', {
-            params: this.model,
-          })
-          .then((res) => {
-            console.log(res.data)
-            // this.setSubActivitiesAll(res.data)
-            this.tableParams.dataSource = res.data
-            this.tableParams.loading = false
-          })
+        if (this.model.activityID.length > 0) {
+          this.tableParams.loading = true
+          axios
+            .get('http://123.56.242.202:8080/api/poc/GetSubActivitiesList', {
+              params: this.model,
+            })
+            .then((res) => {
+              console.log('GetSubActivitiesList', res.data)
+              // this.setSubActivitiesAll(res.data)
+              this.tableParams.dataSource = res.data
+              this.tableParams.loading = false
+            })
+        }
+      },
+      changeEstimate(val, row) {
+        console.log(val, row)
+        this.tableParams.dataSource.forEach((item, i) => {
+          if (item.SubActivityID == row.SubActivityID) {
+            this.$set(this.tableParams.dataSource[i], 'Property10', val)
+            // this.setSubActivitiesAll(this.tableParams.dataSource)
+            // this.setSubActivitiesAll(this.selectionRows)
+          }
+        })
       },
       onChangePassPrice(e, row) {
         this.tableParams.dataSource.forEach((item, i) => {
           if (item.SubActivityID == row.SubActivityID) {
+            console.log('onChangePassPrice', e.target.value)
             this.$set(this.tableParams.dataSource[i], 'PassThroughPrice', e.target.value)
             // this.setSubActivitiesAll(this.tableParams.dataSource)
-            this.setSubActivitiesAll(this.selectionRows)
+            // this.setSubActivitiesAll(this.selectionRows)
           }
         })
+        console.log(this.tableParams.dataSource)
       },
       onChangeServicePrice(e, row) {
         this.tableParams.dataSource.forEach((item, i) => {
           if (item.SubActivityID == row.SubActivityID) {
-            this.$set(this.tableParams.dataSource[i], 'ServicePrice', e.target.value)
+            console.log('onChangeServicePrice', e.target.value)
+            this.$set(this.tableParams.dataSource[i], 'Price', e.target.value)
             // this.setSubActivitiesAll(this.tableParams.dataSource)
-            this.setSubActivitiesAll(this.selectionRows)
+            // this.setSubActivitiesAll(this.selectionRows)
           }
         })
       },
@@ -318,7 +354,7 @@
           if (item.SubActivityID == row.SubActivityID) {
             this.$set(this.tableParams.dataSource[i], 'Duration', e.target.value)
             // this.setSubActivitiesAll(this.tableParams.dataSource)
-            this.setSubActivitiesAll(this.selectionRows)
+            // this.setSubActivitiesAll(this.selectionRows)
           }
         })
       },
@@ -327,7 +363,7 @@
           if (item.SubActivityID == row.SubActivityID) {
             this.$set(this.tableParams.dataSource[i], 'Scale', e.target.value)
             // this.setSubActivitiesAll(this.tableParams.dataSource)
-            this.setSubActivitiesAll(this.selectionRows)
+            // this.setSubActivitiesAll(this.selectionRows)
           }
         })
       },
@@ -336,14 +372,27 @@
           if (item.SubActivityID == row.SubActivityID) {
             this.$set(this.tableParams.dataSource[i], 'DisCount', e.target.value)
             // this.setSubActivitiesAll(this.tableParams.dataSource)
-            this.setSubActivitiesAll(this.selectionRows)
+            // this.setSubActivitiesAll(this.selectionRows)
           }
         })
       },
       selectionChange(keys, rows) {
         this.selectionKeys = keys
         this.selectionRows = rows
+        console.log(keys)
         this.setSubActivitiesAll(this.selectionRows)
+      },
+      saveSubActivitiesAll() {
+        if (this.tableParams.dataSource.length > 0) {
+          let array = []
+          this.tableParams.dataSource.forEach((item) => {
+            if (this.selectionKeys.includes(item.SubActivityID)) {
+              array.push(item)
+            }
+          })
+          console.log('saveSubActivitiesAll', array)
+          this.setSubActivitiesAll(array)
+        }
       },
     },
     created() {

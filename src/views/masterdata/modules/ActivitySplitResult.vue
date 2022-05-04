@@ -66,6 +66,7 @@
         selectionKeys: [],
         selectionRows: [],
         selectActivityID: [],
+        currentRow: null,
         model: {
           activityID: [],
           keyWords: '',
@@ -320,10 +321,14 @@
         }
         this.loadData()
       },
+      openLoad(row) {
+        this.currentRow = row
+        this.loadData()
+      },
       loadData() {
         this.tableParams.loading = true
         axios
-          .post(`http://123.56.242.202:8080/api/SplitRule/GetPMSDataSplitResult?BatchID=8B3FDE19-4BF2-42CA-BB03-D3366E4AD14A`)
+          .post(`http://123.56.242.202:8080/api/SplitRule/GetPMSDataSplitResult?BatchID=${this.currentRow.BatchID}`)
           .then((res) => {
             console.log(res.data)
             // this.setSubActivitiesAll(res.data)
