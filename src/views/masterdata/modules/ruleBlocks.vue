@@ -7,12 +7,22 @@
       <div class="toolbar">
         <span class="thenText">THEN</span>
         <a-button
-          v-if="groupList.SeparateType == 1 || groupList.tierIndex == 2"
+          v-if="[1,2].includes(groupList.SeparateType)"
           type="primary"
           size="small"
           class="toolbtn"
           :disabled="!isEdit"
           @click.stop="addCondition('fixed')"
+        >
+          <a-icon type="plus-circle" /> 添加拆分规则
+        </a-button>
+        <a-button
+          v-if="groupList.SeparateType == 3"
+          type="primary"
+          size="small"
+          class="toolbtn"
+          :disabled="!isEdit"
+          @click.stop="addCondition('forEach')"
         >
           <a-icon type="plus-circle" /> 添加拆分规则
         </a-button>
@@ -36,7 +46,7 @@
         ></div> -->
         <div
           class="condition-select"
-          v-if="['fixed', 'IF', 'ELSE'].includes(item.type)"
+          v-if="['fixed', 'forEach', 'IF', 'ELSE'].includes(item.type)"
         >
           <div class="input-group">
             <span

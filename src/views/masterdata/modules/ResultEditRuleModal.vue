@@ -80,15 +80,6 @@
         Type: 1,
         rules: {}, // 场景规则
         currentRow: {}, // 被选择的拆分SubActivity
-        Rules1: {
-          // 默认-固定拆分
-          id: `rule_${randomUUID(10)}`,
-          SeparateType: 1,
-          ActivityID: '',
-          SplitRuleID: '',
-          tierIndex: 1,
-          Then: [],
-        },
         typeOptions: [
           {
             label: '按固定比例拆分',
@@ -103,6 +94,15 @@
             value: 3,
           },
         ],
+        Rules1: {
+          // 默认-固定拆分
+          id: `rule_${randomUUID(10)}`,
+          SeparateType: 1,
+          ActivityID: '',
+          SplitRuleID: '',
+          tierIndex: 1,
+          Then: [],
+        },
         Rules2: {
           // 默认-条件拆分
           id: `rule_${randomUUID(10)}`,
@@ -223,6 +223,7 @@
           this.rules.Then[1].SplitRuleID = this.currentRow.ID
         } else if (val == 3) {
           this.rules = clonedeep(this.Rules1)
+          this.rules.SeparateType = 3
         }
         this.rules.ActivityID = this.currentRow.ActivityID
         this.rules.SplitRuleID = this.currentRow.ID

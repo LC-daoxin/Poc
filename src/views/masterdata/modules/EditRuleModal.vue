@@ -196,6 +196,7 @@
           this.rules.Then[1].SplitRuleID = this.currentRow.ID
         } else if (val == 3) {
           this.rules = clonedeep(this.Rules1)
+          this.rules.SeparateType = 3
         }
         this.rules.ActivityID = this.currentRow.ActivityID
         this.rules.SplitRuleID = this.currentRow.ID

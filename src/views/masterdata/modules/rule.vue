@@ -54,7 +54,19 @@
 	            id: `${randomUUID(10)}`,
 	            type: 'fixed',
               leftOperatorExpression: {type: '1', value: '', valueArr: []},
-              compareOperation: this.SeparateType == 3 ? 'forEach' : '=',
+              compareOperation: '=',
+              rightOperatorExpression: {type: '1', value: ''},
+              // describe: ''
+            })
+          } else if (type === 'forEach') {
+            console.log('forEach', args)
+            groupList.Then.push({
+              ActivityID: this.ActivityID,
+              SplitRuleID: this.SplitRuleID,
+	            id: `${randomUUID(10)}`,
+	            type: 'forEach',
+              leftOperatorExpression: {type: '1', value: '', valueArr: []},
+              compareOperation: 'forEach',
               rightOperatorExpression: {type: '1', value: ''},
               // describe: ''
             })
@@ -66,13 +78,6 @@
               Then: []
             })
           }
-          // } else if (type === 'symbol') {
-          //   groupList.Then.push({
-          //     id: `${randomUUID(10)}`,
-          //     type: 'symbol',
-          //     formulaRelation: 'and'
-          //   })
-          // }
         } else {
           for (let i = 0; i < groupList.Then.length; i++) {
             if (['IF', 'ELSE'].includes(groupList.Then[i].type)) {
