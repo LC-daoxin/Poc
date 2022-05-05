@@ -201,7 +201,7 @@ export default {
               if (res.data.Code == 200) {
                 sessionStorage.setItem("Access-Token",res.data.Data.Token);
                 sessionStorage.setItem("LoginUser",JSON.stringify(res.data.Data));
-                sessionStorage.setItem("UserMenu",JSON.stringify(res.data.Data.Menu));
+                sessionStorage.setItem("UserMenu",res.data.Data.Menu);
                 //state.loginBtn = false
                 this.loginSuccess(res)
               } else {
