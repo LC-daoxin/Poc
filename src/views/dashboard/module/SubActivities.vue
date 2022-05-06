@@ -121,7 +121,7 @@
         tableParams: {
           loading: false,
           dataSource: [],
-          scroll: { x: 1200 },
+          scroll: { x: 1600 },
           bordered: true,
           columns: [
             {
@@ -131,15 +131,26 @@
               width: 300,
               ellipsis: true,
               customRender: (text, row, index) => {
-                return <b>{text}</b>
+                if (this.templateSelect.length > 0) {
+                  return this.templateSelect[0].Name == 'POCCN' ? <b>{row.ActivityNameCN}</b> : <b>{text}</b>
+                } else {
+                  return <b>{text}</b>
+                }
               },
             },
             {
               title: 'Sub Activity Name',
               dataIndex: 'SubActivityName',
               align: 'center',
-              width: 200,
+              width: 300,
               ellipsis: true,
+              customRender: (text, row, index) => {
+                if (this.templateSelect.length > 0) {
+                  return this.templateSelect[0].Name == 'POCCN' ? <b>{row.SubActivityNameCN}</b> : <b>{text}</b>
+                } else {
+                  return <b>{text}</b>
+                }
+              },
             },
             {
               title: 'Sub Activity Desc',
@@ -239,6 +250,7 @@
     computed: {
       ...mapState({
         lang: (state) => state.app.lang,
+        templateSelect: (state) => state.poc.templateSelect,
         activitiesSelect: (state) => state.poc.activitiesSelect,
       }),
     },
