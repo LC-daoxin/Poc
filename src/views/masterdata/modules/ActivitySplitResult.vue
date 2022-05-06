@@ -332,7 +332,7 @@ export default {
     },
     exportData() {
       axios
-        .post(`http://localhost:44372/api/SplitRule/GetPMSDataSplitResultFile?BatchID=${this.currentRow.BatchID}`)
+        .post(`http://123.56.242.202:8080/api/SplitRule/GetPMSDataSplitResultFile?BatchID=${this.currentRow.BatchID}`)
         .then((res) => {
           const blob = new Blob([res.data], { type: 'application/vnd.ms-excel' })
           const url = window.URL.createObjectURL(blob)

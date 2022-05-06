@@ -357,7 +357,7 @@ export default {
         if (type === 'confirm') {
           this.$XModal.message({ id: 'loding', content: '数据处理中...', status: 'loading' })
 
-          axios.post('http://localhost:44372/api/Contract/DataContractCreate', [this.formData]).then((res) => {
+          axios.post('http://123.56.242.202:8080/api/Contract/DataContractCreate', [this.formData]).then((res) => {
             this.$XModal.close('loding')
             if (res.data.Code == 200) {
               this.$XModal.message({ content: '生成成功', status: 'success' })
