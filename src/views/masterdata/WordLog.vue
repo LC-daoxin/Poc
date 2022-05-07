@@ -11,10 +11,10 @@
       :data="tableList"
       :radio-config="{ trigger: 'row' }"
     >
-      <vxe-column field="FileName" align="center" width="400" title="文件名称"></vxe-column>
-      <vxe-column field="InnerText" title="修改内容"></vxe-column>
-      <vxe-column field="Author" width="120" title="修改人"></vxe-column>
-      <vxe-column field="UpdateTime" width="300" title="修改时间" :formatter="formatDate"></vxe-column>
+      <vxe-column field="FileName" align="center" width="400" title="FileName"></vxe-column>
+      <vxe-column field="InnerText" title="Modification Content"></vxe-column>
+      <vxe-column field="Author" width="120" title="Modifier"></vxe-column>
+      <vxe-column field="UpdateTime" width="300" title="Modification time" :formatter="formatDate"></vxe-column>
     </vxe-table>
   </div>
 </template>

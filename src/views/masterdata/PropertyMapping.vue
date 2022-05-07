@@ -7,7 +7,7 @@
         <vxe-input v-model="searchData.corporateName" placeholder="公司名称(中文)"></vxe-input> -->
         <!-- <vxe-button status="primary" icon="fa vxe-icon--search" @click="search">查询</vxe-button> -->
         <!-- <vxe-button status="primary" icon="fa vxe-icon--plus" @click="add">添加</vxe-button> -->
-        <vxe-button status="primary" icon="fa vxe-icon--edit-outline" @click="edit">编辑</vxe-button>
+        <vxe-button status="primary" icon="fa vxe-icon--edit-outline" @click="edit">Edit</vxe-button>
         <!-- <vxe-button status="primary" icon="fa vxe-icon--close" @click="del">删除</vxe-button> -->
       </template>
     </vxe-toolbar>
@@ -22,41 +22,41 @@
       :data="dataList"
       :radio-config="{ trigger: 'row' }"
     >
-      <vxe-column type="radio" align="center" width="80" title="序号"></vxe-column>
-      <vxe-column field="MappingID" width="130" title="集合ID"></vxe-column>
-      <vxe-column field="PropertyNum" width="130" title="属性编码"></vxe-column>
-      <vxe-column field="PropertyName" width="130" title="属性名称"></vxe-column>
-      <vxe-column field="PropertyDesc" width="130" title="属性排序"></vxe-column>
-      <vxe-column field="PropertyType" width="100" title="属性类型"></vxe-column>
-      <vxe-column field="CreateDate" width="80" title="创建时间"></vxe-column>
-      <vxe-column field="CreateUser" width="130" title="创建用户"></vxe-column>
+      <vxe-column type="radio" align="center" width="80" title=" "></vxe-column>
+      <vxe-column field="MappingID" width="130" title="MappingID"></vxe-column>
+      <vxe-column field="PropertyNum" width="130" title="Property num"></vxe-column>
+      <vxe-column field="PropertyName" width="130" title="Property name"></vxe-column>
+      <vxe-column field="PropertyDesc" width="130" title="Property sorting"></vxe-column>
+      <vxe-column field="PropertyType" width="130" title="Property type"></vxe-column>
+      <vxe-column field="CreateDate" width="130" title="CreateDate"></vxe-column>
+      <vxe-column field="CreateUser" width="130" title="CreateUser"></vxe-column>
       <!-- <vxe-column field="IsDelete" width="130" title="是否删除"></vxe-column> -->
     </vxe-table>
 
     <vxe-modal v-model="open" :title="title" width="1000" height="250" resize>
       <template #default>
         <vxe-form :data="formData" title-align="right" title-width="120">
-          <vxe-form-item title="属性编码" field="PropertyNum" span="12">
+          <vxe-form-item title="Property num" field="PropertyNum" span="12">
             <template #default>
-              <vxe-input v-model="formData.PropertyNum" placeholder="请输入属性编码" readonly></vxe-input>
+              <vxe-input v-model="formData.PropertyNum" placeholder="Please enter the Property num" readonly></vxe-input>
             </template>
           </vxe-form-item>
 
-          <vxe-form-item title="属性名称" field="PropertyName" span="12">
+          <vxe-form-item title="Property Name" field="PropertyName" span="12">
             <template #default>
-              <vxe-input v-model="formData.PropertyName" placeholder="请输入属性名称"></vxe-input>
+              <vxe-input v-model="formData.PropertyName" placeholder="Please enter a property name"></vxe-input>
             </template>
           </vxe-form-item>
 
-          <vxe-form-item title="类型排序" field="PropertyDesc" span="12">
+          <vxe-form-item title="Property Sorting" field="PropertyDesc" span="12">
             <template #default>
-              <vxe-input v-model="formData.PropertyDesc" placeholder="请输入类型排序"></vxe-input>
+              <vxe-input v-model="formData.PropertyDesc" placeholder="Please enter sort type"></vxe-input>
             </template>
           </vxe-form-item>
 
-          <vxe-form-item title="属性类型" field="PropertyType" span="12">
+          <vxe-form-item title="Property Type" field="PropertyType" span="12">
             <template #default>
-              <vxe-select v-model="formData.PropertyType" placeholder="请输入属性类型" clearable>
+              <vxe-select v-model="formData.PropertyType" placeholder="Please enter the property type" clearable>
                 <vxe-option value="String" label="String"></vxe-option>
                 <vxe-option value="Int" label="Int"></vxe-option>
                 <vxe-option value="Double" label="Double"></vxe-option>
@@ -67,8 +67,8 @@
 
           <vxe-form-item align="right" span="24">
             <template #default>
-              <vxe-button type="button" status="primary" @click="save">保存</vxe-button>
-              <vxe-button type="button" @click="close">取消</vxe-button>
+              <vxe-button type="button" status="primary" @click="save">Save</vxe-button>
+              <vxe-button type="button" @click="close">Close</vxe-button>
             </template>
           </vxe-form-item>
         </vxe-form>
@@ -140,62 +140,62 @@ export default {
     edit() {
       var checked = this.$refs.vxeTable.getRadioRecord()
       if (checked == null) {
-        this.$XModal.message({ content: '请选择要修改的数据', status: 'warning' })
+        this.$XModal.message({ content: 'Please select the data to modify', status: 'warning' })
         return
       }
       this.formData = checked
-      this.title = '修改属性'
+      this.title = 'modify attribute'
       this.open = true
     },
     del() {
       var checked = this.$refs.vxeTable.getRadioRecord()
       if (checked == null) {
-        this.$XModal.message({ content: '请选择要删除的数据', status: 'warning' })
+        this.$XModal.message({ content: 'Please select the data to delete', status: 'warning' })
         return
       }
-      this.$XModal.confirm('确定删除？').then((type) => {
+      this.$XModal.confirm('Are you sure to delete?').then((type) => {
         if (type === 'confirm') {
-          this.$XModal.message({ id: 'loding', content: '数据处理中...', status: 'loading' })
+          this.$XModal.message({ id: 'loding', content: 'Data processing...', status: 'loading' })
           axios
             .post('http://123.56.242.202:8080/api/BaseData/MasterDataDelete?MasterID=' + checked.MasterID)
             .then((res) => {
               this.$XModal.close('loding')
               if (res.data.Code == 200) {
-                this.$XModal.message({ content: '删除成功', status: 'success' })
+                this.$XModal.message({ content: 'Deleted successfully', status: 'success' })
                 this.open = false
                 this.getList('', '')
               } else {
-                this.$XModal.message({ content: '删除失败' + res.data.Message, status: 'error' })
+                this.$XModal.message({ content: 'Delete failed:' + res.data.Message, status: 'error' })
               }
             })
         }
       })
     },
     save() {
-      this.$XModal.confirm('确定保存？').then((type) => {
+      this.$XModal.confirm('Are you sure to save?').then((type) => {
         if (type === 'confirm') {
-          this.$XModal.message({ id: 'loding', content: '数据处理中...', status: 'loading' })
+          this.$XModal.message({ id: 'loding', content: 'Data processing...', status: 'loading' })
           debugger
           if (this.formData.MappingID == null) {
             axios.post('http://123.56.242.202:8080/api/BaseData/PropertyMappingCreate', [this.formData]).then((res) => {
               this.$XModal.close('loding')
               if (res.data.Code == 200) {
-                this.$XModal.message({ content: '添加成功', status: 'success' })
+                this.$XModal.message({ content: 'Added successfully', status: 'success' })
                 this.open = false
                 this.getList('', '')
               } else {
-                this.$XModal.message({ content: '添加失败：' + res.data.Message, status: 'error' })
+                this.$XModal.message({ content: 'Add failed:' + res.data.Message, status: 'error' })
               }
             })
           } else {
             axios.post('http://123.56.242.202:8080/api/BaseData/PropertyMappingUpdate', [this.formData]).then((res) => {
               this.$XModal.close('loding')
               if (res.data.Code == 200) {
-                this.$XModal.message({ content: '修改成功', status: 'success' })
+                this.$XModal.message({ content: 'Modified successfully', status: 'success' })
                 this.open = false
                 this.getList('', '')
               } else {
-                this.$XModal.message({ content: '修改失败：' + res.data.Message, status: 'error' })
+                this.$XModal.message({ content: 'Modification failed:' + res.data.Message, status: 'error' })
               }
             })
           }

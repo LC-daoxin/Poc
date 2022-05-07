@@ -3,8 +3,8 @@
   <div>
     <vxe-toolbar style="padding-left: 10px; margin-bottom: 10px; border-radius: 5px">
       <template #buttons>
-        <vxe-input v-model="searchKey" placeholder="文件名称"></vxe-input>
-        <vxe-button status="primary" icon="fa vxe-icon--search" @click="search">查询</vxe-button>
+        <vxe-input v-model="searchKey" placeholder="FileName"></vxe-input>
+        <vxe-button status="primary" icon="fa vxe-icon--search" @click="search">Search</vxe-button>
       </template>
     </vxe-toolbar>
     <vxe-table
@@ -17,24 +17,24 @@
       :data="tableList"
       :radio-config="{ trigger: 'row' }"
     >
-      <vxe-column field="ProjectID" width="180" title="项目编号"></vxe-column>
-      <vxe-column field="ProjectName" width="180" title="项目名称"></vxe-column>
-      <vxe-column field="ProposalFileName" width="180" title="Proposal文件名称"></vxe-column>
-      <vxe-column field="ContractFileName" width="180" title="Contract文件名称"></vxe-column>
-      <vxe-column field="CreateDate" width="160" title="创建时间"></vxe-column>
-      <vxe-column field="UserName" width="80" title="创建人"></vxe-column>
-      <vxe-column field="Status" width="80" title="状态"></vxe-column>
+      <vxe-column field="ProjectID" width="180" title="ProjectID"></vxe-column>
+      <vxe-column field="ProjectName" width="180" title="ProjectName"></vxe-column>
+      <vxe-column field="ProposalFileName" width="180" title="ProposalFileName"></vxe-column>
+      <vxe-column field="ContractFileName" width="180" title="ContractFileName"></vxe-column>
+      <vxe-column field="CreateDate" width="160" title="CreateDate"></vxe-column>
+      <vxe-column field="UserName" width="120" title="CreateUser"></vxe-column>
+      <vxe-column field="Status" width="80" title="Status"></vxe-column>
 
-      <vxe-column type="seq" title="操作" width="400" :resizable="false" show-overflow>
+      <vxe-column type="seq" title="Operation" width="400" :resizable="false" show-overflow>
         <template #default="{ row }">
-          <vxe-button @click="showDetailEvent(row)">生成合同{{ row.batchID }}</vxe-button>
-          <vxe-button @click="SelectProposal(row.ProposalFileName, row)">查看Proposal{{ row.batchID }}</vxe-button>
-          <vxe-button @click="SelectContract(row.ContractFileName, row)">查看Contract{{ row.batchID }}</vxe-button>
+          <vxe-button @click="showDetailEvent(row)">Generate Contract{{ row.batchID }}</vxe-button>
+          <vxe-button @click="SelectProposal(row.ProposalFileName, row)">View Proposal{{ row.batchID }}</vxe-button>
+          <vxe-button @click="SelectContract(row.ContractFileName, row)">View Contract{{ row.batchID }}</vxe-button>
         </template>
       </vxe-column>
     </vxe-table>
 
-    <vxe-modal v-model="showDetails" title="英文合同信息" width="600" height="440" resize>
+    <vxe-modal v-model="showDetails" title="English contract information" width="600" height="440" resize>
       <template #default>
         <vxe-form :data="formData" title-align="right" title-width="80">
           <vxe-form-item title="Name" field="Name" span="16">
@@ -65,8 +65,8 @@
           </vxe-form-item>
           <vxe-form-item align="right" span="24">
             <template #default>
-              <vxe-button type="button" status="primary" @click="save">生成</vxe-button>
-              <vxe-button type="button" @click="close">取消</vxe-button>
+              <vxe-button type="button" status="primary" @click="save">Save</vxe-button>
+              <vxe-button type="button" @click="close">Close</vxe-button>
             </template>
           </vxe-form-item>
         </vxe-form>
@@ -186,7 +186,7 @@
       </template>
     </vxe-modal>
 
-    <vxe-modal v-model="showDetails11" title="文件信息" width="1200" height="800" resize>
+    <vxe-modal v-model="showDetails11" title="File Information" width="1200" height="800" resize>
       <template #default>
         <div class="Generate">
           <iframe
@@ -272,7 +272,7 @@ export default {
       name = row.ContractFileNameIP + '/default/' + name
 
       if (row.Status == '未生成') {
-        this.$XModal.message({ content: '此合同未生成，无法查看', status: 'warning' })
+        this.$XModal.message({ content: 'This contract has not been generated and cannot be viewed', status: 'warning' })
         return
       }
       this.showDetails11 = true
@@ -293,7 +293,7 @@ export default {
       this.formData = {}
 
       if (row.Status == '已生成') {
-        this.$XModal.message({ content: '此合同已经生成，无法再次进行生成。', status: 'warning' })
+        this.$XModal.message({ content: 'This contract has been generated and cannot be generated again.', status: 'warning' })
         return
       }
 
@@ -353,18 +353,18 @@ export default {
       })
     },
     save() {
-      this.$XModal.confirm('确定保存？').then((type) => {
+      this.$XModal.confirm('Are you sure to save?').then((type) => {
         if (type === 'confirm') {
-          this.$XModal.message({ id: 'loding', content: '数据处理中...', status: 'loading' })
+          this.$XModal.message({ id: 'loding', content: 'Data processing...', status: 'loading' })
 
           axios.post('http://123.56.242.202:8080/api/Contract/DataContractCreate', [this.formData]).then((res) => {
             this.$XModal.close('loding')
             if (res.data.Code == 200) {
-              this.$XModal.message({ content: '生成成功', status: 'success' })
+              this.$XModal.message({ content: 'Generated successfully', status: 'success' })
               this.showDetails = false
               this.getList('')
             } else {
-              this.$XModal.message({ content: '生成失败：' + res.data.Message, status: 'error' })
+              this.$XModal.message({ content: 'Build failed:' + res.data.Message, status: 'error' })
             }
           })
         }

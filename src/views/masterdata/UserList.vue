@@ -3,11 +3,11 @@
   <div>
     <vxe-toolbar style="padding-left: 10px; margin-bottom: 10px; border-radius: 5px">
       <template #buttons>
-        <vxe-input v-model="searchKey" placeholder="用户名称"></vxe-input>
-        <vxe-button status="primary" icon="fa vxe-icon--search" @click="search">查询</vxe-button>
-        <vxe-button status="primary" icon="fa vxe-icon--plus" @click="add">添加</vxe-button>
-        <vxe-button status="primary" icon="fa vxe-icon--edit-outline" @click="edit">编辑</vxe-button>
-        <vxe-button status="primary" icon="fa vxe-icon--close" @click="del">删除</vxe-button>
+        <vxe-input v-model="searchKey" placeholder="User name"></vxe-input>
+        <vxe-button status="primary" icon="fa vxe-icon--search" @click="search">Search</vxe-button>
+        <vxe-button status="primary" icon="fa vxe-icon--plus" @click="add">Add</vxe-button>
+        <vxe-button status="primary" icon="fa vxe-icon--edit-outline" @click="edit">Edit</vxe-button>
+        <vxe-button status="primary" icon="fa vxe-icon--close" @click="del">Delete</vxe-button>
       </template>
     </vxe-toolbar>
     <vxe-table
@@ -20,21 +20,21 @@
       :data="userList"
       :radio-config="{ trigger: 'row' }"
     >
-      <vxe-column type="radio" align="center" width="80" title="序号"></vxe-column>
-      <vxe-column field="DepartmentName" width="150" title="所属部门"></vxe-column>
-      <vxe-column field="UserName" width="180" title="用户名"></vxe-column>
-      <vxe-column field="Sex" width="80" title="性别"></vxe-column>
-      <vxe-column field="Mobile" title="电话"></vxe-column>
-      <vxe-column field="Status" width="80" title="状态"></vxe-column>
-      <vxe-column field="CreateTime" title="创建日期" :formatter="formatDate"></vxe-column>
+      <vxe-column type="radio" align="center" width="80" title=" "></vxe-column>
+      <vxe-column field="DepartmentName" width="150" title="Organization"></vxe-column>
+      <vxe-column field="UserName" width="180" title="UserName"></vxe-column>
+      <vxe-column field="Sex" width="80" title="Sex"></vxe-column>
+      <vxe-column field="Mobile" title="Mobile"></vxe-column>
+      <vxe-column field="Status" width="80" title="Status"></vxe-column>
+      <vxe-column field="CreateTime" title="CreateTime" :formatter="formatDate"></vxe-column>
     </vxe-table>
 
     <vxe-modal v-model="open" :title="title" width="600" height="270" resize>
       <template #default>
         <vxe-form :data="formData" title-align="right" title-width="80">
-          <vxe-form-item title="所属部门" field="DepartmentID" span="24">
+          <vxe-form-item title="Organization" field="DepartmentID" span="24">
             <template #default>
-              <vxe-select v-model="formData.DepartmentID" placeholder="请选择部门">
+              <vxe-select v-model="formData.DepartmentID" placeholder="Please select a department">
                 <vxe-option
                   v-for="item in depList"
                   :key="item.ID"
@@ -44,29 +44,29 @@
               </vxe-select>
             </template>
           </vxe-form-item>
-          <vxe-form-item title="用户名称" field="UserName" span="12">
+          <vxe-form-item title="UserName" field="UserName" span="12">
             <template #default>
-              <vxe-input v-model="formData.UserName" placeholder="请输入用户名称"></vxe-input>
+              <vxe-input v-model="formData.UserName" placeholder="Please enter user name"></vxe-input>
             </template>
           </vxe-form-item>
 
-          <vxe-form-item title="性别" field="Sex" span="12">
+          <vxe-form-item title="Gender" field="Sex" span="12">
             <template #default>
-              <vxe-select v-model="formData.Sex" placeholder="请选择性别" clearable>
+              <vxe-select v-model="formData.Sex" placeholder="Please select gender" clearable>
                 <vxe-option value="男" label="男"></vxe-option>
                 <vxe-option value="女" label="女"></vxe-option>
               </vxe-select>
             </template>
           </vxe-form-item>
-          <vxe-form-item title="电话" field="Mobile" span="24">
+          <vxe-form-item title="Telephone" field="Mobile" span="24">
             <template #default>
-              <vxe-input v-model="formData.Mobile" placeholder="请输入电话"></vxe-input>
+              <vxe-input v-model="formData.Mobile" placeholder="Please enter the phone number"></vxe-input>
             </template>
           </vxe-form-item>
           <vxe-form-item align="right" span="24">
             <template #default>
-              <vxe-button type="button" status="primary" @click="save">保存</vxe-button>
-              <vxe-button type="button" @click="close">取消</vxe-button>
+              <vxe-button type="button" status="primary" @click="save">Save</vxe-button>
+              <vxe-button type="button" @click="close">Close</vxe-button>
             </template>
           </vxe-form-item>
         </vxe-form>
@@ -149,67 +149,67 @@ export default {
       this.getList(this.searchKey)
     },
     add() {
-      this.title = '新增用户'
+      this.title = 'New user'
       this.open = true
       this.formData = {}
     },
     edit() {
       var checked = this.$refs.vxeTable.getRadioRecord()
       if (checked == null) {
-        this.$XModal.message({ content: '请选择要修改的数据', status: 'warning' })
+        this.$XModal.message({ content: 'Please select the data to modify', status: 'warning' })
         return
       }
       this.formData = checked
-      this.title = '修改用户'
+      this.title = 'Modify user'
       this.open = true
     },
     del() {
       var checked = this.$refs.vxeTable.getRadioRecord()
       if (checked == null) {
-        this.$XModal.message({ content: '请选择要删除的数据', status: 'warning' })
+        this.$XModal.message({ content: 'Please select the data to delete', status: 'warning' })
         return
       }
-      this.$XModal.confirm('确定删除？').then((type) => {
+      this.$XModal.confirm('Are you sure to delete?').then((type) => {
         if (type === 'confirm') {
-          this.$XModal.message({ id: 'loding', content: '数据处理中...', status: 'loading' })
+          this.$XModal.message({ id: 'loding', content: 'Data processing...', status: 'loading' })
           axios.post('http://123.56.242.202:8080/api/User/UserDelete?userID=' + checked.ID).then((res) => {
             this.$XModal.close('loding')
             if (res.data.Code == 200) {
-              this.$XModal.message({ content: '删除成功', status: 'success' })
+              this.$XModal.message({ content: 'Deleted successfully', status: 'success' })
               this.open = false
               this.getList('')
             } else {
-              this.$XModal.message({ content: '删除失败' + res.data.Message, status: 'error' })
+              this.$XModal.message({ content: 'Delete failed' + res.data.Message, status: 'error' })
             }
           })
         }
       })
     },
     save() {
-      this.$XModal.confirm('确定保存？').then((type) => {
+      this.$XModal.confirm('Are you sure to save?').then((type) => {
         if (type === 'confirm') {
-          this.$XModal.message({ id: 'loding', content: '数据处理中...', status: 'loading' })
+          this.$XModal.message({ id: 'loding', content: 'Data processing...', status: 'loading' })
           this.formData.DepartmentName = this.getDepName(this.formData.DepartmentID).replace(/\|\-\-/g, '')
           if (this.formData.ID == null) {
             axios.post('http://123.56.242.202:8080/api/User/UserCreate', [this.formData]).then((res) => {
               this.$XModal.close('loding')
               if (res.data.Code == 200) {
-                this.$XModal.message({ content: '添加成功', status: 'success' })
+                this.$XModal.message({ content: 'Added successfully', status: 'success' })
                 this.open = false
                 this.getList('')
               } else {
-                this.$XModal.message({ content: '添加失败：' + res.data.Message, status: 'error' })
+                this.$XModal.message({ content: 'Add failed:' + res.data.Message, status: 'error' })
               }
             })
           } else {
             axios.post('http://123.56.242.202:8080/api/User/UserUpdate', this.formData).then((res) => {
               this.$XModal.close('loding')
               if (res.data.Code == 200) {
-                this.$XModal.message({ content: '修改成功', status: 'success' })
+                this.$XModal.message({ content: 'Modified successfully', status: 'success' })
                 this.open = false
                 this.getList('')
               } else {
-                this.$XModal.message({ content: '修改失败：' + res.data.Message, status: 'error' })
+                this.$XModal.message({ content: 'Modification failed:' + res.data.Message, status: 'error' })
               }
             })
           }

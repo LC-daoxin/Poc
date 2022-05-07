@@ -5,9 +5,9 @@
       <template #buttons>
         <!-- <vxe-input v-model="searchKey" placeholder="节点名称"></vxe-input>
         <vxe-button status="primary" icon="fa vxe-icon--search" @click="search">查询</vxe-button> -->
-        <vxe-button status="primary" icon="fa vxe-icon--plus" @click="add">添加</vxe-button>
-        <vxe-button status="primary" icon="fa vxe-icon--edit-outline" @click="edit">编辑</vxe-button>
-        <vxe-button status="primary" icon="fa vxe-icon--close" @click="del">删除</vxe-button>
+        <vxe-button status="primary" icon="fa vxe-icon--plus" @click="add">Add</vxe-button>
+        <vxe-button status="primary" icon="fa vxe-icon--edit-outline" @click="edit">Edit</vxe-button>
+        <vxe-button status="primary" icon="fa vxe-icon--close" @click="del">Delete</vxe-button>
       </template>
     </vxe-toolbar>
     <vxe-table
@@ -21,22 +21,22 @@
       :radio-config="{ trigger: 'row' }"
       :tree-config="{ transform: true, rowField: 'ActivityID', parentField: 'ParentID', expandAll: true }"
     >
-      <vxe-column type="radio" align="center" width="80" title="序号"></vxe-column>
-      <vxe-column field="ActivityName" width="120" title="工作项名称" tree-node></vxe-column>
-      <vxe-column field="ActivityNameCN" width="150" title="工作项名称（中文）"></vxe-column>
-      <vxe-column field="ActivityDesc" width="120" title="工作项描述"></vxe-column>
-      <vxe-column field="ActivityDescCN" width="150" title="工作项描述（中文）"></vxe-column>
-      <vxe-column field="ActivityShortName" width="120" title="工作项简介"></vxe-column>
-      <vxe-column field="ActivityShortNameCN" width="150" title="工作项简介（中文）"></vxe-column>
-      <vxe-column field="StageCN" width="150" title="阶段（中文）"></vxe-column>
-      <vxe-column field="Stage" width="80" title="阶段"></vxe-column>
-      <vxe-column field="Price" width="80" title="报价"></vxe-column>
-      <vxe-column field="PriceMark" width="80" title="报价其他"></vxe-column>
-      <vxe-column field="PassThroughPrice" width="120" title="耗价价格"></vxe-column>
-      <vxe-column field="PassThroughPriceMark" width="150" title="耗价价格其他"></vxe-column>
-      <vxe-column field="StartTime" width="80" title="开始时间"></vxe-column>
-      <vxe-column field="EndTime" width="80" title="结束时间"></vxe-column>
-      <vxe-column field="Duration" width="80" title="期间（人天）"></vxe-column>
+      <vxe-column type="radio" align="center" width="80" title=" "></vxe-column>
+      <vxe-column field="ActivityName" width="120" title="ActivityName" tree-node></vxe-column>
+      <vxe-column field="ActivityNameCN" width="150" title="ActivityName (Chinese)"></vxe-column>
+      <vxe-column field="ActivityDesc" width="120" title="ActivityDesc"></vxe-column>
+      <vxe-column field="ActivityDescCN" width="150" title="ActivityDesc (Chinese)"></vxe-column>
+      <vxe-column field="ActivityShortName" width="120" title="ActivityShortName"></vxe-column>
+      <vxe-column field="ActivityShortNameCN" width="150" title="ActivityShortName (Chinese)"></vxe-column>
+      <vxe-column field="StageCN" width="150" title="Stage (Chinese)"></vxe-column>
+      <vxe-column field="Stage" width="80" title="Stage"></vxe-column>
+      <vxe-column field="Price" width="80" title="Price"></vxe-column>
+      <vxe-column field="PriceMark" width="80" title="PriceMark"></vxe-column>
+      <vxe-column field="PassThroughPrice" width="120" title="PassThroughPrice"></vxe-column>
+      <vxe-column field="PassThroughPriceMark" width="150" title="PassThroughPriceMark"></vxe-column>
+      <vxe-column field="StartTime" width="80" title="StartTime"></vxe-column>
+      <vxe-column field="EndTime" width="80" title="EndTime"></vxe-column>
+      <vxe-column field="Duration" width="80" title="Duration"></vxe-column>
       <vxe-column field="DisCount" width="80" title="DisCount"></vxe-column>
       <vxe-column field="Scale" width="80" title="Scale"></vxe-column>
       <vxe-column field="Property2" width="90" title="Property2"></vxe-column>
@@ -57,40 +57,40 @@
               <vxe-input v-model="formData.ActivityID" placeholder="请输入ActivityID"></vxe-input>
             </template>
           </vxe-form-item> -->
-          <vxe-form-item title="工作项名称" field="ActivityName" span="12">
+          <vxe-form-item title="ActivityName" field="ActivityName" span="12">
             <template #default>
-              <vxe-input v-model="formData.ActivityName" placeholder="请输入工作项名称"> </vxe-input>
+              <vxe-input v-model="formData.ActivityName" placeholder="Please enter the ActivityName"> </vxe-input>
             </template>
           </vxe-form-item>
-          <vxe-form-item title="工作项名称（中文）" field="ActivityNameCN" span="12">
+          <vxe-form-item title="ActivityName (Chinese)" field="ActivityNameCN" span="12">
             <template #default>
-              <vxe-input v-model="formData.ActivityNameCN" placeholder="请输入工作项名称（中文）"></vxe-input>
+              <vxe-input v-model="formData.ActivityNameCN" placeholder="Please enter the ActivityName(Chinese)"></vxe-input>
             </template>
           </vxe-form-item>
-          <vxe-form-item title="工作项描述" field="ActivityDesc" span="12">
+          <vxe-form-item title="ActivityDesc" field="ActivityDesc" span="12">
             <template #default>
-              <vxe-input v-model="formData.ActivityDesc" placeholder="请输入工作项描述"> </vxe-input>
+              <vxe-input v-model="formData.ActivityDesc" placeholder="Please enter the ActivityDesc"> </vxe-input>
             </template>
           </vxe-form-item>
-          <vxe-form-item title="工作项描述（中文）" field="ActivityDescCN" span="12">
+          <vxe-form-item title="ActivityDesc (Chinese)" field="ActivityDescCN" span="12">
             <template #default>
-              <vxe-input v-model="formData.ActivityDescCN" placeholder="请输入工作项描述（中文）"></vxe-input>
+              <vxe-input v-model="formData.ActivityDescCN" placeholder="Please enter the  ActivityDesc(Chinese)"></vxe-input>
             </template>
           </vxe-form-item>
-          <vxe-form-item title="工作项简介" field="ActivityShortName" span="12">
+          <vxe-form-item title="ActivityShortName" field="ActivityShortName" span="12">
             <template #default>
-              <vxe-input v-model="formData.ActivityShortName" placeholder="请输入工作项简介"> </vxe-input>
+              <vxe-input v-model="formData.ActivityShortName" placeholder="Please enter the ActivityShortName"> </vxe-input>
             </template>
           </vxe-form-item>
-          <vxe-form-item title="工作项简介（中文）" field="ActivityShortNameCN" span="12">
+          <vxe-form-item title="ActivityShortName (Chinese)" field="ActivityShortNameCN" span="12">
             <template #default>
-              <vxe-input v-model="formData.ActivityShortNameCN" placeholder="请输入工作项简介（中文）"></vxe-input>
+              <vxe-input v-model="formData.ActivityShortNameCN" placeholder="Please enter the ActivityShortName(Chinese)"></vxe-input>
             </template>
           </vxe-form-item>
 
           <vxe-form-item title="ProjectID" field="ProjectID" span="12">
             <template #default>
-              <vxe-select v-model="formData.ProjectID" placeholder="请选择">
+              <vxe-select v-model="formData.ProjectID" placeholder="Please select">
                 <vxe-option
                   v-for="item in projectList"
                   :key="item.MasterID"
@@ -102,7 +102,7 @@
           </vxe-form-item>
           <vxe-form-item title="PipelineModolID" field="PipelineModolID" span="12">
             <template #default>
-              <vxe-select v-model="formData.PipelineModolID" placeholder="请选择">
+              <vxe-select v-model="formData.PipelineModolID" placeholder="Please select">
                 <vxe-option
                   v-for="item in activityList"
                   :key="item.TypeID"
@@ -112,54 +112,54 @@
               </vxe-select>
             </template>
           </vxe-form-item>
-          <vxe-form-item title="阶段（中文）" field="StageCN" span="12">
+          <vxe-form-item title="Stage (Chinese)" field="StageCN" span="12">
             <template #default>
-              <vxe-input v-model="formData.StageCN" placeholder="请输入阶段（中文）"></vxe-input>
+              <vxe-input v-model="formData.StageCN" placeholder="Please enter the Stage(Chinese)"></vxe-input>
             </template>
           </vxe-form-item>
-          <vxe-form-item title="阶段" field="Stage" span="12">
+          <vxe-form-item title="Stage" field="Stage" span="12">
             <template #default>
-              <vxe-input v-model="formData.Stage" placeholder="请输入阶段"></vxe-input>
+              <vxe-input v-model="formData.Stage" placeholder="Please enter the Stage"></vxe-input>
             </template>
           </vxe-form-item>
-          <vxe-form-item title="报价" field="Price" span="12">
+          <vxe-form-item title="Price" field="Price" span="12">
             <template #default>
-              <vxe-input v-model="formData.Price" placeholder="请输入报价"></vxe-input>
+              <vxe-input v-model="formData.Price" placeholder="Please enter the Price"></vxe-input>
             </template>
           </vxe-form-item>
-          <vxe-form-item title="报价其他" field="PriceMark" span="12">
+          <vxe-form-item title="PriceMark" field="PriceMark" span="12">
             <template #default>
-              <vxe-input v-model="formData.PriceMark" placeholder="请输入报价其他"></vxe-input>
+              <vxe-input v-model="formData.PriceMark" placeholder="Please enter the PriceMark"></vxe-input>
             </template>
           </vxe-form-item>
-          <vxe-form-item title="耗价价格" field="PassThroughPrice" span="12">
+          <vxe-form-item title="PassThroughPrice" field="PassThroughPrice" span="12">
             <template #default>
-              <vxe-input v-model="formData.PassThroughPrice" placeholder="请输入耗价价格"></vxe-input>
+              <vxe-input v-model="formData.PassThroughPrice" placeholder="Please enter the PassThroughPrice"></vxe-input>
             </template>
           </vxe-form-item>
-          <vxe-form-item title="耗价价格其他" field="PassThroughPriceMark" span="12">
+          <vxe-form-item title="PassThroughPriceMark" field="PassThroughPriceMark" span="12">
             <template #default>
-              <vxe-input v-model="formData.PassThroughPriceMark" placeholder="请输入耗价价格其他"></vxe-input>
+              <vxe-input v-model="formData.PassThroughPriceMark" placeholder="Please enter the PassThroughPriceMark"></vxe-input>
             </template>
           </vxe-form-item>
-          <vxe-form-item title="开始时间" field="StartTime" span="12">
+          <vxe-form-item title="StartTime" field="StartTime" span="12">
             <template #default>
-              <vxe-input v-model="formData.StartTime" placeholder="请输入开始时间" type="datetime"></vxe-input>
+              <vxe-input v-model="formData.StartTime" placeholder="Please enter the start time" type="datetime"></vxe-input>
             </template>
           </vxe-form-item>
-          <vxe-form-item title="结束时间" field="EndTime" span="12">
+          <vxe-form-item title="EndTime" field="EndTime" span="12">
             <template #default>
-              <vxe-input v-model="formData.EndTime" placeholder="请输入结束时间" type="datetime"></vxe-input>
+              <vxe-input v-model="formData.EndTime" placeholder="Please enter the EndTime" type="datetime"></vxe-input>
             </template>
           </vxe-form-item>
-          <vxe-form-item title="期间（人天）" field="Duration" span="12">
+          <vxe-form-item title="Duration" field="Duration" span="12">
             <template #default>
-              <vxe-input v-model="formData.Duration" placeholder="请输入期间（人天）"></vxe-input>
+              <vxe-input v-model="formData.Duration" placeholder="Please enter the Duration"></vxe-input>
             </template>
           </vxe-form-item>
           <vxe-form-item title="DisCount" field="DisCount" span="12">
             <template #default>
-              <vxe-input v-model="formData.DisCount" placeholder="请输入DisCount"></vxe-input>
+              <vxe-input v-model="formData.DisCount" placeholder="Please enter the DisCount"></vxe-input>
             </template>
           </vxe-form-item>
           <vxe-form-item title="Scale" field="Scale" span="12">
@@ -287,8 +287,8 @@
 
           <vxe-form-item align="right" span="24">
             <template #default>
-              <vxe-button type="button" status="primary" @click="save">保存</vxe-button>
-              <vxe-button type="button" @click="close">取消</vxe-button>
+              <vxe-button type="button" status="primary" @click="save">Save</vxe-button>
+              <vxe-button type="button" @click="close">Close</vxe-button>
             </template>
           </vxe-form-item>
         </vxe-form>
@@ -374,72 +374,72 @@ export default {
       if (checked != null) {
         this.formData.ParentID = checked.ActivityID
       }
-      this.title = '新增节点'
+      this.title = 'New node'
       this.open = true
     },
     edit() {
       var checked = this.$refs.treeTable.getRadioRecord()
       if (checked == null) {
-        this.$XModal.message({ content: '请选择要修改的数据', status: 'warning' })
+        this.$XModal.message({ content: 'Please select the data to modify', status: 'warning' })
         return
       }
       this.formData = checked
-      this.title = '修改Activity基础数据'
+      this.title = 'Modify Activity Basic data'
       this.open = true
     },
     del() {
       var checked = this.$refs.treeTable.getRadioRecord()
       if (checked == null) {
-        this.$XModal.message({ content: '请选择要删除的数据', status: 'warning' })
+        this.$XModal.message({ content: 'Please select the data to delete', status: 'warning' })
         return
       }
       if (checked.children.length > 0) {
-        this.$XModal.message({ content: '要删的数据还有子节点', status: 'warning' })
+        this.$XModal.message({ content: 'The data to be deleted has child nodes', status: 'warning' })
         return
       }
-      this.$XModal.confirm('确定删除？').then((type) => {
+      this.$XModal.confirm('Are you sure to delete?').then((type) => {
         if (type === 'confirm') {
-          this.$XModal.message({ id: 'loding', content: '数据处理中...', status: 'loading' })
+          this.$XModal.message({ id: 'loding', content: 'Data processing...', status: 'loading' })
           axios
             .post('http://123.56.242.202:8080/api/BaseData/BaseDataDelete?baseDataID=' + checked.ActivityID)
             .then((res) => {
               this.$XModal.close('loding')
               if (res.data.Code == 200) {
-                this.$XModal.message({ content: '删除成功', status: 'success' })
+                this.$XModal.message({ content: 'Deleted successfully', status: 'success' })
                 this.open = false
                 this.getList('')
               } else {
-                this.$XModal.message({ content: '删除失败' + res.data.Message, status: 'error' })
+                this.$XModal.message({ content: 'Delete failed' + res.data.Message, status: 'error' })
               }
             })
         }
       })
     },
     save() {
-      this.$XModal.confirm('确定保存？').then((type) => {
+      this.$XModal.confirm('Are you sure to save?').then((type) => {
         if (type === 'confirm') {
-          this.$XModal.message({ id: 'loding', content: '数据处理中...', status: 'loading' })
+          this.$XModal.message({ id: 'loding', content: 'Data processing...', status: 'loading' })
 
           if (this.formData.ActivityID == null) {
             axios.post('http://123.56.242.202:8080/api/BaseData/BaseDataCreate', [this.formData]).then((res) => {
               this.$XModal.close('loding')
               if (res.data.Code == 200) {
-                this.$XModal.message({ content: '添加成功', status: 'success' })
+                this.$XModal.message({ content: 'Added successfully', status: 'success' })
                 this.open = false
                 this.getList('')
               } else {
-                this.$XModal.message({ content: '添加失败：' + res.data.Message, status: 'error' })
+                this.$XModal.message({ content: 'Add failed:' + res.data.Message, status: 'error' })
               }
             })
           } else {
             axios.post('http://123.56.242.202:8080/api/BaseData/BaseDataUpdate', [this.formData]).then((res) => {
               this.$XModal.close('loding')
               if (res.data.Code == 200) {
-                this.$XModal.message({ content: '修改成功', status: 'success' })
+                this.$XModal.message({ content: 'Modified successfully', status: 'success' })
                 this.open = false
                 this.getList('')
               } else {
-                this.$XModal.message({ content: '修改失败：' + res.data.Message, status: 'error' })
+                this.$XModal.message({ content: 'Modification failed:' + res.data.Message, status: 'error' })
               }
             })
           }

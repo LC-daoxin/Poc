@@ -5,13 +5,13 @@
       <template #buttons>
         <vxe-input
           v-model="searchKey"
-          placeholder="文件名称"
+          placeholder="FileName"
         ></vxe-input>
         <vxe-button
           status="primary"
           icon="fa vxe-icon--search"
           @click="search"
-        >查询</vxe-button>
+        >Search</vxe-button>
       </template>
     </vxe-toolbar>
     <vxe-table
@@ -27,42 +27,42 @@
       <vxe-column
         field="ProjectID"
         width="180"
-        title="项目编号"
+        title="ProjectID"
       ></vxe-column>
       <vxe-column
         field="ProjectName"
         width="180"
-        title="项目名称"
+        title="ProjectName"
       ></vxe-column>
       <vxe-column
         field="ProposalFileName"
         width="180"
-        title="Proposal文件名称"
+        title="ProposalFileName"
       ></vxe-column>
       <vxe-column
         field="ContractFileName"
         width="180"
-        title="Contract文件名称"
+        title="ContractFileName"
       ></vxe-column>
       <vxe-column
         field="CreateDate"
         width="160"
-        title="创建时间"
+        title="CreateDate"
       ></vxe-column>
       <vxe-column
         field="UserName"
-        width="80"
-        title="创建人"
+        width="140"
+        title="CreateUser"
       ></vxe-column>
       <vxe-column
         field="Status"
         width="80"
-        title="状态"
+        title="Status"
       ></vxe-column>
 
       <vxe-column
         type="seq"
-        title="操作"
+        title="Operation"
         width="180"
         :resizable="false"
         show-overflow
