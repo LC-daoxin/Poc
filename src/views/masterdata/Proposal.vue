@@ -34,24 +34,49 @@
       </vxe-column>
     </vxe-table>
 
-    <vxe-modal v-model="showDetails" title="English contract information" width="600" height="440" resize>
+    <vxe-modal v-model="showDetails" title="English contract information" width="700" height="600" resize>
       <template #default>
-        <vxe-form :data="formData" title-align="right" title-width="80">
-          <vxe-form-item title="Name" field="Name" span="16">
+        <vxe-form :data="formData" title-align="right" title-width="200">
+          <vxe-form-item title="CompanyName" field="CompanyName" span="16">
             <template #default>
-              <vxe-input v-model="formData.Name" placeholder="Please enter Name"></vxe-input>
+              <vxe-input v-model="formData.CompanyName" placeholder="Please enter the CompanyName"></vxe-input>
+            </template>
+          </vxe-form-item>
+          <vxe-form-item title="Address" field="Address" span="16">
+            <template #default>
+              <vxe-input v-model="formData.Address" placeholder="Please enter the Address"></vxe-input>
+            </template>
+          </vxe-form-item>
+          <vxe-form-item title="Postal Code" field="PostalCode" span="16">
+            <template #default>
+              <vxe-input v-model="formData.PostalCode" placeholder="Please enter the Postal Code"></vxe-input>
+            </template>
+          </vxe-form-item>
+          <vxe-form-item title="Organization" field="Organization" span="16">
+            <template #default>
+              <vxe-input v-model="formData.Organization" placeholder="Please enter the Organization"></vxe-input>
+            </template>
+          </vxe-form-item>
+          <vxe-form-item title="Email" field="Email" span="16">
+            <template #default>
+              <vxe-input v-model="formData.Email" placeholder="Please enter the Email"></vxe-input>
+            </template>
+          </vxe-form-item>
+          <vxe-form-item title="ClientName" field="ClientName" span="16">
+            <template #default>
+              <vxe-input v-model="formData.ClientName" placeholder="Please enter ClientName"></vxe-input>
             </template>
           </vxe-form-item>
 
-          <vxe-form-item title="Client" field="Client" span="16">
+          <vxe-form-item title="ClientTitle" field="ClientTitle" span="16">
             <template #default>
-              <vxe-input v-model="formData.Client" placeholder="Please enter Client"></vxe-input>
+              <vxe-input v-model="formData.ClientTitle" placeholder="Please enter the ClientTitle"></vxe-input>
             </template>
           </vxe-form-item>
 
-          <vxe-form-item title="Title" field="Title" span="16">
+          <vxe-form-item title="ClientBy" field="ClientBy" span="16">
             <template #default>
-              <vxe-input v-model="formData.Title" placeholder="Please enter Title"></vxe-input>
+              <vxe-input v-model="formData.ClientBy" placeholder="Please enter the ClientBy"></vxe-input>
             </template>
           </vxe-form-item>
 
@@ -272,7 +297,10 @@ export default {
       name = row.ContractFileNameIP + '/default/' + name
 
       if (row.Status == '未生成') {
-        this.$XModal.message({ content: 'This contract has not been generated and cannot be viewed', status: 'warning' })
+        this.$XModal.message({
+          content: 'This contract has not been generated and cannot be viewed',
+          status: 'warning',
+        })
         return
       }
       this.showDetails11 = true
@@ -293,18 +321,37 @@ export default {
       this.formData = {}
 
       if (row.Status == '已生成') {
-        this.$XModal.message({ content: 'This contract has been generated and cannot be generated again.', status: 'warning' })
+        this.$XModal.message({
+          content: 'This contract has been generated and cannot be generated again.',
+          status: 'warning',
+        })
         return
       }
-
       if (row.ProposalFileName.indexOf('EN') > 0) {
-        this.selectRow = row
-        this.showDetails = true
-        this.formData.BatchID = row.BatchID
+        axios.post('http://123.56.242.202:8080/api/Contract/GetMasterData').then((res) => {
+          this.selectRow = row
+          this.showDetails = true
+          this.formData.BatchID = row.BatchID
+          this.formData.CompanyName = res.data[0].ClientName
+          this.formData.Address = res.data[0].FullAddress
+          this.formData.Organization = res.data[0].Organization
+          this.formData.Email = res.data[0].ClientEmail
+          this.formData.ClientTitle = res.data[0].ProjectName
+        })
       } else {
-        this.selectRow = row
-        this.showDetailsCN = true
-        this.formData.BatchID = row.BatchID
+        axios.post('http://123.56.242.202:8080/api/Contract/GetMasterData').then((res) => {
+          debugger
+          this.selectRow = row
+          this.showDetailsCN = true
+          this.formData.BatchID = row.BatchID
+          this.formData.Client = res.data[0].ClientNameCN
+          this.formData.ProjectName = res.data[0].ProjectNameCN
+          this.formData.ClientName = res.data[0].ClientName
+          this.formData.TrusteeTelephone = res.data[0].ClientPhone
+          this.formData.ClientEmail = res.data[0].ClientEmail
+          this.formData.TrusteeEmail = res.data[0].TechnicalContractCN
+        })
+
         return
       }
     },
