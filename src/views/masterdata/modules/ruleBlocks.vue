@@ -61,6 +61,7 @@
               <a-select
                 style="width: 100px"
                 v-model="item.leftOperatorExpression.type"
+                :dropdownStyle="{ 'z-index': 9999 }"
                 @change="changeLeftOperatorExpression($event, item)"
               >
                 <a-select-option value="1" v-if="!['IF', 'ELSE'].includes(item.type)">BU/SubBU</a-select-option>
@@ -75,7 +76,9 @@
                 :options="optionsList.BuList"
                 placeholder=""
                 change-on-select
+                :popupStyle="{ 'z-index': 9999 }"
                 @change="selectBU($event, item)"
+                @popupVisibleChange="popupVisibleChange($event, item)"
               />
               <a-select
                 style="width: 200px"
@@ -97,6 +100,7 @@
             v-else
             v-model="item.compareOperation"
             class="symbol"
+            :dropdownStyle="{ 'z-index': 9999 }"
             @change="handleChangeSymbol"
           >
             <a-select-option
@@ -112,6 +116,7 @@
             <a-input-group compact>
               <a-select
                 style="width: 100px"
+                :dropdownStyle="{ 'z-index': 9999 }"
                 v-model="item.rightOperatorExpression.type"
               >
                 <a-select-option value="1">固定值</a-select-option>
@@ -204,6 +209,10 @@
       }),
     },
     methods: {
+      popupVisibleChange(val, item) {
+        console.log('popupVisibleChange', val, item)
+        this.$forceUpdate()
+      },
       // 修改条件符号
       handleChangeSymbol(e) {
         console.log(e)

@@ -34,7 +34,7 @@
             :key="item.ActivityID"
             v-for="item in activitiesSelect"
           >{{
-            item.ActivityName
+            templateSelect[0].Name == 'POCCN' ?  item.ActivityNameCN : item.ActivityName
           }}</a-select-option>
         </a-select>
       </a-form-model-item>
