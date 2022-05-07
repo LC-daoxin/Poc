@@ -395,7 +395,7 @@ export default {
       axios.post('http://123.56.242.202:8080//api/poc/SaveProposal', ProposalJson).then((res) => {
         console.log('SaveProposal', res)
         axios
-          .get('http://123.56.242.202:8080/api/poc/CreateProposalInstance', {
+          .get('http://123.56.242.202:8080//api/poc/CreateProposalInstance', {
             params: { batchID: res.data.Data },
           })
           .then((val) => {
