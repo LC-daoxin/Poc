@@ -409,6 +409,8 @@ export default {
             if (res.data.Code == 200) {
               this.$XModal.message({ content: 'Generated successfully', status: 'success' })
               this.showDetails = false
+              this.showDetailsCN = false
+
               this.getList('')
             } else {
               this.$XModal.message({ content: 'Build failed:' + res.data.Message, status: 'error' })

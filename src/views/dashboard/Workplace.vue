@@ -318,10 +318,12 @@ export default {
           ParentID:item.ActivityID,
           ActivityName:item.SubActivityName,
           ProjectID: item.ProjectID,
-          ActivityNameCN:item.ActivityNameCN,
+          ActivityNameCN:item.SubActivityNameCN,
           ActivityDescCN:item.ActivityDescCN,
           ActivityShortNameCN:item.ActivityShortNameCN,
           Stage:item.Stage,
+          Stage:item.StageCN,
+
           DisCount:item.DisCount,
           ParentID:item.ParentID,
           Property1: item.Property1,
@@ -363,6 +365,7 @@ export default {
           ActivityDescCN:item.ActivityDescCN,
           ActivityShortNameCN:item.ActivityShortNameCN,
           Stage:item.Stage,
+          Stage:item.StageCN,
           DisCount:item.DisCount,
           ProjectID: item.ProjectID,
           Duration: item.Duration,
@@ -392,16 +395,16 @@ export default {
       })
       debugger  
 
-      axios.post('http://123.56.242.202:8080//api/poc/SaveProposal', ProposalJson).then((res) => {
+      axios.post('http://123.56.242.202:8080/api/poc/SaveProposal', ProposalJson).then((res) => {
         console.log('SaveProposal', res)
         axios
-          .get('http://123.56.242.202:8080//api/poc/CreateProposalInstance', {
+          .get('http://123.56.242.202:8080/api/poc/CreateProposalInstance', {
             params: { batchID: res.data.Data },
           })
           .then((val) => {
             console.log('CreateProposalInstance', val)
             axios
-              .get('http://123.56.242.202:8080//api/poc/GetDocumentsName', {
+              .get('http://123.56.242.202:8080/api/poc/GetDocumentsName', {
                 params: { batchID: res.data.Data }, 
               })
               .then((res) => {
