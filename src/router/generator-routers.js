@@ -103,12 +103,27 @@ export const generatorDynamicRouter = token => {
         console.log('generatorDynamicRouter response:', res)
         const { result } = res
         console.log('result', result)
+
         const menuNav = []
         const childrenNav = []
         //      后端数据, 根级树数组,  根级 PID
         listToTree(result, childrenNav, 0)
-        rootRouter.children = childrenNav
-        menuNav.push(rootRouter)
+        if (JSON.parse(sessionStorage.getItem("LoginUser")).UserName == 'admin') {
+          rootRouter.children = childrenNav
+          menuNav.push(rootRouter)
+        } else {
+          menuNav.push({
+            key: '',
+            name: 'index',
+            path: '',
+            component: 'BasicLayout',
+            redirect: '/masterdata/Proposal2',
+            meta: {
+              title: '首页'
+            },
+            children: childrenNav
+          })
+        }
         console.log('menuNav', menuNav)
         const routers = generator(menuNav)
         routers.push(notFoundRouter)

@@ -318,12 +318,17 @@
       loadData() {
         if (this.model.activityID.length > 0) {
           this.tableParams.loading = true
+          let url = 'GetSubActivitiesList'
+          if (this.templateSelect.length > 0) {
+            this.templateSelect[0].Name == 'POCCN' ?  url = 'GetSubActivitiesListCN' : ''
+          }
+          console.log(this.templateSelect[0].Name)
           axios
-            .get('http://123.56.242.202:8080/api/poc/GetSubActivitiesList', {
+            .get(`http://123.56.242.202:8080/api/poc/${url}`, {
               params: this.model,
             })
             .then((res) => {
-              console.log('GetSubActivitiesList', res.data)
+              console.log('GetSubActivitiesList/CN', res.data)
               // this.setSubActivitiesAll(res.data)
               this.tableParams.dataSource = res.data
               this.tableParams.loading = false
