@@ -331,16 +331,33 @@ export default {
         })
     },
     exportData() {
-      axios
-        .post(`http://123.56.242.202:8080/api/SplitRule/GetPMSDataSplitResultFile?BatchID=${this.currentRow.BatchID}`)
-        .then((res) => {
-          const blob = new Blob([res.data], { type: 'application/vnd.ms-excel' })
-          const url = window.URL.createObjectURL(blob)
-          window.open(url, '_blank')
-        })
-        .catch((err) => {
-          this.$message.error('文件下载失败！')
-        })
+      // axios
+      //   .post(`http://123.56.242.202:8080/api/SplitRule/GetPMSDataSplitResultFile?BatchID=${this.currentRow.BatchID}`)
+      //   .then((res) => {
+      //     const blob = new Blob([res.data], { type: 'application/vnd.ms-excel' })
+      //     const url = window.URL.createObjectURL(blob)
+      //     window.open(url, '_blank')
+
+      //   })
+      //   .catch((err) => {
+      //     this.$message.error('文件下载失败！')
+      //   })
+
+      axios({
+        url: `http://123.56.242.202:8080/api/SplitRule/GetPMSDataSplitResultFile?BatchID=${this.currentRow.BatchID}`,
+        responseType: 'blob', //表明返回服务器返回的数据类型
+        method: 'post', //请求方式
+      }).then((res) => {
+        //请求成功之后
+        //创建一个隐藏的a链接
+        const link = document.createElement('a')
+        let blob = new Blob([res.data], { type: 'application/vnd.ms-excel' }) //文件流处理
+        link.style.display = 'none' //去除a标签的样式
+        link.href = URL.createObjectURL(blob)
+        link.download = new Date().valueOf() + '拆分结果.xlsx'
+        document.body.appendChild(link)
+        link.click()
+      })
     },
     selectionChange(keys, rows) {
       this.selectionKeys = keys

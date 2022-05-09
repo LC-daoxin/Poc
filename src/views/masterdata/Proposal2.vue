@@ -36,12 +36,12 @@
       ></vxe-column>
       <vxe-column
         field="ProposalFileName"
-        width="180"
+        width="230"
         title="ProposalFileName"
       ></vxe-column>
       <vxe-column
         field="ContractFileName"
-        width="180"
+        width="230"
         title="ContractFileName"
       ></vxe-column>
       <vxe-column

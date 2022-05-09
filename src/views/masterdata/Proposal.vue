@@ -19,8 +19,8 @@
     >
       <vxe-column field="ProjectID" width="180" title="ProjectID"></vxe-column>
       <vxe-column field="ProjectName" width="180" title="ProjectName"></vxe-column>
-      <vxe-column field="ProposalFileName" width="180" title="ProposalFileName"></vxe-column>
-      <vxe-column field="ContractFileName" width="180" title="ContractFileName"></vxe-column>
+      <vxe-column field="ProposalFileName" width="230" title="ProposalFileName"></vxe-column>
+      <vxe-column field="ContractFileName" width="230" title="ContractFileName"></vxe-column>
       <vxe-column field="CreateDate" width="160" title="CreateDate"></vxe-column>
       <vxe-column field="UserName" width="120" title="CreateUser"></vxe-column>
       <vxe-column field="Status" width="80" title="Status"></vxe-column>

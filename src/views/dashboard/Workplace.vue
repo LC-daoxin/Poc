@@ -322,8 +322,7 @@ export default {
           ActivityDescCN:item.ActivityDescCN,
           ActivityShortNameCN:item.ActivityShortNameCN,
           Stage:item.Stage,
-          Stage:item.StageCN,
-
+          StageCN:item.StageCN,
           DisCount:item.DisCount,
           ParentID:item.ParentID,
           Property1: item.Property1,
@@ -365,7 +364,7 @@ export default {
           ActivityDescCN:item.ActivityDescCN,
           ActivityShortNameCN:item.ActivityShortNameCN,
           Stage:item.Stage,
-          Stage:item.StageCN,
+          StageCN:item.StageCN,
           DisCount:item.DisCount,
           ProjectID: item.ProjectID,
           Duration: item.Duration,
