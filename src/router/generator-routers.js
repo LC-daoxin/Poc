@@ -108,25 +108,25 @@ export const generatorDynamicRouter = token => {
         const childrenNav = []
         //      后端数据, 根级树数组,  根级 PID
         listToTree(result, childrenNav, 0)
-        if (JSON.parse(sessionStorage.getItem("LoginUser")).UserName == 'admin') {
-          rootRouter.children = childrenNav
-          menuNav.push(rootRouter)
-        } else {
-          menuNav.push({
-            key: '',
-            name: 'index',
-            path: '',
-            component: 'BasicLayout',
-            redirect: '/masterdata/Proposal2',
-            meta: {
-              title: '首页'
-            },
-            children: childrenNav
-          })
+        rootRouter.children = childrenNav;
+        const User = JSON.parse(sessionStorage.getItem("LoginUser"))
+        switch (User.UserName) {
+          case 'admin': 
+            break;
+          case 'lince': 
+            rootRouter.redirect = '/masterdata/Proposal2'
+            break;
+          case 'xiaokai': 
+            rootRouter.redirect = '/masterdata/Proposal'
+            break;
+          case 'haodong': 
+            rootRouter.redirect = '/dashboard/Workplace'
+            break;
         }
+        menuNav.push(rootRouter);
         console.log('menuNav', menuNav)
         const routers = generator(menuNav)
-        routers.push(notFoundRouter)
+        // routers.push(notFoundRouter)
         console.log('routers', routers)
         resolve(routers)
       })

@@ -346,6 +346,70 @@ export const asyncRouterMap = [
  */
 export const constantRouterMap = [
   {
+    key: '',
+    name: 'index',
+    path: '',
+    component: BasicLayout,
+    redirect: '/dashboard',
+    meta: {
+      title: '首页'
+    },
+    children: [
+      {
+        name: "dashboard",
+        path: '/dashboard',
+        meta: { icon: 'dashboard', title: 'MasterData', show: true },
+        component: RouteView,
+        children: [
+          {
+            name: "MasterBase",
+            path: "/masterdata/MasterBase",
+            component: () => import('@/views/masterdata/MasterBase')
+          }
+        ]
+      },
+      {
+        name: "Proposal",
+        path: '/Proposal',
+        meta: { icon: 'dashboard', title: 'Proposal', show: true },
+        component: RouteView,
+        children: [
+          {
+            path : '/dashboard/Workplace',
+            name : 'Workplace',
+            component: () => import('@/views/dashboard/Workplace')
+          },
+        ]
+      },
+      {
+        name: "Contract",
+        path: '/Contract',
+        meta: { icon: 'dashboard', title: 'Contract', show: true},
+        component: RouteView,
+        children: [
+          {
+            path : '/masterdata/Proposal',
+            name : 'ProposalList',
+            component: () => import('@/views/masterdata/Proposal')
+          },
+        ]
+      },
+      {
+        name: "PMS",
+        path: '/PMS',
+        meta: { icon: 'dashboard', title: 'PMS', show: true },
+        component: RouteView,
+        children: [
+          {
+            path : '/masterdata/Proposal2',
+            name : 'Proposal2',
+            component: () => import('@/views/masterdata/Proposal2')
+          },
+        ]
+      }
+    ]
+  },
+  {
     path: '/user',
     component: UserLayout,
     redirect: '/user/login',
@@ -373,7 +437,6 @@ export const constantRouterMap = [
       }
     ]
   },
-
   {
     path: '/404',
     component: () => import(/* webpackChunkName: "fail" */ '@/views/exception/404')

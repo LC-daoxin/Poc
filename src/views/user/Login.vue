@@ -257,7 +257,7 @@ export default {
       })
     },
     loginSuccess (res) {
-      console.log(res)
+      console.log(res, JSON.parse(sessionStorage.getItem("UserMenu")))
       // check res.homePage define, set $router.push name res.homePage
       // Why not enter onComplete
       /*
@@ -269,7 +269,24 @@ export default {
         })
       })
       */
-      this.$router.push({ path: '/' })
+     let pathUrl = '/'
+     const User = JSON.parse(sessionStorage.getItem("LoginUser"))
+      switch (User.UserName) {
+        case 'admin':
+          pathUrl = '/masterdata/MasterBase'
+          break;
+        case 'lince': 
+          pathUrl = '/masterdata/Proposal2'
+          break;
+        case 'xiaokai': 
+          pathUrl = '/masterdata/Proposal'
+          break;
+        case 'haodong': 
+          pathUrl = '/dashboard/Workplace'
+          break;
+      }
+      console.log('pathUrl', pathUrl)
+      this.$router.push({ path: pathUrl })
       // 延迟 1 秒显示欢迎信息
       setTimeout(() => {
         this.$notification.success({
