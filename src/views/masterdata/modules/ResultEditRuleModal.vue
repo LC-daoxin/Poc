@@ -239,7 +239,7 @@
         } else {
           debugger
           this.currentRow
-          axios.post(`http://123.56.242.202:8080//api/SplitRule/DataUserSplitUpdate`, [{
+          axios.post(`http://123.56.242.202:8080/api/SplitRule/DataUserSplitUpdate`, [{
             ID: this.currentRow.ID,
             // SplitRuleID: this.currentRow.SplitRuleID,
             batchID:  this.currentRow.BatchID,
