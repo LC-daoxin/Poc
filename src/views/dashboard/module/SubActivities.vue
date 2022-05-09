@@ -158,6 +158,13 @@
               align: 'center',
               width: 200,
               ellipsis: true,
+              customRender: (text, row, index) => {
+                if (this.templateSelect.length > 0) {
+                  return this.templateSelect[0].Name == 'POCCN' ? <b>{row.ActivityDescCN}</b> : <b>{text}</b>
+                } else {
+                  return <b>{text}</b>
+                }
+              },
             },
             {
               title: 'Estimate',
@@ -189,14 +196,39 @@
               align: 'center',
               width: 150,
               ellipsis: true,
-              customRender: (text, row, index) => (
-                <a-input
-                  size="small"
-                  v-model:value={text}
-                  onChange={(e) => this.onChangeServicePrice(e, row)}
-                  value={text}
-                />
-              ),
+              customRender: (text, row, index) => {
+                if (this.templateSelect.length > 0) {
+                  // Property3
+                  if (this.templateSelect[0].Name == 'POCCN') {
+                    return (
+                      <a-input
+                        size="small"
+                        v-model:value={row.Property3}
+                        onChange={(e) => this.onChangeServicePrice(e, row)}
+                        value={row.Property3}
+                      />
+                    )
+                  } else {
+                    return (
+                      <a-input
+                        size="small"
+                        v-model:value={text}
+                        onChange={(e) => this.onChangeServicePrice(e, row)}
+                        value={text}
+                      />
+                    )
+                  }
+                } else {
+                  return (
+                    <a-input
+                      size="small"
+                      v-model:value={text}
+                      onChange={(e) => this.onChangeServicePrice(e, row)}
+                      value={text}
+                    />
+                  )
+                }
+              },
             },
             {
               title: 'Pass Though Price',
@@ -219,9 +251,24 @@
               width: 100,
               align: 'center',
               ellipsis: true,
-              customRender: (text, row, index) => (
-                <a-input size="small" v-model:value={text} onChange={(e) => this.onChangeDuration(e, row)} value={text} />
-              ),
+              customRender: (text, row, index) => {
+                if (this.templateSelect.length > 0) {
+                  // Property3
+                  if (this.templateSelect[0].Name == 'POCCN') {
+                    return (
+                      <a-input size="small" v-model:value={row.Property2} onChange={(e) => this.onChangeDuration(e, row)} value={row.Property2} />
+                    )
+                  } else {
+                    return (
+                      <a-input size="small" v-model:value={text} onChange={(e) => this.onChangeDuration(e, row)} value={text} />
+                    )
+                  }
+                } else {
+                  return (
+                    <a-input size="small" v-model:value={text} onChange={(e) => this.onChangeDuration(e, row)} value={text} />
+                  )
+                }
+              },
             },
             {
               title: 'DisCount',
@@ -320,7 +367,7 @@
           this.tableParams.loading = true
           let url = 'GetSubActivitiesList'
           if (this.templateSelect.length > 0) {
-            this.templateSelect[0].Name == 'POCCN' ?  url = 'GetSubActivitiesListCN' : ''
+            this.templateSelect[0].Name == 'POCCN' ? (url = 'GetSubActivitiesListCN') : ''
           }
           console.log(this.templateSelect[0].Name)
           axios
@@ -357,19 +404,35 @@
         console.log(this.tableParams.dataSource)
       },
       onChangeServicePrice(e, row) {
+        let text = 'Price'
+        if (this.templateSelect.length > 0) {
+          if (this.templateSelect[0].Name == 'POCCN') {
+            text = 'Property3'
+          } else {
+            text = 'Price'
+          }
+        }
         this.tableParams.dataSource.forEach((item, i) => {
           if (item.SubActivityID == row.SubActivityID) {
             console.log('onChangeServicePrice', e.target.value)
-            this.$set(this.tableParams.dataSource[i], 'Price', e.target.value)
+            this.$set(this.tableParams.dataSource[i], text, e.target.value)
             // this.setSubActivitiesAll(this.tableParams.dataSource)
             // this.setSubActivitiesAll(this.selectionRows)
           }
         })
       },
       onChangeDuration(e, row) {
+        let text = 'Duration'
+        if (this.templateSelect.length > 0) {
+          if (this.templateSelect[0].Name == 'POCCN') {
+            text = 'Property2'
+          } else {
+            text = 'Duration'
+          }
+        }
         this.tableParams.dataSource.forEach((item, i) => {
           if (item.SubActivityID == row.SubActivityID) {
-            this.$set(this.tableParams.dataSource[i], 'Duration', e.target.value)
+            this.$set(this.tableParams.dataSource[i], text, e.target.value)
             // this.setSubActivitiesAll(this.tableParams.dataSource)
             // this.setSubActivitiesAll(this.selectionRows)
           }

@@ -10,9 +10,26 @@
     >
       <a-form-model-item
         class="form-item"
+        :labelCol="{ span: 9 }"
+        :wrapperCol="{ span: 15 }"
+        style="width: calc(17%)"
+        label="Template"
+      >
+        <a-select
+          allowClear
+          :disabled="ActivityLoading"
+          v-model="Template"
+          @change="changeTemplate"
+        >
+          <a-select-option value="EN">POCEN</a-select-option>
+          <a-select-option value="CN">POCCN</a-select-option>
+        </a-select>
+      </a-form-model-item>
+      <a-form-model-item
+        class="form-item"
         :labelCol="{ span: 5 }"
         :wrapperCol="{ span: 19 }"
-        style="width: calc(40%)"
+        style="width: calc(39%)"
         label="Activity"
       >
         <a-select
@@ -26,7 +43,7 @@
             :key="item.ActivityID"
             v-for="item in ActivityOptions"
           >{{
-            item.ActivityName
+            Template == 'CN' ? item.ActivityNameCN : item.ActivityName
           }}</a-select-option>
         </a-select>
       </a-form-model-item>
@@ -34,7 +51,7 @@
         class="form-item"
         :labelCol="{ span: 5 }"
         :wrapperCol="{ span: 19 }"
-        style="width: calc(40%)"
+        style="width: calc(39%)"
         label="SubActivity"
       >
         <a-select
@@ -48,13 +65,16 @@
             :key="item.SubActivityID"
             v-for="item in SubActivityOptions"
           >{{
-            item.SubActivityName
+            Template == 'CN' ? item.SubActivityNameCN : item.SubActivityName
           }}</a-select-option>
         </a-select>
       </a-form-model-item>
       <a-form-model-item
-        label="Version"
         class="form-item"
+        :labelCol="{ span: 9 }"
+        :wrapperCol="{ span: 15 }"
+        style="width: calc(17%)"
+        label="Version"
       >
         <a-select
           allowClear
@@ -128,6 +148,7 @@
         searchWrapperCol: 15,
         selectionKeys: [],
         selectionRows: [],
+        Template: 'EN',
         model: {
           Activity: '',
           SubActivity: '',
@@ -324,6 +345,12 @@
           return commit('poc/setActivitiesSelect', select)
         },
       }),
+      changeTemplate(val) {
+        console.log('changeTemplate', val)
+        this.getActivitiesList()
+        this.model.Activity = ''
+        this.model.SubActivity = ''
+      },
       // 拖拽列
       changeColumns(evt) {
         console.log(evt, 'oldIndex', evt.oldIndex, 'newIndex', evt.newIndex)
@@ -350,9 +377,7 @@
         if (this.model.SubActivity) {
           this.tableParams.loading = true
           axios
-            .post(`http://123.56.242.202:8080/api/BaseData/GetSplitRuleData?activityID=${this.model.SubActivity}`, {
-              params: { activityID: this.model.SubActivity },
-            })
+            .post(`http://123.56.242.202:8080/api/BaseData/GetSplitRuleData?activityID=${this.model.SubActivity}&language=${this.Template}`)
             .then((res) => {
               console.log('loadData', res)
               this.tableParams.dataSource = res.data
@@ -375,6 +400,7 @@
                 SplitType: 1,
                 Status: 1,
                 Version: this.model.Version,
+                Language: this.Template
               },
             ])
             .then((res) => {
@@ -391,8 +417,12 @@
         this.model.SubActivity = ''
         this.SubActivityLoading = true
         this.activityID = val
+        let Url = 'GetSubActivitiesList'
+        if (this.Template == 'CN') {
+          Url = 'GetSubActivitiesListCN'
+        }
         axios
-          .get('http://123.56.242.202:8080/api/poc/GetSubActivitiesList', {
+          .get(`http://123.56.242.202:8080/api/poc/${Url}`, {
             params: {
               activityID: [val],
               keyWords: '',
@@ -408,7 +438,7 @@
         console.log('changeSubActivity', val)
         console.log(this.model.SubActivity, { activityID: val })
         this.tableParams.loading = true
-        axios.post(`http://123.56.242.202:8080/api/BaseData/GetSplitRuleData?activityID=${val}`).then((res) => {
+        axios.post(`http://123.56.242.202:8080/api/BaseData/GetSplitRuleData?activityID=${val}&language=${this.Template}`).then((res) => {
           console.log('GetSplitRuleData', res)
           const { status, statusText, data } = res
           if (status == 200 && statusText == 'OK') {
@@ -424,8 +454,12 @@
       },
       getActivitiesList() {
         this.ActivityLoading = true
+        let Url = 'GetActivitiesList'
+        if (this.Template == 'CN') {
+          Url = 'GetActivitiesListCN'
+        }
         axios
-          .get('http://123.56.242.202:8080/api/poc/GetActivitiesList', {
+          .get(`http://123.56.242.202:8080/api/poc/${Url}`, {
             params: {
               proposalPipelineID: '',
               activityName: '',
