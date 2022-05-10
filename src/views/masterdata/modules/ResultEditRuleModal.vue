@@ -116,12 +116,12 @@
               id: `${randomUUID(10)}`,
               tierIndex: 2,
               leftOperatorExpression: {
-                type: 2,
+                type: '2',
                 value: 'Scale',
               },
               compareOperation: '=',
               rightOperatorExpression: {
-                type: 1,
+                type: '1',
                 value: 50,
               },
               Then: [],
@@ -131,12 +131,12 @@
               id: `${randomUUID(10)}`,
               tierIndex: 2,
               leftOperatorExpression: {
-                type: 2,
+                type: '2',
                 value: 'Scale',
               },
               compareOperation: '=',
               rightOperatorExpression: {
-                type: 1,
+                type: '1',
                 value: 50,
               },
               Then: [],
@@ -179,8 +179,10 @@
             this.rules.Then = JSON.parse(res.data)
             if (JSON.parse(res.data)[0].type == 'IF') {
               this.Type = 2 // 条件
+              this.rules.SeparateType = 2
             } else if (JSON.parse(res.data)[0].compareOperation == 'forEach') {
               this.Type = 3 // 周期
+              this.rules.SeparateType = 3
             } else {
               this.Type = 1 // 固定比例
             }

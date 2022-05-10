@@ -7,7 +7,7 @@
       <div class="toolbar">
         <span class="thenText">THEN</span>
         <a-button
-          v-if="[1,2].includes(groupList.SeparateType)"
+          v-if="groupList.SeparateType == 1 || groupList.tierIndex == 2"
           type="primary"
           size="small"
           class="toolbtn"
