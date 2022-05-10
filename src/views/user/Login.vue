@@ -323,10 +323,10 @@ export default {
           pathUrl = '/dashboard/Workplace'
           break
         case '报价单审批':
-          rootRouter.redirect = '/masterdata/ToDoList'
+          pathUrl = '/masterdata/ToDoList'
           break
         case '合同审批':
-          rootRouter.redirect = '/masterdata/ToDoList'
+          pathUrl = '/masterdata/ToDoList'
           break
       }
       console.log('pathUrl', pathUrl)
