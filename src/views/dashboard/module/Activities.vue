@@ -113,6 +113,7 @@ export default {
             align: 'center',
             width: 180,
             ellipsis: true,
+            
           },
           {
             title: 'DisCount',

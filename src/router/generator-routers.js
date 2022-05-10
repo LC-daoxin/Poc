@@ -29,10 +29,12 @@ const constantRouterComponents = {
   MasterBase: () => import('@/views/masterdata/MasterBase'),
   PropertyMapping: () => import('@/views/masterdata/PropertyMapping'),
   SplitRuleManagement: () => import('@/views/masterdata/SplitRuleManagement'),
+  ToDoList: () => import('@/views/masterdata/ToDoList'),
+
   WordLog: () => import('@/views/masterdata/WordLog'),
   ActivityMapping: () => import('@/views/masterdata/ActivityMapping'),
-  
-  
+
+
   // form
   BasicForm: () => import('@/views/form/basicForm'),
   StepForm: () => import('@/views/form/stepForm/StepForm'),
@@ -111,16 +113,22 @@ export const generatorDynamicRouter = token => {
         rootRouter.children = childrenNav;
         const User = JSON.parse(sessionStorage.getItem("LoginUser"))
         switch (User.UserName) {
-          case 'admin': 
+          case '超级管理员':
             break;
-          case 'lince': 
+          case '项目经理':
             rootRouter.redirect = '/masterdata/Proposal2'
             break;
-          case 'xiaokai': 
+          case '合同创建':
             rootRouter.redirect = '/masterdata/Proposal'
             break;
-          case 'haodong': 
+          case '报价单创建':
             rootRouter.redirect = '/dashboard/Workplace'
+            break;
+          case '报价单审批':
+            rootRouter.redirect = '/masterdata/ToDoList'
+            break;
+          case '合同审批':
+            rootRouter.redirect = '/masterdata/ToDoList'
             break;
         }
         menuNav.push(rootRouter);
