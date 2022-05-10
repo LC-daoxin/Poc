@@ -376,6 +376,7 @@ export const constantRouterMap = [
         children: [
           {
             path : '/dashboard/Workplace',
+            meta: { title: 'Generate Proposal', show: true },
             name : 'Workplace',
             component: () => import('@/views/dashboard/Workplace')
           },
@@ -389,6 +390,7 @@ export const constantRouterMap = [
         children: [
           {
             path : '/masterdata/Proposal',
+            meta: { title: 'Generate Contract', show: true },
             name : 'ProposalList',
             component: () => import('@/views/masterdata/Proposal')
           },
