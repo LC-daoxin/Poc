@@ -107,6 +107,13 @@ export default {
             align: 'center',
             width: 150,
             ellipsis: true,
+            customRender: (text) => {
+              if (text === 0) {
+                return <b style="color: red;">{0}</b>
+              } else {
+                return text
+              }
+            },
           },
           {
             title: 'Discount',
@@ -121,6 +128,13 @@ export default {
             align: 'center',
             width: 150,
             ellipsis: true,
+            customRender: (text) => {
+              if (text === 0) {
+                return <b style="color: red;">{0}</b>
+              } else {
+                return text
+              }
+            },
           },
           {
             title: 'BU',

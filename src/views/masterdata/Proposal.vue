@@ -17,19 +17,20 @@
       :data="tableList"
       :radio-config="{ trigger: 'row' }"
     >
-      <vxe-column field="ProjectID" width="180" title="ProjectID"></vxe-column>
+      <vxe-column field="ProjectID" width="100" title="ProjectID"></vxe-column>
       <vxe-column field="ProjectName" width="180" title="ProjectName"></vxe-column>
       <vxe-column field="ProposalFileName" width="230" title="ProposalFileName"></vxe-column>
       <vxe-column field="ContractFileName" width="230" title="ContractFileName"></vxe-column>
       <vxe-column field="CreateDate" width="160" title="CreateDate"></vxe-column>
-      <vxe-column field="UserName" width="120" title="CreateUser"></vxe-column>
+      <vxe-column field="UserName" width="100" title="CreateUser"></vxe-column>
       <vxe-column field="Status" width="80" title="Status"></vxe-column>
 
-      <vxe-column type="seq" title="Operation" width="400" :resizable="false" show-overflow>
+      <vxe-column type="seq" title="Operation" width="600" :resizable="false" show-overflow>
         <template #default="{ row }">
           <vxe-button @click="showDetailEvent(row)">Generate Contract{{ row.batchID }}</vxe-button>
           <vxe-button @click="SelectProposal(row.ProposalFileName, row)">View Proposal{{ row.batchID }}</vxe-button>
           <vxe-button @click="SelectContract(row.ContractFileName, row)">View Contract{{ row.batchID }}</vxe-button>
+          <vxe-button @click="SelectContract1(row.ProposalFileName, row)">View Contract Proposal{{ row.batchID }}</vxe-button>
         </template>
       </vxe-column>
     </vxe-table>
@@ -213,15 +214,36 @@
 
     <vxe-modal v-model="showDetails11" title="File Information" width="1200" height="800" resize>
       <template #default>
-        <div class="Generate">
-          <iframe
-            v-if="iframeShow"
-            sandbox="allow-forms allow-modals allow-popups allow-scripts allow-same-origin allow-downloads"
-            id="Generate"
-            :src="url"
-            class="iframe"
-          />
-        </div>
+        <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
+          <el-tab-pane label="文件信息" name="first">
+            <div class="Generate">
+              <iframe
+                v-if="iframeShow"
+                sandbox="allow-forms allow-modals allow-popups allow-scripts allow-same-origin allow-downloads"
+                id="Generate"
+                :src="url"
+                class="iframe"
+              />
+            </div>
+          </el-tab-pane>
+          <el-tab-pane label="修改记录" name="second">
+            <vxe-table
+              ref="vxeTable"
+              size="small"
+              border
+              show-overflow
+              row-id="ID"
+              :row-config="{ isHover: true }"
+              :data="tableFileList"
+              :radio-config="{ trigger: 'row' }"
+            >
+              <vxe-column field="FileName" title="FileName"></vxe-column>
+              <vxe-column field="InnerText" title="Modification Content"></vxe-column>
+              <vxe-column field="Author" width="120" title="Modifier"></vxe-column>
+              <vxe-column field="UpdateTime" width="300" title="Modification time" :formatter="formatDate"></vxe-column>
+            </vxe-table>
+          </el-tab-pane>
+        </el-tabs>
       </template>
     </vxe-modal>
   </div>
@@ -247,10 +269,13 @@ export default {
       selectRow: {},
       //模板数据
       tableList: [],
+      tableFileList: [],
+      selectFileName: '',
       searchKey: '',
       //部门数据
       depList: [],
       url: '/static/SelectOnlineEditing.html',
+      activeName: 'first',
       iframeShow: true,
     }
   },
@@ -263,6 +288,16 @@ export default {
       axios.post('http://123.56.242.202:8080/api/Contract/GetContractList?fileName=' + name).then((res) => {
         this.arrayToTree(res.data, 'ID', 'ParentID', this.depList)
       })
+    },
+    handleClick(tab, event) {
+      if (tab.name == 'second') {
+        axios.post('http://123.56.242.202:8080/api/user/GetByWordNameLog?fileName=' + this.selectFileName).then((res) => {
+          this.tableFileList = res.data
+          setTimeout(() => {
+            this.$refs.vxeTable.setAllTreeExpand(true)
+          }, 200)
+        })
+      }
     },
     formatDate({ cellValue }, format) {
       return XEUtils.toDateString(cellValue, format || 'yyyy-MM-dd HH:mm:ss')
@@ -281,6 +316,13 @@ export default {
       name = row.ProposalFileNameIP + '/default/' + name
       this.showDetails11 = true
       this.iframeShow = false
+      this.selectFileName = row.ProposalFileName
+      axios.post('http://123.56.242.202:8080/api/user/GetByWordNameLog?fileName=' + row.FileName).then((res) => {
+        this.tableFileList = res.data
+        setTimeout(() => {
+          this.$refs.vxeTable.setAllTreeExpand(true)
+        }, 200)
+      })
       this.$nextTick(() => {
         this.iframeShow = true
       })
@@ -305,6 +347,14 @@ export default {
       }
       this.showDetails11 = true
       this.iframeShow = false
+      this.selectFileName = row.ContractFileName
+
+      axios.post('http://123.56.242.202:8080/api/user/GetByWordNameLog?fileName=' + row.ContractFileName).then((res) => {
+        this.tableFileList = res.data
+        setTimeout(() => {
+          this.$refs.vxeTable.setAllTreeExpand(true)
+        }, 200)
+      })
       this.$nextTick(() => {
         this.iframeShow = true
       })
@@ -317,6 +367,48 @@ export default {
         )
       }, 500)
     },
+    SelectContract1(name, row) {
+      debugger
+      name = row.ProposalFileNameIP + '/default/' + name
+
+      if (row.Status == '未生成') {
+        this.$XModal.message({
+          content: 'This contract has not been generated and cannot be viewed',
+          status: 'warning',
+        })
+        return
+      }
+
+      if (row.ProposalFileName.indexOf('EN') == -1) {
+        this.$XModal.message({
+          content: 'This data has only one file.',
+          status: 'warning',
+        })
+        return
+      }
+      this.showDetails11 = true
+      this.iframeShow = false
+      this.selectFileName = row.ContractFileName
+
+      axios.post('http://123.56.242.202:8080/api/user/GetByWordNameLog?fileName=' + row.ProposalFileName).then((res) => {
+        this.tableFileList = res.data
+        setTimeout(() => {
+          this.$refs.vxeTable.setAllTreeExpand(true)
+        }, 200)
+      })
+      this.$nextTick(() => {
+        this.iframeShow = true
+      })
+      setTimeout(() => {
+        document.getElementById('Generate').contentWindow.postMessage(
+          {
+            name,
+          },
+          '*'
+        )
+      }, 500)
+    },
+
     showDetailEvent(row) {
       this.formData = {}
 
