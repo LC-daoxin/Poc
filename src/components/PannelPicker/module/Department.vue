@@ -73,7 +73,6 @@
 <script>
   import api from '@/api/masterdata/dept'
   import mixin from '../mixin.vue'
-
   export default {
     mixins: [mixin],
     data() {

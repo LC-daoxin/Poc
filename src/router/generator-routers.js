@@ -30,6 +30,9 @@ const constantRouterComponents = {
   PropertyMapping: () => import('@/views/masterdata/PropertyMapping'),
   SplitRuleManagement: () => import('@/views/masterdata/SplitRuleManagement'),
   ToDoList: () => import('@/views/masterdata/ToDoList'),
+  ProposalRequest: () => import('@/views/masterdata/ProposalRequest'),
+
+  
 
   WordLog: () => import('@/views/masterdata/WordLog'),
   ActivityMapping: () => import('@/views/masterdata/ActivityMapping'),
@@ -118,16 +121,16 @@ export const generatorDynamicRouter = token => {
           case '项目经理':
             rootRouter.redirect = '/masterdata/Proposal2'
             break;
-          case '合同创建':
+          case '合同创建人':
             rootRouter.redirect = '/masterdata/Proposal'
             break;
-          case '报价单创建':
+          case '报价单创建人':
             rootRouter.redirect = '/dashboard/Workplace'
             break;
-          case '报价单审批':
+          case '报价单审批人':
             rootRouter.redirect = '/masterdata/ToDoList'
             break;
-          case '合同审批':
+          case '合同审批人':
             rootRouter.redirect = '/masterdata/ToDoList'
             break;
         }

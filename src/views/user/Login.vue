@@ -322,10 +322,10 @@ export default {
         case '报价单创建':
           pathUrl = '/dashboard/Workplace'
           break
-        case '报价单审批':
+        case '报价单审批人':
           pathUrl = '/masterdata/ToDoList'
           break
-        case '合同审批':
+        case '合同审批人':
           pathUrl = '/masterdata/ToDoList'
           break
       }
