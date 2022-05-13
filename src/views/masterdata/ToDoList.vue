@@ -4,8 +4,8 @@
     <vxe-toolbar style="padding-left: 10px; margin-bottom: 10px; border-radius: 5px">
       <template #buttons>
         <a-select allowClear :disabled="ActivityLoading" v-model="Template" @change="changeApprove" style="width: 15%">
-          <a-select-option value="">待审批</a-select-option>
-          <a-select-option value="true">已审批</a-select-option>
+          <a-select-option value="">Pending approval</a-select-option>
+          <a-select-option value="true">Approved</a-select-option>
         </a-select>
       </template>
     </vxe-toolbar>
@@ -36,7 +36,7 @@
     <vxe-modal v-model="showDetails" title="File Information" width="1200" height="800" resize>
       <template #default>
         <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
-          <el-tab-pane label="文件信息" name="first">
+          <el-tab-pane label="Document content" name="first">
             <div class="Generate">
               <iframe
                 v-if="iframeShow"
@@ -47,7 +47,7 @@
               />
             </div>
           </el-tab-pane>
-          <el-tab-pane label="修改记录" name="second">
+          <el-tab-pane label="Adjustment record" name="second">
             <vxe-table
               ref="vxeTable"
               size="small"
@@ -104,7 +104,7 @@ export default {
   methods: {
     handleClick(tab, event) {
       if (tab.name == 'second') {
-        axios.post('http://123.56.242.202:8080/api/user/GetByWordNameLog?fileName=' + this.selectFileName).then((res) => {
+        axios.post('http://localhost:44372//api/user/GetByWordNameLog?fileName=' + this.selectFileName).then((res) => {
           this.tableFileList = res.data
           setTimeout(() => {
             this.$refs.vxeTable.setAllTreeExpand(true)
@@ -137,7 +137,7 @@ export default {
       this.showDetails = true
       this.iframeShow = false
       this.selectFileName = row.FileName
-      axios.post('http://123.56.242.202:8080/api/user/GetByWordNameLog?fileName=' + row.FileName).then((res) => {
+      axios.post('http://localhost:44372//api/user/GetByWordNameLog?fileName=' + row.FileName).then((res) => {
         this.tableFileList = res.data
         setTimeout(() => {
           this.$refs.vxeTable.setAllTreeExpand(true)
@@ -157,7 +157,7 @@ export default {
     },
     getList(val) {
       var user = JSON.parse(sessionStorage.getItem('LoginUser'))
-      axios.post('http://123.56.242.202:8080/api/user/ToDoList?userID=' + user.UserID + '&approve=' + val).then((res) => {
+      axios.post('http://localhost:44372//api/user/ToDoList?userID=' + user.UserID + '&approve=' + val).then((res) => {
         this.tableList = res.data
         setTimeout(() => {
           this.$refs.vxeTable.setAllTreeExpand(true)
@@ -165,11 +165,11 @@ export default {
       })
     },
     Approved(row) {
-      this.$XModal.confirm('Are you sure you want to approve?').then((type) => {
+      this.$XModal.confirm('Are you sure you want to approve?','Message prompt', { cancelButtonText: 'cancel', confirmButtonText: 'sure' }).then((type) => {
         if (type === 'confirm') {
           this.$XModal.message({ id: 'loding', content: 'Data processing...', status: 'loading' })
           axios
-            .post('http://123.56.242.202:8080/api/user/Approve?fileName=' + row.FileName + '&batchID=' + row.BatchID)
+            .post('http://localhost:44372//api/user/Approve?fileName=' + row.FileName + '&batchID=' + row.BatchID)
             .then((res) => {
               this.$XModal.close('loding')
               if (res.data.Code == 200) {

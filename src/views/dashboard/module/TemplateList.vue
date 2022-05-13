@@ -113,7 +113,7 @@
               title: 'Template Name',
               dataIndex: 'Name',
               align: 'center',
-              width: 250,
+              width: 700,
               customRender: (text, row, index) => {
                 return <b>{text}</b>
               },
@@ -185,7 +185,7 @@
       },
       loadData(model = {}) {
         this.tableParams.loading = true
-        axios.get('http://123.56.242.202:8080/api/poc/GetDocumentsTempList').then((res) => {
+        axios.get('http://localhost:44372//api/poc/GetDocumentsTempList').then((res) => {
           console.log('loadData', res)
           this.tableParams.dataSource = res.data
           this.tableParams.loading = false

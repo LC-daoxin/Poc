@@ -10,7 +10,7 @@
           <div class="header">
             <a href="/">
               <img src="~@/assets/ym.png" class="logo" alt="logo">
-              <span class="title">报价系统</span>
+              <span class="title">CDP</span>
             </a>
           </div>
         </div>

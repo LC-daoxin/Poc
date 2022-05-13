@@ -128,7 +128,7 @@
         class="right"
         :span="8"
       >
-        <div class="title">已选择</div>
+        <div class="title">Selected</div>
         <div class="select-list">
           <a-row
             class="select-row"

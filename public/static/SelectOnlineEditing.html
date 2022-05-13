@@ -44,7 +44,7 @@
 
         var docEditor;
         var fileName = "";
-        var lang = "zh";
+        var lang = "en";
         var fileType = "";
         var token = null;
         var appid = null;
@@ -123,7 +123,7 @@
                 if (fileName.indexOf('=') > -1)
                     fileName = fileName.split('=')[1];
 
-                var host = 'http://123.56.242.202:8080/api/Contract/Save';
+                var host = 'http://localhost:44372//api/Contract/Save';
 
                 $.ajax({
                     url: host,
@@ -132,9 +132,9 @@
                     async: false,
                     success: function (json) {
                         if (json.Code == 200 || json.Code == '200') {
-                            alert('保存成功');
+                            alert('Saved successfully');
                         } else {
-                            this.error(json, '保存失败');
+                            this.error(json, 'Save failed');
                         }
                     },
                     error: function (json, msg) {

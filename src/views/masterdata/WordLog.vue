@@ -60,12 +60,12 @@ export default {
       return XEUtils.toDateString(cellValue, format || 'yyyy-MM-dd HH:mm:ss')
     },
     getList() {
-      axios.post('http://123.56.242.202:8080/api/User/GetWordLog').then((res) => {
+      axios.post('http://localhost:44372//api/User/GetWordLog').then((res) => {
         this.tableList = res.data
       })
     },
     OnloadFile(row) {
-      axios.post('http://123.56.242.202:8080//api/Contract/GetFile?fileName=' + row.FileName).then((res) => {
+      axios.post('http://localhost:44372///api/Contract/GetFile?fileName=' + row.FileName).then((res) => {
         debugger
         this.tableList = res.data
         var name = res.data.IP + '/default/' + row.FileName

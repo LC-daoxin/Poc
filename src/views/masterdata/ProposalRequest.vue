@@ -205,7 +205,7 @@ export default {
     },
     getList(val) {
       var user = JSON.parse(sessionStorage.getItem('LoginUser'))
-      axios.post('http://123.56.242.202:8080/api/user/GetMasterData?projectName=&corporateName=').then((res) => {
+      axios.post('http://localhost:44372//api/user/GetMasterData?projectName=&corporateName=').then((res) => {
         this.tableList = res.data
         setTimeout(() => {
           this.$refs.vxeTable.setAllTreeExpand(true)
@@ -213,20 +213,25 @@ export default {
       })
     },
     Approved(row) {
-      this.$XModal.confirm('Are you sure you want to approve?').then((type) => {
-        if (type === 'confirm') {
-          this.$XModal.message({ id: 'loding', content: '数据处理中...', status: 'loading' })
-          axios.post('http://123.56.242.202:8080/api/user/MasterDataUpdate?masterID=' + row.MasterID).then((res) => {
-            this.$XModal.close('loding')
-            if (res.data.Code == 200) {
-              this.$XModal.message({ content: '审批成功', status: 'success' })
-              this.getList()
-            } else {
-              this.$XModal.message({ content: '审批失败' + res.data.Message, status: 'error' })
-            }
-          })
-        }
-      })
+      this.$XModal
+        .confirm('Are you sure you want to approve?', 'Message prompt', {
+          cancelButtonText: 'cancel',
+          confirmButtonText: 'sure',
+        })
+        .then((type) => {
+          if (type === 'confirm') {
+            this.$XModal.message({ id: 'loding', content: 'Data processing...', status: 'loading' })
+            axios.post('http://localhost:44372//api/user/MasterDataUpdate?masterID=' + row.MasterID).then((res) => {
+              this.$XModal.close('loding')
+              if (res.data.Code == 200) {
+                this.$XModal.message({ content: 'Approval succeeded', status: 'success' })
+                this.getList()
+              } else {
+                this.$XModal.message({ content: 'Approval failed:' + res.data.Message, status: 'error' })
+              }
+            })
+          }
+        })
     },
   },
 }

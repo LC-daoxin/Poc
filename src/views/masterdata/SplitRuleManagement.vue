@@ -127,16 +127,16 @@
             Sort: item.Sort,
           }
         })
-        axios.post('http://123.56.242.202:8080/api/poc/SaveProposal', ProposalJson).then((res) => {
+        axios.post('http://localhost:44372//api/poc/SaveProposal', ProposalJson).then((res) => {
           console.log('SaveProposal', res)
           axios
-            .get('http://123.56.242.202:8080/api/poc/CreateProposalInstance', {
+            .get('http://localhost:44372//api/poc/CreateProposalInstance', {
               params: { batchID: res.data.Data },
             })
             .then((val) => {
               console.log('CreateProposalInstance', val)
               axios
-                .get('http://123.56.242.202:8080/api/poc/GetDocumentsName', {
+                .get('http://localhost:44372//api/poc/GetDocumentsName', {
                   params: { batchID: res.data.Data },
                 })
                 .then((res) => {

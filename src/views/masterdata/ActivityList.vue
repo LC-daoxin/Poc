@@ -111,11 +111,11 @@ export default {
         this.$XModal.message({ content: '要删的数据还有子节点', status: 'warning' })
         return
       }
-      this.$XModal.confirm('确定删除？').then((type) => {
+      this.$XModal.confirm('确定删除？','Message prompt').then((type) => {
         if (type === 'confirm') {
           this.$XModal.message({ id: 'loding', content: '数据处理中...', status: 'loading' })
           axios
-            .post('http://123.56.242.202:8080/api/BaseData/ActivityTypeDelete?typeID=' + checked.TypeID)
+            .post('http://localhost:44372//api/BaseData/ActivityTypeDelete?typeID=' + checked.TypeID)
             .then((res) => {
               this.$XModal.close('loding')
               if (res.data.Code == 200) {
@@ -130,12 +130,12 @@ export default {
       })
     },
     save() {
-      this.$XModal.confirm('确定保存？').then((type) => {
+      this.$XModal.confirm('确定保存？','Message prompt').then((type) => {
         if (type === 'confirm') {
           this.$XModal.message({ id: 'loding', content: '数据处理中...', status: 'loading' })
 
           if (this.formData.TypeID == null) {
-            axios.post('http://123.56.242.202:8080/api/BaseData/ActivityTypeCreate', [this.formData]).then((res) => {
+            axios.post('http://localhost:44372//api/BaseData/ActivityTypeCreate', [this.formData]).then((res) => {
               this.$XModal.close('loding')
               if (res.data.Code == 200) {
                 this.$XModal.message({ content: '添加成功', status: 'success' })
@@ -146,7 +146,7 @@ export default {
               }
             })
           } else {
-            axios.post('http://123.56.242.202:8080/api/BaseData/ActivityTypeUpdate', [this.formData]).then((res) => {
+            axios.post('http://localhost:44372//api/BaseData/ActivityTypeUpdate', [this.formData]).then((res) => {
               this.$XModal.close('loding')
               if (res.data.Code == 200) {
                 this.$XModal.message({ content: '修改成功', status: 'success' })
@@ -170,7 +170,7 @@ export default {
       this.open = false
     },
     getList(name) {
-      axios.post('http://123.56.242.202:8080/api/BaseData/GetActivityType?name=' + name).then((res) => {
+      axios.post('http://localhost:44372//api/BaseData/GetActivityType?name=' + name).then((res) => {
         this.actList = res.data
         for (var item of this.actList) {
           item.Type = item.Type + ''

@@ -64,7 +64,10 @@
           </vxe-form-item>
           <vxe-form-item title="ActivityName (Chinese)" field="ActivityNameCN" span="12">
             <template #default>
-              <vxe-input v-model="formData.ActivityNameCN" placeholder="Please enter the ActivityName(Chinese)"></vxe-input>
+              <vxe-input
+                v-model="formData.ActivityNameCN"
+                placeholder="Please enter the ActivityName(Chinese)"
+              ></vxe-input>
             </template>
           </vxe-form-item>
           <vxe-form-item title="ActivityDesc" field="ActivityDesc" span="12">
@@ -74,17 +77,24 @@
           </vxe-form-item>
           <vxe-form-item title="ActivityDesc (Chinese)" field="ActivityDescCN" span="12">
             <template #default>
-              <vxe-input v-model="formData.ActivityDescCN" placeholder="Please enter the  ActivityDesc(Chinese)"></vxe-input>
+              <vxe-input
+                v-model="formData.ActivityDescCN"
+                placeholder="Please enter the  ActivityDesc(Chinese)"
+              ></vxe-input>
             </template>
           </vxe-form-item>
           <vxe-form-item title="ActivityShortName" field="ActivityShortName" span="12">
             <template #default>
-              <vxe-input v-model="formData.ActivityShortName" placeholder="Please enter the ActivityShortName"> </vxe-input>
+              <vxe-input v-model="formData.ActivityShortName" placeholder="Please enter the ActivityShortName">
+              </vxe-input>
             </template>
           </vxe-form-item>
           <vxe-form-item title="ActivityShortName (Chinese)" field="ActivityShortNameCN" span="12">
             <template #default>
-              <vxe-input v-model="formData.ActivityShortNameCN" placeholder="Please enter the ActivityShortName(Chinese)"></vxe-input>
+              <vxe-input
+                v-model="formData.ActivityShortNameCN"
+                placeholder="Please enter the ActivityShortName(Chinese)"
+              ></vxe-input>
             </template>
           </vxe-form-item>
 
@@ -134,17 +144,27 @@
           </vxe-form-item>
           <vxe-form-item title="PassThroughPrice" field="PassThroughPrice" span="12">
             <template #default>
-              <vxe-input v-model="formData.PassThroughPrice" placeholder="Please enter the PassThroughPrice"></vxe-input>
+              <vxe-input
+                v-model="formData.PassThroughPrice"
+                placeholder="Please enter the PassThroughPrice"
+              ></vxe-input>
             </template>
           </vxe-form-item>
           <vxe-form-item title="PassThroughPriceMark" field="PassThroughPriceMark" span="12">
             <template #default>
-              <vxe-input v-model="formData.PassThroughPriceMark" placeholder="Please enter the PassThroughPriceMark"></vxe-input>
+              <vxe-input
+                v-model="formData.PassThroughPriceMark"
+                placeholder="Please enter the PassThroughPriceMark"
+              ></vxe-input>
             </template>
           </vxe-form-item>
           <vxe-form-item title="StartTime" field="StartTime" span="12">
             <template #default>
-              <vxe-input v-model="formData.StartTime" placeholder="Please enter the start time" type="datetime"></vxe-input>
+              <vxe-input
+                v-model="formData.StartTime"
+                placeholder="Please enter the start time"
+                type="datetime"
+              ></vxe-input>
             </template>
           </vxe-form-item>
           <vxe-form-item title="EndTime" field="EndTime" span="12">
@@ -314,29 +334,29 @@ export default {
   },
   mounted() {
     this.getList('')
-    axios.post('http://123.56.242.202:8080/api/BaseData/GetMasterData?projectName=&corporateName=').then((res) => {
+    axios.post('http://localhost:44372//api/BaseData/GetMasterData?projectName=&corporateName=').then((res) => {
       this.projectList = res.data
     })
 
-    axios.post('http://123.56.242.202:8080/api/BaseData/GetActivityType?name=').then((res) => {
-        this.activityList = this.arrayToTree(res.data, 'TypeID', 'ParentID',[])
-        this.activityList = this.getActTree(this.activityList);
+    axios.post('http://localhost:44372//api/BaseData/GetActivityType?name=').then((res) => {
+      this.activityList = this.arrayToTree(res.data, 'TypeID', 'ParentID', [])
+      this.activityList = this.getActTree(this.activityList)
     })
   },
   methods: {
-    getActTree(datas){
-      var dt = [];
-      for(var item of datas){
-          item.ActivetName="|--"+item.ActivetName+"("+this.formatterType(item.Type)+")";
-          dt.push(item);
-          item.children=item.children==undefined?[]:item.children;
-          for(var cd of item.children){
-            cd.ActivetName="|--|--"+cd.ActivetName+"("+this.formatterType(item.Type)+")";
-            dt.push(cd);
-          }
+    getActTree(datas) {
+      var dt = []
+      for (var item of datas) {
+        item.ActivetName = '|--' + item.ActivetName + '(' + this.formatterType(item.Type) + ')'
+        dt.push(item)
+        item.children = item.children == undefined ? [] : item.children
+        for (var cd of item.children) {
+          cd.ActivetName = '|--|--' + cd.ActivetName + '(' + this.formatterType(item.Type) + ')'
+          dt.push(cd)
+        }
       }
-      console.log(dt);
-      return dt;
+      console.log(dt)
+      return dt
     },
     search() {
       this.getList(this.searchKey)
@@ -352,7 +372,7 @@ export default {
         records[o[id]] = o
       }
       for (var i = 0; i < itemLength; i++) {
-        var currentData =data[i];
+        var currentData = data[i]
         var parentData = records[currentData[pid]]
         if (!parentData) {
           //alert(currentData["name"]);
@@ -367,7 +387,7 @@ export default {
       }
       return targetData
     },
-    
+
     add() {
       this.formData = {}
       var checked = this.$refs.treeTable.getRadioRecord()
@@ -397,54 +417,63 @@ export default {
         this.$XModal.message({ content: 'The data to be deleted has child nodes', status: 'warning' })
         return
       }
-      this.$XModal.confirm('Are you sure to delete?').then((type) => {
-        if (type === 'confirm') {
-          this.$XModal.message({ id: 'loding', content: 'Data processing...', status: 'loading' })
-          axios
-            .post('http://123.56.242.202:8080/api/BaseData/BaseDataDelete?baseDataID=' + checked.ActivityID)
-            .then((res) => {
-              this.$XModal.close('loding')
-              if (res.data.Code == 200) {
-                this.$XModal.message({ content: 'Deleted successfully', status: 'success' })
-                this.open = false
-                this.getList('')
-              } else {
-                this.$XModal.message({ content: 'Delete failed' + res.data.Message, status: 'error' })
-              }
-            })
-        }
-      })
+      this.$XModal
+        .confirm({
+          content: 'Are you sure to delete?',
+          cancelButtonText: 'cancel',
+          confirmButtonText: 'sure',
+          title: 'Message prompt',
+        })
+        .then((type) => {
+          if (type === 'confirm') {
+            this.$XModal.message({ id: 'loding', content: 'Data processing...', status: 'loading' })
+            axios
+              .post('http://localhost:44372//api/BaseData/BaseDataDelete?baseDataID=' + checked.ActivityID)
+              .then((res) => {
+                this.$XModal.close('loding')
+                if (res.data.Code == 200) {
+                  this.$XModal.message({ content: 'Deleted successfully', status: 'success' })
+                  this.open = false
+                  this.getList('')
+                } else {
+                  this.$XModal.message({ content: 'Delete failed' + res.data.Message, status: 'error' })
+                }
+              })
+          }
+        })
     },
     save() {
-      this.$XModal.confirm('Are you sure to save?').then((type) => {
-        if (type === 'confirm') {
-          this.$XModal.message({ id: 'loding', content: 'Data processing...', status: 'loading' })
+      this.$XModal
+        .confirm('Are you sure to save?', 'Message prompt', { cancelButtonText: 'cancel', confirmButtonText: 'sure' })
+        .then((type) => {
+          if (type === 'confirm') {
+            this.$XModal.message({ id: 'loding', content: 'Data processing...', status: 'loading' })
 
-          if (this.formData.ActivityID == null) {
-            axios.post('http://123.56.242.202:8080/api/BaseData/BaseDataCreate', [this.formData]).then((res) => {
-              this.$XModal.close('loding')
-              if (res.data.Code == 200) {
-                this.$XModal.message({ content: 'Added successfully', status: 'success' })
-                this.open = false
-                this.getList('')
-              } else {
-                this.$XModal.message({ content: 'Add failed:' + res.data.Message, status: 'error' })
-              }
-            })
-          } else {
-            axios.post('http://123.56.242.202:8080/api/BaseData/BaseDataUpdate', [this.formData]).then((res) => {
-              this.$XModal.close('loding')
-              if (res.data.Code == 200) {
-                this.$XModal.message({ content: 'Modified successfully', status: 'success' })
-                this.open = false
-                this.getList('')
-              } else {
-                this.$XModal.message({ content: 'Modification failed:' + res.data.Message, status: 'error' })
-              }
-            })
+            if (this.formData.ActivityID == null) {
+              axios.post('http://localhost:44372//api/BaseData/BaseDataCreate', [this.formData]).then((res) => {
+                this.$XModal.close('loding')
+                if (res.data.Code == 200) {
+                  this.$XModal.message({ content: 'Added successfully', status: 'success' })
+                  this.open = false
+                  this.getList('')
+                } else {
+                  this.$XModal.message({ content: 'Add failed:' + res.data.Message, status: 'error' })
+                }
+              })
+            } else {
+              axios.post('http://localhost:44372//api/BaseData/BaseDataUpdate', [this.formData]).then((res) => {
+                this.$XModal.close('loding')
+                if (res.data.Code == 200) {
+                  this.$XModal.message({ content: 'Modified successfully', status: 'success' })
+                  this.open = false
+                  this.getList('')
+                } else {
+                  this.$XModal.message({ content: 'Modification failed:' + res.data.Message, status: 'error' })
+                }
+              })
+            }
           }
-        }
-      })
+        })
     },
     formatterType(cellValue) {
       if (cellValue == '1') return 'Project Type1'
@@ -456,7 +485,7 @@ export default {
       this.open = false
     },
     getList() {
-      axios.post('http://123.56.242.202:8080/api/BaseData/GetBaseData').then((res) => {
+      axios.post('http://localhost:44372//api/BaseData/GetBaseData').then((res) => {
         this.actList = res.data
         setTimeout(() => {
           this.$refs.treeTable.setAllTreeExpand(true)

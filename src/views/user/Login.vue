@@ -224,7 +224,7 @@ export default {
           state.loginBtn = true
           axios
             .post(
-              'http://123.56.242.202:8080/api/User/UserLogin?userName=' +
+              'http://localhost:44372//api/User/UserLogin?userName=' +
                 values.username +
                 '&password=' +
                 values.password
@@ -239,7 +239,7 @@ export default {
                 //state.loginBtn = false
                 this.loginSuccess(res)
               } else {
-                this.$XModal.message({ content: '账号或密码不对', status: 'error' })
+                this.$XModal.message({ content: 'Wrong account or password', status: 'error' })
                 state.loginBtn = false
               }
             })
@@ -334,8 +334,8 @@ export default {
       // 延迟 1 秒显示欢迎信息
       setTimeout(() => {
         this.$notification.success({
-          message: '欢迎',
-          description: `${timeFix()}，欢迎回来`,
+          message: 'Welcome',
+          description: `${timeFix()}，Welcome`,
         })
       }, 1000)
       this.isLoginError = false

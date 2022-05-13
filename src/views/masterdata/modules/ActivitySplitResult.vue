@@ -336,7 +336,7 @@ export default {
     loadData() {
       this.tableParams.loading = true
       axios
-        .post(`http://123.56.242.202:8080/api/SplitRule/GetPMSDataSplitResult?BatchID=${this.currentRow.BatchID}`)
+        .post(`http://localhost:44372//api/SplitRule/GetPMSDataSplitResult?BatchID=${this.currentRow.BatchID}`)
         .then((res) => {
           console.log(res.data)
           // this.setSubActivitiesAll(res.data)
@@ -346,7 +346,7 @@ export default {
     },
     exportData() {
       // axios
-      //   .post(`http://123.56.242.202:8080/api/SplitRule/GetPMSDataSplitResultFile?BatchID=${this.currentRow.BatchID}`)
+      //   .post(`http://localhost:44372//api/SplitRule/GetPMSDataSplitResultFile?BatchID=${this.currentRow.BatchID}`)
       //   .then((res) => {
       //     const blob = new Blob([res.data], { type: 'application/vnd.ms-excel' })
       //     const url = window.URL.createObjectURL(blob)
@@ -358,7 +358,7 @@ export default {
       //   })
 
       axios({
-        url: `http://123.56.242.202:8080/api/SplitRule/GetPMSDataSplitResultFile?BatchID=${this.currentRow.BatchID}`,
+        url: `http://localhost:44372//api/SplitRule/GetPMSDataSplitResultFile?BatchID=${this.currentRow.BatchID}`,
         responseType: 'blob', //表明返回服务器返回的数据类型
         method: 'post', //请求方式
       }).then((res) => {

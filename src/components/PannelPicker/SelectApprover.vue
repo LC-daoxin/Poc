@@ -14,7 +14,7 @@
       :type="rowObj[type].length > 0 ? 'primary' : 'dashed'"
       @click="openPannel"
     >
-      {{ rowObj[type].length > 0 ? "已选择" : selectName }}
+      {{ rowObj[type].length > 0 ? "Selected" : selectName }}
     </a-button>
     <general-pannel
       ref="pannel"

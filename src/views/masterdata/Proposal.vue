@@ -3,6 +3,11 @@
   <div>
     <vxe-toolbar style="padding-left: 10px; margin-bottom: 10px; border-radius: 5px">
       <template #buttons>
+        <a-select allowClear :disabled="ActivityLoading" v-model="Template" @change="changeApprove" style="width: 13%">
+          <a-select-option value="">Not generated</a-select-option>
+          <a-select-option value="true">Generated</a-select-option>
+        </a-select>
+        &nbsp;
         <vxe-input v-model="searchKey" placeholder="FileName"></vxe-input>
         <vxe-button status="primary" icon="fa vxe-icon--search" @click="search">Search</vxe-button>
       </template>
@@ -30,7 +35,9 @@
           <vxe-button @click="showDetailEvent(row)">Generate Contract{{ row.batchID }}</vxe-button>
           <vxe-button @click="SelectProposal(row.ProposalFileName, row)">View Proposal{{ row.batchID }}</vxe-button>
           <vxe-button @click="SelectContract(row.ContractFileName, row)">View Contract{{ row.batchID }}</vxe-button>
-          <vxe-button @click="SelectContract1(row.ProposalFileName, row)">View Contract Proposal{{ row.batchID }}</vxe-button>
+          <vxe-button @click="SelectContract1(row.ProposalFileName, row)"
+            >View Contract Proposal{{ row.batchID }}</vxe-button
+          >
         </template>
       </vxe-column>
     </vxe-table>
@@ -99,113 +106,113 @@
       </template>
     </vxe-modal>
 
-    <vxe-modal v-model="showDetailsCN" title="中文合同信息" width="1100" height="600" resize>
+    <vxe-modal v-model="showDetailsCN" title="Chinese contract information" width="1100" height="600" resize>
       <template #default>
         <vxe-form :data="formData" title-align="right" title-width="120">
-          <vxe-form-item title="项目名称" field="ProjectName" span="20">
+          <vxe-form-item title="ProjectName" field="ProjectName" span="20">
             <template #default>
-              <vxe-input v-model="formData.ProjectName" placeholder="请输入项目名称"></vxe-input>
+              <vxe-input v-model="formData.ProjectName" placeholder="Please enter the project name"></vxe-input>
             </template>
           </vxe-form-item>
 
-          <vxe-form-item title="客户（委托方）" field="Client" span="10">
+          <vxe-form-item title="Client" field="Client" span="10">
             <template #default>
-              <vxe-input v-model="formData.Client" placeholder="请输入客户（委托方）"></vxe-input>
+              <vxe-input v-model="formData.Client" placeholder="Please enter the Client"></vxe-input>
             </template>
           </vxe-form-item>
 
-          <vxe-form-item title="研究开发方（受托方）" field="Trustee" span="10">
+          <vxe-form-item title="Trustee" field="Trustee" span="10">
             <template #default>
-              <vxe-input v-model="formData.Trustee" placeholder="请输入"></vxe-input>
+              <vxe-input v-model="formData.Trustee" placeholder="Please enter the Trustee"></vxe-input>
             </template>
           </vxe-form-item>
 
-          <vxe-form-item title="合同开始日期" field="BeginDate" span="10">
-            <vxe-input v-model="formData.BeginDate" placeholder="合同开始日期" type="date"></vxe-input>
+          <vxe-form-item title="BeginDate" field="BeginDate" span="10">
+            <vxe-input v-model="formData.BeginDate" placeholder="Please enter the BeginDate" type="date"></vxe-input>
           </vxe-form-item>
-          <vxe-form-item title="合同结束日期" field="EndDate" span="10">
-            <vxe-input v-model="formData.EndDate" placeholder="合同结束日期" type="date"></vxe-input>
-          </vxe-form-item>
-
-          <vxe-form-item title="姓名" field="ClientName" span="10">
-            <template #default>
-              <vxe-input v-model="formData.ClientName" placeholder="请输入委托方项目姓名"></vxe-input>
-            </template>
-          </vxe-form-item>
-          <vxe-form-item title="姓名" field="TrusteeName" span="10">
-            <template #default>
-              <vxe-input v-model="formData.TrusteeName" placeholder="请输入受托方项目姓名"></vxe-input>
-            </template>
-          </vxe-form-item>
-          <vxe-form-item title="工作电话" field="ClientTelephone" span="10">
-            <template #default>
-              <vxe-input v-model="formData.ClientTelephone" placeholder="请输入委托方项目工作电话"></vxe-input>
-            </template>
-          </vxe-form-item>
-          <vxe-form-item title="工作电话" field="TrusteeTelephone" span="10">
-            <template #default>
-              <vxe-input v-model="formData.TrusteeTelephone" placeholder="请输入受托方项目工作电话"></vxe-input>
-            </template>
-          </vxe-form-item>
-          <vxe-form-item title="手机" field="ClientPhone" span="10">
-            <template #default>
-              <vxe-input v-model="formData.ClientPhone" placeholder="请输入委托方项目手机"></vxe-input>
-            </template>
-          </vxe-form-item>
-          <vxe-form-item title="手机" field="TrusteePhone" span="10">
-            <template #default>
-              <vxe-input v-model="formData.TrusteePhone" placeholder="请输入受托方项目手机"></vxe-input>
-            </template>
-          </vxe-form-item>
-          <vxe-form-item title="Email" field="ClientEmail" span="10">
-            <template #default>
-              <vxe-input v-model="formData.ClientEmail" placeholder="请输入委托方项目Email"></vxe-input>
-            </template>
-          </vxe-form-item>
-          <vxe-form-item title="Email" field="TrusteeEmail" span="10">
-            <template #default>
-              <vxe-input v-model="formData.TrusteeEmail" placeholder="请输入受托方项目Email"></vxe-input>
-            </template>
-          </vxe-form-item>
-          <vxe-form-item title="通信地址" field="ClientAddress" span="10">
-            <template #default>
-              <vxe-input v-model="formData.ClientAddress" placeholder="请输入委托方项目通信地址"></vxe-input>
-            </template>
-          </vxe-form-item>
-          <vxe-form-item title="通信地址" field="TrusteeAddress" span="10">
-            <template #default>
-              <vxe-input v-model="formData.TrusteeAddress" placeholder="请输入受托方项目通信地址"></vxe-input>
-            </template>
+          <vxe-form-item title="EndDate" field="EndDate" span="10">
+            <vxe-input v-model="formData.EndDate" placeholder="Please enter the EndDate" type="date"></vxe-input>
           </vxe-form-item>
 
-          <vxe-form-item title="费用总额（人民币）" field="Total" span="10">
+          <vxe-form-item title="ClientName" field="ClientName" span="10">
             <template #default>
-              <vxe-input v-model="formData.Total" placeholder="请输入费用总额（人民币）"></vxe-input>
+              <vxe-input v-model="formData.ClientName" placeholder="Please enter the ClientName"></vxe-input>
+            </template>
+          </vxe-form-item>
+          <vxe-form-item title="TrusteeName" field="TrusteeName" span="10">
+            <template #default>
+              <vxe-input v-model="formData.TrusteeName" placeholder="Please enter the TrusteeName"></vxe-input>
+            </template>
+          </vxe-form-item>
+          <vxe-form-item title="ClientTelephone" field="ClientTelephone" span="10">
+            <template #default>
+              <vxe-input v-model="formData.ClientTelephone" placeholder="Please enter the ClientTelephone"></vxe-input>
+            </template>
+          </vxe-form-item>
+          <vxe-form-item title="TrusteeTelephone" field="TrusteeTelephone" span="10">
+            <template #default>
+              <vxe-input v-model="formData.TrusteeTelephone" placeholder="Please enter the TrusteeTelephone"></vxe-input>
+            </template>
+          </vxe-form-item>
+          <vxe-form-item title="ClientPhone" field="ClientPhone" span="10">
+            <template #default>
+              <vxe-input v-model="formData.ClientPhone" placeholder="Please enter the ClientPhone"></vxe-input>
+            </template>
+          </vxe-form-item>
+          <vxe-form-item title="TrusteePhone" field="TrusteePhone" span="10">
+            <template #default>
+              <vxe-input v-model="formData.TrusteePhone" placeholder="Please enter the TrusteePhone"></vxe-input>
+            </template>
+          </vxe-form-item>
+          <vxe-form-item title="ClientEmail" field="ClientEmail" span="10">
+            <template #default>
+              <vxe-input v-model="formData.ClientEmail" placeholder="Please enter the ClientEmail"></vxe-input>
+            </template>
+          </vxe-form-item>
+          <vxe-form-item title="TrusteeEmail" field="TrusteeEmail" span="10">
+            <template #default>
+              <vxe-input v-model="formData.TrusteeEmail" placeholder="Please enter the TrusteeEmail"></vxe-input>
+            </template>
+          </vxe-form-item>
+          <vxe-form-item title="ClientAddress" field="ClientAddress" span="10">
+            <template #default>
+              <vxe-input v-model="formData.ClientAddress" placeholder="Please enter the Client Address"></vxe-input>
+            </template>
+          </vxe-form-item>
+          <vxe-form-item title="TrusteeAddress" field="TrusteeAddress" span="10">
+            <template #default>
+              <vxe-input v-model="formData.TrusteeAddress" placeholder="Please enter the mailing address of the entrusted party"></vxe-input>
             </template>
           </vxe-form-item>
 
-          <vxe-form-item title="项目启动经费" field="StartUpFunds" span="10">
+          <vxe-form-item title="Total expenses (RMB)" field="Total" span="10">
             <template #default>
-              <vxe-input v-model="formData.StartUpFunds" placeholder="请输入项目启动经费"></vxe-input>
+              <vxe-input v-model="formData.Total" placeholder="Please enter the total fee (RMB)"></vxe-input>
             </template>
           </vxe-form-item>
 
-          <vxe-form-item title="一次性材料费用" field="OneFee" span="10">
+          <vxe-form-item title="Project start-up funds" field="StartUpFunds" span="10">
             <template #default>
-              <vxe-input v-model="formData.OneFee" placeholder="请输入费用总额（人民币）"></vxe-input>
+              <vxe-input v-model="formData.StartUpFunds" placeholder="Please enter the project start-up fund"></vxe-input>
             </template>
           </vxe-form-item>
 
-          <vxe-form-item title="填料费用" field="FillerCost" span="10">
+          <vxe-form-item title="One time material cost" field="OneFee" span="10">
             <template #default>
-              <vxe-input v-model="formData.FillerCost" placeholder="请输入填料费用"></vxe-input>
+              <vxe-input v-model="formData.OneFee" placeholder="Please enter the total fee (RMB)"></vxe-input>
+            </template>
+          </vxe-form-item>
+
+          <vxe-form-item title="Filler cost" field="FillerCost" span="10">
+            <template #default>
+              <vxe-input v-model="formData.FillerCost" placeholder="Please enter the filling fee"></vxe-input>
             </template>
           </vxe-form-item>
 
           <vxe-form-item align="right" span="24">
             <template #default>
-              <vxe-button type="button" status="primary" @click="save">生成</vxe-button>
-              <vxe-button type="button" @click="close">取消</vxe-button>
+              <vxe-button type="button" status="primary" @click="save">Generate</vxe-button>
+              <vxe-button type="button" @click="close">Cancel</vxe-button>
             </template>
           </vxe-form-item>
         </vxe-form>
@@ -215,7 +222,7 @@
     <vxe-modal v-model="showDetails11" title="File Information" width="1200" height="800" resize>
       <template #default>
         <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
-          <el-tab-pane label="文件信息" name="first">
+          <el-tab-pane label="Document content" name="first">
             <div class="Generate">
               <iframe
                 v-if="iframeShow"
@@ -226,7 +233,7 @@
               />
             </div>
           </el-tab-pane>
-          <el-tab-pane label="修改记录" name="second">
+          <el-tab-pane label="Adjustment record" name="second">
             <vxe-table
               ref="vxeTable"
               size="small"
@@ -277,6 +284,7 @@ export default {
       url: '/static/SelectOnlineEditing.html',
       activeName: 'first',
       iframeShow: true,
+      Template: '',
     }
   },
   mounted() {
@@ -285,13 +293,15 @@ export default {
   },
   methods: {
     getDepList(name) {
-      axios.post('http://123.56.242.202:8080/api/Contract/GetContractList?fileName=' + name).then((res) => {
-        this.arrayToTree(res.data, 'ID', 'ParentID', this.depList)
-      })
+      axios
+        .post('http://localhost:44372/api/Contract/GetContractListProposal?fileName=' + name + '&approve=' + this.Template)
+        .then((res) => {
+          this.arrayToTree(res.data, 'ID', 'ParentID', this.depList)
+        })
     },
     handleClick(tab, event) {
       if (tab.name == 'second') {
-        axios.post('http://123.56.242.202:8080/api/user/GetByWordNameLog?fileName=' + this.selectFileName).then((res) => {
+        axios.post('http://localhost:44372//api/user/GetByWordNameLog?fileName=' + this.selectFileName).then((res) => {
           this.tableFileList = res.data
           setTimeout(() => {
             this.$refs.vxeTable.setAllTreeExpand(true)
@@ -312,12 +322,15 @@ export default {
       }
       return name
     },
+    changeApprove() {
+      this.getList('')
+    },
     SelectProposal(name, row) {
       name = row.ProposalFileNameIP + '/default/' + name
       this.showDetails11 = true
       this.iframeShow = false
       this.selectFileName = row.ProposalFileName
-      axios.post('http://123.56.242.202:8080/api/user/GetByWordNameLog?fileName=' + row.FileName).then((res) => {
+      axios.post('http://localhost:44372//api/user/GetByWordNameLog?fileName=' + row.FileName).then((res) => {
         this.tableFileList = res.data
         setTimeout(() => {
           this.$refs.vxeTable.setAllTreeExpand(true)
@@ -338,7 +351,7 @@ export default {
     SelectContract(name, row) {
       name = row.ContractFileNameIP + '/default/' + name
 
-      if (row.Status == '未生成') {
+      if (row.Status == 'Not generated') {
         this.$XModal.message({
           content: 'This contract has not been generated and cannot be viewed',
           status: 'warning',
@@ -349,7 +362,7 @@ export default {
       this.iframeShow = false
       this.selectFileName = row.ContractFileName
 
-      axios.post('http://123.56.242.202:8080/api/user/GetByWordNameLog?fileName=' + row.ContractFileName).then((res) => {
+      axios.post('http://localhost:44372//api/user/GetByWordNameLog?fileName=' + row.ContractFileName).then((res) => {
         this.tableFileList = res.data
         setTimeout(() => {
           this.$refs.vxeTable.setAllTreeExpand(true)
@@ -371,7 +384,7 @@ export default {
       debugger
       name = row.ProposalFileNameIP + '/default/' + name
 
-      if (row.Status == '未生成') {
+      if (row.Status == 'Not generated') {
         this.$XModal.message({
           content: 'This contract has not been generated and cannot be viewed',
           status: 'warning',
@@ -390,7 +403,7 @@ export default {
       this.iframeShow = false
       this.selectFileName = row.ContractFileName
 
-      axios.post('http://123.56.242.202:8080/api/user/GetByWordNameLog?fileName=' + row.ProposalFileName).then((res) => {
+      axios.post('http://localhost:44372//api/user/GetByWordNameLog?fileName=' + row.ProposalFileName).then((res) => {
         this.tableFileList = res.data
         setTimeout(() => {
           this.$refs.vxeTable.setAllTreeExpand(true)
@@ -412,7 +425,7 @@ export default {
     showDetailEvent(row) {
       this.formData = {}
 
-      if (row.Status == '已生成') {
+      if (row.Status == 'Generated') {
         this.$XModal.message({
           content: 'This contract has been generated and cannot be generated again.',
           status: 'warning',
@@ -420,7 +433,7 @@ export default {
         return
       }
       if (row.ProposalFileName.indexOf('EN') > 0) {
-        axios.post('http://123.56.242.202:8080/api/Contract/GetMasterData').then((res) => {
+        axios.post('http://localhost:44372//api/Contract/GetMasterData').then((res) => {
           this.selectRow = row
           this.showDetails = true
           this.formData.BatchID = row.BatchID
@@ -431,7 +444,7 @@ export default {
           this.formData.ClientTitle = res.data[0].ProjectName
         })
       } else {
-        axios.post('http://123.56.242.202:8080/api/Contract/GetMasterData').then((res) => {
+        axios.post('http://localhost:44372//api/Contract/GetMasterData').then((res) => {
           debugger
           this.selectRow = row
           this.showDetailsCN = true
@@ -484,19 +497,22 @@ export default {
       this.showDetails = false
     },
     getList(name) {
-      axios.post('http://123.56.242.202:8080/api/Contract/GetContractList?fileName=' + name).then((res) => {
-        this.tableList = res.data
-        setTimeout(() => {
-          this.$refs.vxeTable.setAllTreeExpand(true)
-        }, 200)
-      })
+      axios
+        .post('http://localhost:44372//api/Contract/GetContractListProposal?fileName=' + name + '&approve=' + this.Template)
+        .then((res) => {
+          this.tableList = res.data
+          setTimeout(() => {
+            this.$refs.vxeTable.setAllTreeExpand(true)
+          }, 200)
+        })
     },
+
     save() {
-      this.$XModal.confirm('Are you sure to save?').then((type) => {
+      this.$XModal.confirm('Are you sure to save?','Message prompt', { cancelButtonText: 'cancel', confirmButtonText: 'sure' }).then((type) => {
         if (type === 'confirm') {
           this.$XModal.message({ id: 'loding', content: 'Data processing...', status: 'loading' })
 
-          axios.post('http://123.56.242.202:8080/api/Contract/DataContractCreate', [this.formData]).then((res) => {
+          axios.post('http://localhost:44372//api/Contract/DataContractCreate', [this.formData]).then((res) => {
             this.$XModal.close('loding')
             if (res.data.Code == 200) {
               this.$XModal.message({ content: 'Generated successfully', status: 'success' })

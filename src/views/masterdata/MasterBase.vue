@@ -28,7 +28,6 @@
       <vxe-column field="ProjectName" width="130" title="ProjectName"></vxe-column>
       <vxe-column field="CorporateNameCN" width="130" title="CorporateName (Chinese)"></vxe-column>
       <vxe-column field="CorporateName" width="130" title="CorporateName"></vxe-column>
-      <vxe-column field="OrganizationCN" width="100" title="Organization"></vxe-column>
       <vxe-column field="ProjectID" width="80" title="ProjectID"></vxe-column>
       <vxe-column field="ClientNameCN" width="130" title="ClientName (Chinese)"></vxe-column>
       <vxe-column field="ClientName" width="100" title="ClientName"></vxe-column>
@@ -51,14 +50,14 @@
 
     <vxe-modal v-model="open" :title="title" width="1000" height="650" resize>
       <template #default>
-        <vxe-form :data="formData" title-align="right" title-width="120">
+        <vxe-form :data="formData" title-align="right" title-width="180">
           <vxe-form-item title="ProjectName (Chinese)" field="ProjectNameCN" span="12">
             <template #default>
               <vxe-input v-model="formData.ProjectNameCN" placeholder="Please enter the (Chinese)"></vxe-input>
             </template>
           </vxe-form-item>
 
-          <vxe-form-item title="ProjectName(英文)" field="ProjectName" span="12">
+          <vxe-form-item title="ProjectName(Chinese)" field="ProjectName" span="12">
             <template #default>
               <vxe-input v-model="formData.ProjectName" placeholder="Please enter the ProjectName"></vxe-input>
             </template>
@@ -273,10 +272,10 @@ export default {
         this.$XModal.message({ content: 'Please select the data to delete', status: 'warning' })
         return
       }
-      this.$XModal.confirm('Are you sure to delete?').then((type) => {
+      this.$XModal.confirm('Are you sure to delete?','Message prompt', { cancelButtonText: 'cancel', confirmButtonText: 'sure' }).then((type) => {
         if (type === 'confirm') {
           this.$XModal.message({ id: 'loding', content: 'Data processing...', status: 'loading' })
-          axios.post('http://123.56.242.202:8080/api/BaseData/MasterDataDelete?MasterID=' + checked.MasterID).then((res) => {
+          axios.post('http://localhost:44372//api/BaseData/MasterDataDelete?MasterID=' + checked.MasterID).then((res) => {
             this.$XModal.close('loding')
             if (res.data.Code == 200) {
               this.$XModal.message({ content: 'Deleted successfully', status: 'success' })
@@ -290,11 +289,11 @@ export default {
       })
     },
     save() {
-      this.$XModal.confirm('Are you sure to save?').then((type) => {
+      this.$XModal.confirm('Are you sure to save?','Message prompt', { cancelButtonText: 'cancel', confirmButtonText: 'sure' }).then((type) => {
         if (type === 'confirm') {
           this.$XModal.message({ id: 'loding', content: 'Data processing...', status: 'loading' })
           if (this.formData.MasterID == null) {
-            axios.post('http://123.56.242.202:8080/api/BaseData/MasterDataCreate', [this.formData]).then((res) => {
+            axios.post('http://localhost:44372//api/BaseData/MasterDataCreate', [this.formData]).then((res) => {
               this.$XModal.close('loding')
               if (res.data.Code == 200) {
                 this.$XModal.message({ content: 'Added successfully', status: 'success' })
@@ -305,7 +304,7 @@ export default {
               }
             })
           } else {
-            axios.post('http://123.56.242.202:8080/api/BaseData/MasterDataUpdate',[this.formData]).then((res) => {
+            axios.post('http://localhost:44372//api/BaseData/MasterDataUpdate',[this.formData]).then((res) => {
               this.$XModal.close('loding')
               if (res.data.Code == 200) {
                 this.$XModal.message({ content: 'Modified successfully', status: 'success' })
@@ -325,7 +324,7 @@ export default {
     getList(projectName, corporateName) {
       axios
         .post(
-          'http://123.56.242.202:8080/api/BaseData/GetMasterData?projectName=' +
+          'http://localhost:44372//api/BaseData/GetMasterData?projectName=' +
             projectName +
             '&corporateName= ' +
             corporateName

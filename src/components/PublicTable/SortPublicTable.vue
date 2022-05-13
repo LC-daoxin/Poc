@@ -62,7 +62,7 @@
           [
             createElement('template', { slot: 'message' }, [
               createElement('span', { style: { marginRight: '12px' } }, [
-                '已选择',
+                'Selected',
                 this.renderSelectionCount(createElement),
                 this.renderClear(createElement),
               ]),

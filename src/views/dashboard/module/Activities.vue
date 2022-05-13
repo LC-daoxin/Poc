@@ -115,41 +115,41 @@ export default {
             ellipsis: true,
             
           },
-          {
-            title: 'DisCount',
-            dataIndex: 'DisCount',
-            align: 'center',
-            width: 140,
-            ellipsis: true,
-            customRender: (text, row, index) => (
-              <a-input
-                size="small"
-                v-model:value={text}
-                onChange={(e) => this.onChangeServicePrice(e, row)}
-                value={text}
-              />
-            ),
-          },
-          {
-            title: 'Time',
-            width: 260,
-            align: 'center',
-            customRender: (text, row, index) => (
-              <a-range-picker
-                size="small"
-                format="YYYY-MM-DD"
-                placeholder={['Start Time', 'End Time']}
-                onChange={(val) => this.onChangeTime(val, row)}
-              />
-            ),
-          },
-          {
-            title: 'Duration',
-            dataIndex: 'Duration',
-            width: 150,
-            align: 'center',
-            customRender: (text, row, index) => <span>{text}</span>,
-          },
+          // {
+          //   title: 'DisCount',
+          //   dataIndex: 'DisCount',
+          //   align: 'center',
+          //   width: 140,
+          //   ellipsis: true,
+          //   customRender: (text, row, index) => (
+          //     <a-input
+          //       size="small"
+          //       v-model:value={text}
+          //       onChange={(e) => this.onChangeServicePrice(e, row)}
+          //       value={text}
+          //     />
+          //   ),
+          // },
+          // {
+          //   title: 'Time',
+          //   width: 260,
+          //   align: 'center',
+          //   customRender: (text, row, index) => (
+          //     <a-range-picker
+          //       size="small"
+          //       format="YYYY-MM-DD"
+          //       placeholder={['Start Time', 'End Time']}
+          //       onChange={(val) => this.onChangeTime(val, row)}
+          //     />
+          //   ),
+          // },
+          // {
+          //   title: 'Duration',
+          //   dataIndex: 'Duration',
+          //   width: 150,
+          //   align: 'center',
+          //   customRender: (text, row, index) => <span>{text}</span>,
+          // },
         ],
       },
     }
@@ -229,9 +229,9 @@ export default {
       if (this.templateSelect.length > 0) {
         this.templateSelect[0].Name == 'POCCN' ?  url = 'GetActivitiesListCN' : ''
       }
-      console.log(1, `http://123.56.242.202:8080/api/poc/${url}`)
+      console.log(1, `http://localhost:44372//api/poc/${url}`)
       axios
-        .get(`http://123.56.242.202:8080/api/poc/${url}`, {
+        .get(`http://localhost:44372//api/poc/${url}`, {
           params: model,
         })
         .then((res) => {
@@ -242,7 +242,7 @@ export default {
     },
     getProposalPipeLine() {
       // this.tableParams.loading = true
-      axios.get('http://123.56.242.202:8080/api/poc/GetProposalPipeLine', {}).then((res) => {
+      axios.get('http://localhost:44372//api/poc/GetProposalPipeLine', {}).then((res) => {
         console.log('getProposalPipeLine', res)
         this.pipelineOptions = res.data
       })
