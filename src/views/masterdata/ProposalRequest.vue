@@ -25,107 +25,114 @@
         </template>
       </vxe-column>
     </vxe-table>
-    <vxe-modal v-model="showDetails" title="Proposal" width="1100" height="600" resize>
+    <vxe-modal v-model="showDetails" title="Proposal" width="1100" height="630" resize>
       <template #default>
         <vxe-form :data="formData" title-align="right" title-width="140">
           <vxe-form-item title="ProjectID" field="ProjectID" span="20">
             <template #default>
-              <vxe-input v-model="formData.ProjectID" disabled></vxe-input>
+              <vxe-input v-model="formData.ProjectID"></vxe-input>
             </template>
           </vxe-form-item>
 
           <vxe-form-item title="ProjectName(CN)" field="ProjectNameCN" span="10">
             <template #default>
-              <vxe-input v-model="formData.ProjectNameCN" disabled></vxe-input>
+              <vxe-input v-model="formData.ProjectNameCN"></vxe-input>
             </template>
           </vxe-form-item>
 
           <vxe-form-item title="ProjectName" field="ProjectName" span="10">
             <template #default>
-              <vxe-input v-model="formData.ProjectName" disabled></vxe-input>
+              <vxe-input v-model="formData.ProjectName"></vxe-input>
             </template>
           </vxe-form-item>
 
           <vxe-form-item title="CorporateName(CN)" field="CorporateNameCN" span="10">
             <template #default>
-              <vxe-input v-model="formData.CorporateNameCN" disabled></vxe-input>
+              <vxe-input v-model="formData.CorporateNameCN"></vxe-input>
             </template>
           </vxe-form-item>
 
           <vxe-form-item title="CorporateName" field="CorporateName" span="10">
             <template #default>
-              <vxe-input v-model="formData.CorporateName" disabled></vxe-input>
+              <vxe-input v-model="formData.CorporateName"></vxe-input>
             </template>
           </vxe-form-item>
           <vxe-form-item title="ClientName(CN)" field="ClientNameCN" span="10">
             <template #default>
-              <vxe-input v-model="formData.ClientNameCN" disabled></vxe-input>
+              <vxe-input v-model="formData.ClientNameCN"></vxe-input>
             </template>
           </vxe-form-item>
 
           <vxe-form-item title="ClientName" field="ClientName" span="10">
             <template #default>
-              <vxe-input v-model="formData.ClientName" disabled></vxe-input>
+              <vxe-input v-model="formData.ClientName"></vxe-input>
             </template>
           </vxe-form-item>
           <vxe-form-item title="FullAddress(CN)" field="FullAddressCN" span="10">
             <template #default>
-              <vxe-input v-model="formData.FullAddressCN" disabled></vxe-input>
+              <vxe-input v-model="formData.FullAddressCN"></vxe-input>
             </template>
           </vxe-form-item>
 
           <vxe-form-item title="FullAddress" field="FullAddress" span="10">
             <template #default>
-              <vxe-input v-model="formData.FullAddress" disabled></vxe-input>
+              <vxe-input v-model="formData.FullAddress"></vxe-input>
             </template>
           </vxe-form-item>
           <vxe-form-item title="TechnicalContract(CN)" field="TechnicalContractCN" span="10">
             <template #default>
-              <vxe-input v-model="formData.TechnicalContractCN" disabled></vxe-input>
+              <vxe-input v-model="formData.TechnicalContractCN"></vxe-input>
             </template>
           </vxe-form-item>
 
           <vxe-form-item title="TechnicalContract" field="TechnicalContract" span="10">
             <template #default>
-              <vxe-input v-model="formData.TechnicalContract" disabled></vxe-input>
+              <vxe-input v-model="formData.TechnicalContract"></vxe-input>
             </template>
           </vxe-form-item>
           <vxe-form-item title="BusinessContract(CN)" field="BusinessContractCN" span="10">
             <template #default>
-              <vxe-input v-model="formData.BusinessContractCN" disabled></vxe-input>
+              <vxe-input v-model="formData.BusinessContractCN"></vxe-input>
             </template>
           </vxe-form-item>
 
           <vxe-form-item title="BusinessContract" field="BusinessContract" span="10">
             <template #default>
-              <vxe-input v-model="formData.BusinessContract" disabled></vxe-input>
+              <vxe-input v-model="formData.BusinessContract"></vxe-input>
             </template>
           </vxe-form-item>
 
           <vxe-form-item title="CustomerService(CN)" field="CustomerServiceCN" span="10">
             <template #default>
-              <vxe-input v-model="formData.CustomerServiceCN" disabled></vxe-input>
+              <vxe-input v-model="formData.CustomerServiceCN"></vxe-input>
             </template>
           </vxe-form-item>
 
           <vxe-form-item title="CustomerService" field="CustomerService" span="10">
             <template #default>
-              <vxe-input v-model="formData.CustomerService" disabled></vxe-input>
+              <vxe-input v-model="formData.CustomerService"></vxe-input>
             </template>
           </vxe-form-item>
           <vxe-form-item title="Organization" field="Organization" span="10">
             <template #default>
-              <vxe-input v-model="formData.Organization" disabled></vxe-input>
+              <vxe-input v-model="formData.Organization"></vxe-input>
             </template>
           </vxe-form-item>
           <vxe-form-item title="ClientEmail" field="ClientEmail" span="10">
             <template #default>
-              <vxe-input v-model="formData.ClientEmail" disabled></vxe-input>
+              <vxe-input v-model="formData.ClientEmail"></vxe-input>
             </template>
           </vxe-form-item>
           <vxe-form-item title="ClientPhone" field="ClientPhone" span="10">
             <template #default>
-              <vxe-input v-model="formData.ClientPhone" disabled></vxe-input>
+              <vxe-input v-model="formData.ClientPhone"></vxe-input>
+            </template>
+          </vxe-form-item>
+
+          <vxe-form-item align="right" span="24">
+            <template #default>
+              <vxe-button type="button" status="primary" @click="save">Save</vxe-button>
+              <vxe-button type="button" @click="close">Close</vxe-button>
             </template>
           </vxe-form-item>
         </vxe-form>
@@ -205,7 +212,7 @@ export default {
     },
     getList(val) {
       var user = JSON.parse(sessionStorage.getItem('LoginUser'))
-      axios.post('http://localhost:44372//api/user/GetMasterData?projectName=&corporateName=').then((res) => {
+      axios.post('http://123.56.242.202:8080//api/user/GetMasterData?projectName=&corporateName=').then((res) => {
         this.tableList = res.data
         setTimeout(() => {
           this.$refs.vxeTable.setAllTreeExpand(true)
@@ -221,7 +228,7 @@ export default {
         .then((type) => {
           if (type === 'confirm') {
             this.$XModal.message({ id: 'loding', content: 'Data processing...', status: 'loading' })
-            axios.post('http://localhost:44372//api/user/MasterDataUpdate?masterID=' + row.MasterID).then((res) => {
+            axios.post('http://123.56.242.202:8080//api/user/MasterDataUpdate?masterID=' + row.MasterID).then((res) => {
               this.$XModal.close('loding')
               if (res.data.Code == 200) {
                 this.$XModal.message({ content: 'Approval succeeded', status: 'success' })

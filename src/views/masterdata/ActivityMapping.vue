@@ -334,11 +334,11 @@ export default {
   },
   mounted() {
     this.getList('')
-    axios.post('http://localhost:44372//api/BaseData/GetMasterData?projectName=&corporateName=').then((res) => {
+    axios.post('http://123.56.242.202:8080//api/BaseData/GetMasterData?projectName=&corporateName=').then((res) => {
       this.projectList = res.data
     })
 
-    axios.post('http://localhost:44372//api/BaseData/GetActivityType?name=').then((res) => {
+    axios.post('http://123.56.242.202:8080//api/BaseData/GetActivityType?name=').then((res) => {
       this.activityList = this.arrayToTree(res.data, 'TypeID', 'ParentID', [])
       this.activityList = this.getActTree(this.activityList)
     })
@@ -428,7 +428,7 @@ export default {
           if (type === 'confirm') {
             this.$XModal.message({ id: 'loding', content: 'Data processing...', status: 'loading' })
             axios
-              .post('http://localhost:44372//api/BaseData/BaseDataDelete?baseDataID=' + checked.ActivityID)
+              .post('http://123.56.242.202:8080//api/BaseData/BaseDataDelete?baseDataID=' + checked.ActivityID)
               .then((res) => {
                 this.$XModal.close('loding')
                 if (res.data.Code == 200) {
@@ -450,7 +450,7 @@ export default {
             this.$XModal.message({ id: 'loding', content: 'Data processing...', status: 'loading' })
 
             if (this.formData.ActivityID == null) {
-              axios.post('http://localhost:44372//api/BaseData/BaseDataCreate', [this.formData]).then((res) => {
+              axios.post('http://123.56.242.202:8080//api/BaseData/BaseDataCreate', [this.formData]).then((res) => {
                 this.$XModal.close('loding')
                 if (res.data.Code == 200) {
                   this.$XModal.message({ content: 'Added successfully', status: 'success' })
@@ -461,7 +461,7 @@ export default {
                 }
               })
             } else {
-              axios.post('http://localhost:44372//api/BaseData/BaseDataUpdate', [this.formData]).then((res) => {
+              axios.post('http://123.56.242.202:8080//api/BaseData/BaseDataUpdate', [this.formData]).then((res) => {
                 this.$XModal.close('loding')
                 if (res.data.Code == 200) {
                   this.$XModal.message({ content: 'Modified successfully', status: 'success' })
@@ -485,7 +485,7 @@ export default {
       this.open = false
     },
     getList() {
-      axios.post('http://localhost:44372//api/BaseData/GetBaseData').then((res) => {
+      axios.post('http://123.56.242.202:8080//api/BaseData/GetBaseData').then((res) => {
         this.actList = res.data
         setTimeout(() => {
           this.$refs.treeTable.setAllTreeExpand(true)

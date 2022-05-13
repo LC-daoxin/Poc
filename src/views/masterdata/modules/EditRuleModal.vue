@@ -137,7 +137,7 @@
         this.currentRow = record
         this.visible = true
         this.getOptionsAll()
-        axios.get(`http://localhost:44372//api/SplitRule/GetDataSplit?splitRuleID=${record.ID}`).then((res) => {
+        axios.get(`http://123.56.242.202:8080//api/SplitRule/GetDataSplit?splitRuleID=${record.ID}`).then((res) => {
           console.log('GetDataSplit', res, JSON.parse(res.data))
           if (res.data == '[]') {
             this.rules = clonedeep(this.Rules1)
@@ -182,10 +182,10 @@
         )
       },
       getBuList() {
-        return axios.get(`http://localhost:44372//api/SplitRule/GetBuList`)
+        return axios.get(`http://123.56.242.202:8080//api/SplitRule/GetBuList`)
       },
       getProperty() {
-        return axios.get(`http://localhost:44372//api/SplitRule/GetProperty`)
+        return axios.get(`http://123.56.242.202:8080//api/SplitRule/GetProperty`)
       },
       changeSeparateType(val) {
         if (val == 1) {
@@ -213,13 +213,13 @@
           this.$message.warning('请配置拆分规则！')
         } else {
           if (!this.isEdit) { // 创建
-            axios.post(`http://localhost:44372//api/SplitRule/DataSplitCreate`, this.rules.Then).then((res) => {
+            axios.post(`http://123.56.242.202:8080//api/SplitRule/DataSplitCreate`, this.rules.Then).then((res) => {
               console.log('DataSplitCreate', res)
               this.rules = {}
               this.handleCancel()
             })
           } else { // 更新
-            axios.post(`http://localhost:44372//api/SplitRule/DataSplitUpdate`, this.rules.Then).then((res) => {
+            axios.post(`http://123.56.242.202:8080//api/SplitRule/DataSplitUpdate`, this.rules.Then).then((res) => {
               console.log('DataSplitUpdate', res)
               this.rules = {}
               this.handleCancel()

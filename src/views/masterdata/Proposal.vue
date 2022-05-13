@@ -294,14 +294,14 @@ export default {
   methods: {
     getDepList(name) {
       axios
-        .post('http://localhost:44372/api/Contract/GetContractListProposal?fileName=' + name + '&approve=' + this.Template)
+        .post('http://123.56.242.202:8080/api/Contract/GetContractListProposal?fileName=' + name + '&approve=' + this.Template)
         .then((res) => {
           this.arrayToTree(res.data, 'ID', 'ParentID', this.depList)
         })
     },
     handleClick(tab, event) {
       if (tab.name == 'second') {
-        axios.post('http://localhost:44372//api/user/GetByWordNameLog?fileName=' + this.selectFileName).then((res) => {
+        axios.post('http://123.56.242.202:8080//api/user/GetByWordNameLog?fileName=' + this.selectFileName).then((res) => {
           this.tableFileList = res.data
           setTimeout(() => {
             this.$refs.vxeTable.setAllTreeExpand(true)
@@ -330,7 +330,7 @@ export default {
       this.showDetails11 = true
       this.iframeShow = false
       this.selectFileName = row.ProposalFileName
-      axios.post('http://localhost:44372//api/user/GetByWordNameLog?fileName=' + row.FileName).then((res) => {
+      axios.post('http://123.56.242.202:8080//api/user/GetByWordNameLog?fileName=' + row.FileName).then((res) => {
         this.tableFileList = res.data
         setTimeout(() => {
           this.$refs.vxeTable.setAllTreeExpand(true)
@@ -362,7 +362,7 @@ export default {
       this.iframeShow = false
       this.selectFileName = row.ContractFileName
 
-      axios.post('http://localhost:44372//api/user/GetByWordNameLog?fileName=' + row.ContractFileName).then((res) => {
+      axios.post('http://123.56.242.202:8080//api/user/GetByWordNameLog?fileName=' + row.ContractFileName).then((res) => {
         this.tableFileList = res.data
         setTimeout(() => {
           this.$refs.vxeTable.setAllTreeExpand(true)
@@ -403,7 +403,7 @@ export default {
       this.iframeShow = false
       this.selectFileName = row.ContractFileName
 
-      axios.post('http://localhost:44372//api/user/GetByWordNameLog?fileName=' + row.ProposalFileName).then((res) => {
+      axios.post('http://123.56.242.202:8080//api/user/GetByWordNameLog?fileName=' + row.ProposalFileName).then((res) => {
         this.tableFileList = res.data
         setTimeout(() => {
           this.$refs.vxeTable.setAllTreeExpand(true)
@@ -433,7 +433,7 @@ export default {
         return
       }
       if (row.ProposalFileName.indexOf('EN') > 0) {
-        axios.post('http://localhost:44372//api/Contract/GetMasterData').then((res) => {
+        axios.post('http://123.56.242.202:8080//api/Contract/GetMasterData').then((res) => {
           this.selectRow = row
           this.showDetails = true
           this.formData.BatchID = row.BatchID
@@ -444,7 +444,7 @@ export default {
           this.formData.ClientTitle = res.data[0].ProjectName
         })
       } else {
-        axios.post('http://localhost:44372//api/Contract/GetMasterData').then((res) => {
+        axios.post('http://123.56.242.202:8080//api/Contract/GetMasterData').then((res) => {
           debugger
           this.selectRow = row
           this.showDetailsCN = true
@@ -498,7 +498,7 @@ export default {
     },
     getList(name) {
       axios
-        .post('http://localhost:44372//api/Contract/GetContractListProposal?fileName=' + name + '&approve=' + this.Template)
+        .post('http://123.56.242.202:8080//api/Contract/GetContractListProposal?fileName=' + name + '&approve=' + this.Template)
         .then((res) => {
           this.tableList = res.data
           setTimeout(() => {
@@ -512,7 +512,7 @@ export default {
         if (type === 'confirm') {
           this.$XModal.message({ id: 'loding', content: 'Data processing...', status: 'loading' })
 
-          axios.post('http://localhost:44372//api/Contract/DataContractCreate', [this.formData]).then((res) => {
+          axios.post('http://123.56.242.202:8080//api/Contract/DataContractCreate', [this.formData]).then((res) => {
             this.$XModal.close('loding')
             if (res.data.Code == 200) {
               this.$XModal.message({ content: 'Generated successfully', status: 'success' })

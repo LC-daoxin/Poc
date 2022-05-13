@@ -377,7 +377,7 @@
         if (this.model.SubActivity) {
           this.tableParams.loading = true
           axios
-            .post(`http://localhost:44372//api/BaseData/GetSplitRuleData?activityID=${this.model.SubActivity}&language=${this.Template}`)
+            .post(`http://123.56.242.202:8080//api/BaseData/GetSplitRuleData?activityID=${this.model.SubActivity}&language=${this.Template}`)
             .then((res) => {
               console.log('loadData', res)
               this.tableParams.dataSource = res.data
@@ -390,7 +390,7 @@
       addActivity() {
         if (this.model.SubActivity) {
           axios
-            .post('http://localhost:44372//api/BaseData/SplitRuleCreate', [
+            .post('http://123.56.242.202:8080//api/BaseData/SplitRuleCreate', [
               {
                 ActivityID: this.model.SubActivity,
                 Effictive: this.$moment().format('YYYY-MM-DD'),
@@ -422,7 +422,7 @@
           Url = 'GetSubActivitiesListCN'
         }
         axios
-          .get(`http://localhost:44372//api/poc/${Url}`, {
+          .get(`http://123.56.242.202:8080//api/poc/${Url}`, {
             params: {
               activityID: [val],
               keyWords: '',
@@ -438,7 +438,7 @@
         console.log('changeSubActivity', val)
         console.log(this.model.SubActivity, { activityID: val })
         this.tableParams.loading = true
-        axios.post(`http://localhost:44372//api/BaseData/GetSplitRuleData?activityID=${val}&language=${this.Template}`).then((res) => {
+        axios.post(`http://123.56.242.202:8080//api/BaseData/GetSplitRuleData?activityID=${val}&language=${this.Template}`).then((res) => {
           console.log('GetSplitRuleData', res)
           const { status, statusText, data } = res
           if (status == 200 && statusText == 'OK') {
@@ -459,7 +459,7 @@
           Url = 'GetActivitiesListCN'
         }
         axios
-          .get(`http://localhost:44372//api/poc/${Url}`, {
+          .get(`http://123.56.242.202:8080//api/poc/${Url}`, {
             params: {
               proposalPipelineID: '',
               activityName: '',
@@ -507,7 +507,7 @@
       },
       updateSplitList(record) {
         axios
-          .post('http://localhost:44372//api/BaseData/SplitRuleUpdate', [
+          .post('http://123.56.242.202:8080//api/BaseData/SplitRuleUpdate', [
             {
               ...record,
             },
@@ -524,7 +524,7 @@
       deleteRule(record) {
         console.log(record)
         axios
-          .post(`http://localhost:44372//api/BaseData/SplitRuleDelete?ruleID=${record.ID}`)
+          .post(`http://123.56.242.202:8080//api/BaseData/SplitRuleDelete?ruleID=${record.ID}`)
           .then((res) => {
             console.log('SplitRuleDelete', res)
             this.loadData()

@@ -229,9 +229,9 @@ export default {
       if (this.templateSelect.length > 0) {
         this.templateSelect[0].Name == 'POCCN' ?  url = 'GetActivitiesListCN' : ''
       }
-      console.log(1, `http://localhost:44372//api/poc/${url}`)
+      console.log(1, `http://123.56.242.202:8080//api/poc/${url}`)
       axios
-        .get(`http://localhost:44372//api/poc/${url}`, {
+        .get(`http://123.56.242.202:8080//api/poc/${url}`, {
           params: model,
         })
         .then((res) => {
@@ -242,7 +242,7 @@ export default {
     },
     getProposalPipeLine() {
       // this.tableParams.loading = true
-      axios.get('http://localhost:44372//api/poc/GetProposalPipeLine', {}).then((res) => {
+      axios.get('http://123.56.242.202:8080//api/poc/GetProposalPipeLine', {}).then((res) => {
         console.log('getProposalPipeLine', res)
         this.pipelineOptions = res.data
       })

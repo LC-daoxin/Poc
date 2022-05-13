@@ -240,7 +240,7 @@
       selectBULoadData(item) {
         console.log('selectBULoadData', item[0])
         item[0].loading = true
-        axios.get(`http://localhost:44372//api/SplitRule/GetSubBuList?departmentID=${item[0].ID}`).then(res => {
+        axios.get(`http://123.56.242.202:8080//api/SplitRule/GetSubBuList?departmentID=${item[0].ID}`).then(res => {
           console.log('getSubBuList', res)
           if (res.data.length > 0) {
             let children = []
