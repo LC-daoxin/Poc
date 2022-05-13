@@ -24,7 +24,7 @@
     >
       <vxe-column field="ProjectID" width="100" title="ProjectID"></vxe-column>
       <vxe-column field="ProjectName" width="180" title="ProjectName"></vxe-column>
-      <vxe-column field="ProposalFileName" width="230" title="ProposalFileName"></vxe-column>
+      <vxe-column field="ProposalFileName" width="330" title="ProposalFileName"></vxe-column>
       <vxe-column field="ContractFileName" width="230" title="ContractFileName"></vxe-column>
       <vxe-column field="CreateDate" width="160" title="CreateDate"></vxe-column>
       <vxe-column field="UserName" width="100" title="CreateUser"></vxe-column>
@@ -35,9 +35,9 @@
           <vxe-button @click="showDetailEvent(row)">Generate Contract{{ row.batchID }}</vxe-button>
           <vxe-button @click="SelectProposal(row.ProposalFileName, row)">View Proposal{{ row.batchID }}</vxe-button>
           <vxe-button @click="SelectContract(row.ContractFileName, row)">View Contract{{ row.batchID }}</vxe-button>
-          <vxe-button @click="SelectContract1(row.ProposalFileName, row)"
+          <!-- <vxe-button @click="SelectContract1(row.ProposalFileName, row)"
             >View Contract Proposal{{ row.batchID }}</vxe-button
-          >
+          > -->
         </template>
       </vxe-column>
     </vxe-table>
@@ -106,7 +106,7 @@
       </template>
     </vxe-modal>
 
-    <vxe-modal v-model="showDetailsCN" title="Chinese contract information" width="1100" height="600" resize>
+    <vxe-modal v-model="showDetailsCN" title="Chinese contract information" width="1100" height="650" resize>
       <template #default>
         <vxe-form :data="formData" title-align="right" title-width="120">
           <vxe-form-item title="ProjectName" field="ProjectName" span="20">
@@ -151,7 +151,10 @@
           </vxe-form-item>
           <vxe-form-item title="TrusteeTelephone" field="TrusteeTelephone" span="10">
             <template #default>
-              <vxe-input v-model="formData.TrusteeTelephone" placeholder="Please enter the TrusteeTelephone"></vxe-input>
+              <vxe-input
+                v-model="formData.TrusteeTelephone"
+                placeholder="Please enter the TrusteeTelephone"
+              ></vxe-input>
             </template>
           </vxe-form-item>
           <vxe-form-item title="ClientPhone" field="ClientPhone" span="10">
@@ -181,7 +184,10 @@
           </vxe-form-item>
           <vxe-form-item title="TrusteeAddress" field="TrusteeAddress" span="10">
             <template #default>
-              <vxe-input v-model="formData.TrusteeAddress" placeholder="Please enter the mailing address of the entrusted party"></vxe-input>
+              <vxe-input
+                v-model="formData.TrusteeAddress"
+                placeholder="Please enter the mailing address of the entrusted party"
+              ></vxe-input>
             </template>
           </vxe-form-item>
 
@@ -193,7 +199,10 @@
 
           <vxe-form-item title="Project start-up funds" field="StartUpFunds" span="10">
             <template #default>
-              <vxe-input v-model="formData.StartUpFunds" placeholder="Please enter the project start-up fund"></vxe-input>
+              <vxe-input
+                v-model="formData.StartUpFunds"
+                placeholder="Please enter the project start-up fund"
+              ></vxe-input>
             </template>
           </vxe-form-item>
 
@@ -294,14 +303,16 @@ export default {
   methods: {
     getDepList(name) {
       axios
-        .post('http://123.56.242.202:8080/api/Contract/GetContractListProposal?fileName=' + name + '&approve=' + this.Template)
+        .post(
+          'http://localhost:44372/api/Contract/GetContractListProposal?fileName=' + name + '&approve=' + this.Template
+        )
         .then((res) => {
           this.arrayToTree(res.data, 'ID', 'ParentID', this.depList)
         })
     },
     handleClick(tab, event) {
       if (tab.name == 'second') {
-        axios.post('http://123.56.242.202:8080//api/user/GetByWordNameLog?fileName=' + this.selectFileName).then((res) => {
+        axios.post('http://localhost:44372//api/user/GetByWordNameLog?fileName=' + this.selectFileName).then((res) => {
           this.tableFileList = res.data
           setTimeout(() => {
             this.$refs.vxeTable.setAllTreeExpand(true)
@@ -330,7 +341,7 @@ export default {
       this.showDetails11 = true
       this.iframeShow = false
       this.selectFileName = row.ProposalFileName
-      axios.post('http://123.56.242.202:8080//api/user/GetByWordNameLog?fileName=' + row.FileName).then((res) => {
+      axios.post('http://localhost:44372//api/user/GetByWordNameLog?fileName=' + row.FileName).then((res) => {
         this.tableFileList = res.data
         setTimeout(() => {
           this.$refs.vxeTable.setAllTreeExpand(true)
@@ -362,7 +373,7 @@ export default {
       this.iframeShow = false
       this.selectFileName = row.ContractFileName
 
-      axios.post('http://123.56.242.202:8080//api/user/GetByWordNameLog?fileName=' + row.ContractFileName).then((res) => {
+      axios.post('http://localhost:44372//api/user/GetByWordNameLog?fileName=' + row.ContractFileName).then((res) => {
         this.tableFileList = res.data
         setTimeout(() => {
           this.$refs.vxeTable.setAllTreeExpand(true)
@@ -403,7 +414,7 @@ export default {
       this.iframeShow = false
       this.selectFileName = row.ContractFileName
 
-      axios.post('http://123.56.242.202:8080//api/user/GetByWordNameLog?fileName=' + row.ProposalFileName).then((res) => {
+      axios.post('http://localhost:44372//api/user/GetByWordNameLog?fileName=' + row.ProposalFileName).then((res) => {
         this.tableFileList = res.data
         setTimeout(() => {
           this.$refs.vxeTable.setAllTreeExpand(true)
@@ -432,19 +443,21 @@ export default {
         })
         return
       }
-      if (row.ProposalFileName.indexOf('EN') > 0) {
-        axios.post('http://123.56.242.202:8080//api/Contract/GetMasterData').then((res) => {
+
+      if (row.ProposalFileName.indexOf('EN') != -1) {
+        axios.post('http://localhost:44372//api/Contract/GetMasterData').then((res) => {
           this.selectRow = row
           this.showDetails = true
           this.formData.BatchID = row.BatchID
-          this.formData.CompanyName = res.data[0].ClientName
+          this.formData.CompanyName = res.data[0].CorporateName
+          this.formData.ClientName = res.data[0].ClientName
           this.formData.Address = res.data[0].FullAddress
           this.formData.Organization = res.data[0].Organization
           this.formData.Email = res.data[0].ClientEmail
           this.formData.ClientTitle = res.data[0].ProjectName
         })
       } else {
-        axios.post('http://123.56.242.202:8080//api/Contract/GetMasterData').then((res) => {
+        axios.post('http://localhost:44372//api/Contract/GetMasterData').then((res) => {
           debugger
           this.selectRow = row
           this.showDetailsCN = true
@@ -452,7 +465,10 @@ export default {
           this.formData.Client = res.data[0].ClientNameCN
           this.formData.ProjectName = res.data[0].ProjectNameCN
           this.formData.ClientName = res.data[0].ClientName
-          this.formData.TrusteeTelephone = res.data[0].ClientPhone
+          this.formData.ClientAddress = res.data[0].FullAddress
+
+          
+          this.formData.ClientPhone = res.data[0].ClientPhone
           this.formData.ClientEmail = res.data[0].ClientEmail
           this.formData.TrusteeEmail = res.data[0].TechnicalContractCN
         })
@@ -495,10 +511,14 @@ export default {
     },
     close() {
       this.showDetails = false
+      this.showDetailsCN = false
+
     },
     getList(name) {
       axios
-        .post('http://123.56.242.202:8080//api/Contract/GetContractListProposal?fileName=' + name + '&approve=' + this.Template)
+        .post(
+          'http://localhost:44372//api/Contract/GetContractListProposal?fileName=' + name + '&approve=' + this.Template
+        )
         .then((res) => {
           this.tableList = res.data
           setTimeout(() => {
@@ -508,24 +528,26 @@ export default {
     },
 
     save() {
-      this.$XModal.confirm('Are you sure to save?','Message prompt', { cancelButtonText: 'cancel', confirmButtonText: 'sure' }).then((type) => {
-        if (type === 'confirm') {
-          this.$XModal.message({ id: 'loding', content: 'Data processing...', status: 'loading' })
+      this.$XModal
+        .confirm('Are you sure to save?', 'Message prompt', { cancelButtonText: 'cancel', confirmButtonText: 'sure' })
+        .then((type) => {
+          if (type === 'confirm') {
+            this.$XModal.message({ id: 'loding', content: 'Data processing...', status: 'loading' })
 
-          axios.post('http://123.56.242.202:8080//api/Contract/DataContractCreate', [this.formData]).then((res) => {
-            this.$XModal.close('loding')
-            if (res.data.Code == 200) {
-              this.$XModal.message({ content: 'Generated successfully', status: 'success' })
-              this.showDetails = false
-              this.showDetailsCN = false
+            axios.post('http://localhost:44372//api/Contract/DataContractCreate', [this.formData]).then((res) => {
+              this.$XModal.close('loding')
+              if (res.data.Code == 200) {
+                this.$XModal.message({ content: 'Generated successfully', status: 'success' })
+                this.showDetails = false
+                this.showDetailsCN = false
 
-              this.getList('')
-            } else {
-              this.$XModal.message({ content: 'Build failed:' + res.data.Message, status: 'error' })
-            }
-          })
-        }
-      })
+                this.getList('')
+              } else {
+                this.$XModal.message({ content: 'Build failed:' + res.data.Message, status: 'error' })
+              }
+            })
+          }
+        })
     },
   },
 }

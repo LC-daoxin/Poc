@@ -224,7 +224,7 @@ export default {
           state.loginBtn = true
           axios
             .post(
-              'http://123.56.242.202:8080//api/User/UserLogin?userName=' +
+              'http://localhost:44372//api/User/UserLogin?userName=' +
                 values.username +
                 '&password=' +
                 values.password

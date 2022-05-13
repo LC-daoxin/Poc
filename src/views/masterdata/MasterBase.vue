@@ -275,7 +275,7 @@ export default {
       this.$XModal.confirm('Are you sure to delete?','Message prompt', { cancelButtonText: 'cancel', confirmButtonText: 'sure' }).then((type) => {
         if (type === 'confirm') {
           this.$XModal.message({ id: 'loding', content: 'Data processing...', status: 'loading' })
-          axios.post('http://123.56.242.202:8080//api/BaseData/MasterDataDelete?MasterID=' + checked.MasterID).then((res) => {
+          axios.post('http://localhost:44372//api/BaseData/MasterDataDelete?MasterID=' + checked.MasterID).then((res) => {
             this.$XModal.close('loding')
             if (res.data.Code == 200) {
               this.$XModal.message({ content: 'Deleted successfully', status: 'success' })
@@ -293,7 +293,7 @@ export default {
         if (type === 'confirm') {
           this.$XModal.message({ id: 'loding', content: 'Data processing...', status: 'loading' })
           if (this.formData.MasterID == null) {
-            axios.post('http://123.56.242.202:8080//api/BaseData/MasterDataCreate', [this.formData]).then((res) => {
+            axios.post('http://localhost:44372//api/BaseData/MasterDataCreate', [this.formData]).then((res) => {
               this.$XModal.close('loding')
               if (res.data.Code == 200) {
                 this.$XModal.message({ content: 'Added successfully', status: 'success' })
@@ -304,7 +304,7 @@ export default {
               }
             })
           } else {
-            axios.post('http://123.56.242.202:8080//api/BaseData/MasterDataUpdate',[this.formData]).then((res) => {
+            axios.post('http://localhost:44372//api/BaseData/MasterDataUpdate',[this.formData]).then((res) => {
               this.$XModal.close('loding')
               if (res.data.Code == 200) {
                 this.$XModal.message({ content: 'Modified successfully', status: 'success' })
@@ -324,7 +324,7 @@ export default {
     getList(projectName, corporateName) {
       axios
         .post(
-          'http://123.56.242.202:8080//api/BaseData/GetMasterData?projectName=' +
+          'http://localhost:44372//api/BaseData/GetMasterData?projectName=' +
             projectName +
             '&corporateName= ' +
             corporateName

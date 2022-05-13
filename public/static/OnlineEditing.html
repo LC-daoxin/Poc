@@ -123,7 +123,7 @@
                 if (fileName.indexOf('=') > -1)
                     fileName = fileName.split('=')[1];
 
-                var host = 'http://123.56.242.202:8080/api/poc/Save';
+                var host = 'http://localhost:44372/api/poc/Save';
 
                 $.ajax({
                     url: host,
@@ -132,7 +132,7 @@
                     async: false,
                     success: function (json) {
                         if (json.Code == 200 || json.Code == '200') {
-                            var name = json.data
+                            var name = json.Data
                             messageEvent.source.postMessage({ type: 'reload', name }, messageEvent.origin)
                         } else {
                             this.error(json, 'Save failed');

@@ -116,7 +116,7 @@ export default {
       this.$XModal.confirm('Are you sure to delete?','Message prompt', { cancelButtonText: 'cancel', confirmButtonText: 'sure' }).then((type) => {
         if (type === 'confirm') {
           this.$XModal.message({ id: 'loding', content: 'Data processing...', status: 'loading' })
-          axios.post('http://123.56.242.202:8080//api/User/DepartmentDelete?userID=' + checked.ID).then((res) => {
+          axios.post('http://localhost:44372//api/User/DepartmentDelete?userID=' + checked.ID).then((res) => {
             this.$XModal.close('loding')
             if (res.data.Code == 200) {
               this.$XModal.message({ content: 'Deleted successfully', status: 'success' })
@@ -135,7 +135,7 @@ export default {
           this.$XModal.message({ id: 'loding', content: 'Data processing...', status: 'loading' })
 
           if (this.formData.ID == null) {
-            axios.post('http://123.56.242.202:8080//api/User/DepartmentCreate', [this.formData]).then((res) => {
+            axios.post('http://localhost:44372//api/User/DepartmentCreate', [this.formData]).then((res) => {
               this.$XModal.close('loding')
               if (res.data.Code == 200) {
                 this.$XModal.message({ content: 'Added successfully', status: 'success' })
@@ -146,7 +146,7 @@ export default {
               }
             })
           } else {
-            axios.post('http://123.56.242.202:8080//api/User/DepartmentUpdate', this.formData).then((res) => {
+            axios.post('http://localhost:44372//api/User/DepartmentUpdate', this.formData).then((res) => {
               this.$XModal.close('loding')
               if (res.data.Code == 200) {
                 this.$XModal.message({ content: 'Modified successfully', status: 'success' })
@@ -164,7 +164,7 @@ export default {
       this.open = false
     },
     getList(name) {
-      axios.post('http://123.56.242.202:8080//api/User/GetDepartmentInfo?departmentName='+name).then((res) => {
+      axios.post('http://localhost:44372//api/User/GetDepartmentInfo?departmentName='+name).then((res) => {
         this.depList = res.data
         setTimeout(() => {
           this.$refs.treeTable.setAllTreeExpand(true)

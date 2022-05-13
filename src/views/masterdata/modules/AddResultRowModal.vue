@@ -162,7 +162,7 @@
         this.$refs.form.validate((valid) => {
           if (valid) {
 						console.log(2)
-						axios.post('http://123.56.242.202:8080//api/SplitRule/PMSDataSplitResultUpdate', [this.model]).then((res) => {
+						axios.post('http://localhost:44372//api/SplitRule/PMSDataSplitResultUpdate', [this.model]).then((res) => {
 							console.log('PMSDataSplitResultUpdate', res)
 							this.cancel()
 						})

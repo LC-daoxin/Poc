@@ -8,19 +8,10 @@
       :labelCol="{ span: searchLabelCol }"
       :wrapperCol="{ span: searchWrapperCol }"
     >
-      <a-form-model-item
-        label="Key Words"
-        class="form-item"
-      >
-        <a-input
-          allowClear
-          v-model="model.keyWords"
-        ></a-input>
+      <a-form-model-item label="Key Words" class="form-item">
+        <a-input allowClear v-model="model.keyWords"></a-input>
       </a-form-model-item>
-      <a-form-model-item
-        label="Checked Activity"
-        prop="activityID"
-      >
+      <a-form-model-item label="Checked Activity" prop="activityID">
         <a-select
           allowClear
           style="width: 400px"
@@ -29,34 +20,15 @@
           v-model="selectActivityID"
           @change="changePipeline"
         >
-          <a-select-option
-            :value="item.ActivityID"
-            :key="item.ActivityID"
-            v-for="item in activitiesSelect"
-          >{{
-            templateSelect[0].Name == 'POCCN' ?  item.ActivityNameCN : item.ActivityName
+          <a-select-option :value="item.ActivityID" :key="item.ActivityID" v-for="item in activitiesSelect">{{
+            templateSelect[0].Name.indexOf('CN') != -1 ? item.ActivityNameCN : item.ActivityName
           }}</a-select-option>
         </a-select>
       </a-form-model-item>
     </a-form-model>
     <div class="search-approval-wrapper">
-      <a-button
-        class="search_btn"
-        type="primary"
-        icon="search"
-        @click="loadData()"
-      >Search</a-button>
-      <!-- <a-button
-        class="search_btn"
-        icon="plus"
-        type="primary"
-        @click="openAddModal"
-      > {{this.$t('add')}} </a-button> -->
-      <a-button
-        class="search_btn"
-        icon="delete"
-        @click="refresh(false)"
-      >Reset</a-button>
+      <a-button class="search_btn" type="primary" icon="search" @click="loadData()">Search</a-button>
+      <a-button class="search_btn" icon="delete" @click="refresh(false)">Reset</a-button>
     </div>
     <public-table
       class="table"
@@ -74,150 +46,176 @@
 </template>
 
 <script>
-  import { PageHeaderWrapper } from '@ant-design-vue/pro-layout'
-  import { PublicTable } from '@/components'
-  import _ from 'lodash'
-  import axios from 'axios'
-  import { mapState, mapMutations } from 'vuex'
+import { PageHeaderWrapper } from '@ant-design-vue/pro-layout'
+import { PublicTable } from '@/components'
+import _ from 'lodash'
+import axios from 'axios'
+import { mapState, mapMutations } from 'vuex'
 
-  export default {
-    name: 'SubActivities',
-    components: {
-      PageHeaderWrapper,
-      PublicTable,
-    },
-    data() {
-      const EstimateOptions = [
-        {
-          label: '无',
-          value: 'False',
-        },
-        {
-          label: 'Estimate',
-          value: 'True',
-        },
-      ]
-      return {
-        // data
-        searchLabelCol: 9,
-        searchWrapperCol: 15,
-        selectionKeys: [],
-        selectionRows: [],
-        selectActivityID: [],
-        model: {
-          activityID: [],
-          keyWords: '',
-        },
-        pipelineOptions: [],
-        projectType1Disabled: true,
-        projectType1Options: [],
-        projectType2Disabled: true,
-        projectType2Options: [],
-        pagination: {
-          total: 0,
-          current: 1,
-          pageSize: 10,
-        },
-        tableParams: {
-          loading: false,
-          dataSource: [],
-          scroll: { x: 1600 },
-          bordered: true,
-          columns: [
-            {
-              title: 'Activity Name',
-              dataIndex: 'ActivityName',
-              align: 'center',
-              width: 300,
-              ellipsis: true,
-              customRender: (text, row, index) => {
-                if (this.templateSelect.length > 0) {
-                  return this.templateSelect[0].Name == 'POCCN' ? <b>{row.ActivityNameCN}</b> : <b>{text}</b>
-                } else {
-                  return <b>{text}</b>
-                }
-              },
+export default {
+  name: 'SubActivities',
+  components: {
+    PageHeaderWrapper,
+    PublicTable,
+  },
+  data() {
+    
+    const EstimateOptions = [
+      {
+        label: '无',
+        value: 'False',
+      },
+      {
+        label: 'Estimate',
+        value: 'True',
+      },
+    ]
+
+    const Options = [
+      {
+        label: '无',
+        value: 'False',
+      },
+      {
+        label: 'Options',
+        value: 'True',
+      },
+    ]
+    return {
+      // data
+      searchLabelCol: 9,
+      searchWrapperCol: 15,
+      selectionKeys: [],
+      selectionRows: [],
+      selectActivityID: [],
+      model: {
+        activityID: [],
+        keyWords: '',
+      },
+      pipelineOptions: [],
+      projectType1Disabled: true,
+      projectType1Options: [],
+      projectType2Disabled: true,
+      projectType2Options: [],
+      pagination: {
+        total: 0,
+        current: 1,
+        pageSize: 10,
+      },
+      tableParams: {
+        loading: false,
+        dataSource: [],
+        scroll: { x: 1600 },
+        bordered: true,
+        columns: [
+          {
+            title: 'Activity Name',
+            dataIndex: 'ActivityName',
+            align: 'center',
+            width: 300,
+            ellipsis: true,
+            customRender: (text, row, index) => {
+              if (this.templateSelect.length > 0) {
+                return this.templateSelect[0].Name.indexOf('CN') != -1 ? <b>{row.ActivityNameCN}</b> : <b>{text}</b>
+              } else {
+                return <b>{text}</b>
+              }
             },
-            {
-              title: 'Sub Activity Name',
-              dataIndex: 'SubActivityName',
-              align: 'center',
-              width: 300,
-              ellipsis: true,
-              customRender: (text, row, index) => {
-                if (this.templateSelect.length > 0) {
-                  return this.templateSelect[0].Name == 'POCCN' ? <b>{row.SubActivityNameCN}</b> : <b>{text}</b>
-                } else {
-                  return <b>{text}</b>
-                }
-              },
+          },
+          {
+            title: 'Sub Activity Name',
+            dataIndex: 'SubActivityName',
+            align: 'center',
+            width: 300,
+            ellipsis: true,
+            customRender: (text, row, index) => {
+              if (this.templateSelect.length > 0) {
+                return this.templateSelect[0].Name.indexOf('CN') != -1 ? <b>{row.SubActivityNameCN}</b> : <b>{text}</b>
+              } else {
+                return <b>{text}</b>
+              }
             },
-            {
-              title: 'Sub Activity Desc',
-              dataIndex: 'ActivityDesc',
-              align: 'center',
-              width: 200,
-              ellipsis: true,
-              customRender: (text, row, index) => {
-                if (this.templateSelect.length > 0) {
-                  return this.templateSelect[0].Name == 'POCCN' ? <b>{row.ActivityDescCN}</b> : <b>{text}</b>
-                } else {
-                  return <b>{text}</b>
-                }
-              },
+          },
+          {
+            title: 'Sub Activity Desc',
+            dataIndex: 'ActivityDesc',
+            align: 'center',
+            width: 200,
+            ellipsis: true,
+            customRender: (text, row, index) => {
+              if (this.templateSelect.length > 0) {
+                return this.templateSelect[0].Name.indexOf('CN') != -1 ? <b>{row.ActivityDescCN}</b> : <b>{text}</b>
+              } else {
+                return <b>{text}</b>
+              }
             },
-            {
-              title: 'Estimate',
-              dataIndex: 'Property10',
-              align: 'center',
-              width: 100,
-              ellipsis: true,
-              customRender: (text, record, index) => {
-                let val = text && text == 'True' ? 'True' : 'False'
-                return (
-                  <a-select
-                    value={val}
-                    style="width: 100%"
-                    size="small"
-                    onChange={(val) => {
-                      this.changeEstimate(val, record)
-                    }}
-                  >
-                    {EstimateOptions.map((item) => {
-                      return <a-select-option value={item.value}>{item.label}</a-select-option>
-                    })}
-                  </a-select>
-                )
-              },
+          },
+          {
+            title: 'Estimate',
+            dataIndex: 'Property10',
+            align: 'center',
+            width: 100,
+            ellipsis: true,
+            customRender: (text, record, index) => {
+              let val = text && text == 'True' ? 'True' : 'False'
+              return (
+                <a-select
+                  value={val}
+                  style="width: 100%"
+                  size="small"
+                  onChange={(val) => {
+                    this.changeEstimate(val, record)
+                  }}
+                >
+                  {EstimateOptions.map((item) => {
+                    return <a-select-option value={item.value}>{item.label}</a-select-option>
+                  })}
+                </a-select>
+              )
             },
-            {
-              title: 'Service Price',
-              dataIndex: 'Price',
-              align: 'center',
-              width: 150,
-              ellipsis: true,
-              customRender: (text, row, index) => {
-                if (this.templateSelect.length > 0) {
-                  // Property3
-                  if (this.templateSelect[0].Name == 'POCCN') {
-                    return (
-                      <a-input
-                        size="small"
-                        v-model:value={row.Property3}
-                        onChange={(e) => this.onChangeServicePrice(e, row)}
-                        value={row.Property3}
-                      />
-                    )
-                  } else {
-                    return (
-                      <a-input
-                        size="small"
-                        v-model:value={text}
-                        onChange={(e) => this.onChangeServicePrice(e, row)}
-                        value={text}
-                      />
-                    )
-                  }
+          },
+          {
+            title: 'Options',
+            dataIndex: 'Property11',
+            align: 'center',
+            width: 100,
+            ellipsis: true,
+            customRender: (text, record, index) => {
+              let val = text && text == 'True' ? 'True' : 'False'
+              return (
+                <a-select
+                  value={val}
+                  style="width: 100%"
+                  size="small"
+                  onChange={(val) => {
+                    this.changeEstimate(val, record)
+                  }}
+                >
+                  {Options.map((item) => {
+                    return <a-select-option value={item.value}>{item.label}</a-select-option>
+                  })}
+                </a-select>
+              )
+            },
+          },
+          {
+            title: 'Service Price',
+            dataIndex: 'Price',
+            align: 'center',
+            width: 150,
+            ellipsis: true,
+            customRender: (text, row, index) => {
+              if (this.templateSelect.length > 0) {
+                // Property3
+                if (this.templateSelect[0].Name.indexOf('CN') != -1) {
+                  return (
+                    <a-input
+                      size="small"
+                      v-model:value={row.Property3}
+                      onChange={(e) => this.onChangeServicePrice(e, row)}
+                      value={row.Property3}
+                    />
+                  )
                 } else {
                   return (
                     <a-input
@@ -228,257 +226,282 @@
                     />
                   )
                 }
-              },
+              } else {
+                return (
+                  <a-input
+                    size="small"
+                    v-model:value={text}
+                    onChange={(e) => this.onChangeServicePrice(e, row)}
+                    value={text}
+                  />
+                )
+              }
             },
-            {
-              title: 'Pass Though Price',
-              dataIndex: 'PassThroughPrice',
-              align: 'center',
-              width: 150,
-              ellipsis: true,
-              customRender: (text, row, index) => (
-                <a-input
-                  size="small"
-                  v-model:value={text}
-                  onChange={(e) => this.onChangePassPrice(e, row)}
-                  value={text}
-                />
-              ),
-            },
-            {
-              title: 'Duration',
-              dataIndex: 'Duration',
-              width: 100,
-              align: 'center',
-              ellipsis: true,
-              customRender: (text, row, index) => {
-                if (this.templateSelect.length > 0) {
-                  // Property3
-                  if (this.templateSelect[0].Name == 'POCCN') {
-                    return (
-                      <a-input size="small" v-model:value={row.Property2} onChange={(e) => this.onChangeDuration(e, row)} value={row.Property2} />
-                    )
-                  } else {
-                    return (
-                      <a-input size="small" v-model:value={text} onChange={(e) => this.onChangeDuration(e, row)} value={text} />
-                    )
-                  }
+          },
+          {
+            title: 'Pass Though Price',
+            dataIndex: 'PassThroughPrice',
+            align: 'center',
+            width: 150,
+            ellipsis: true,
+            customRender: (text, row, index) => (
+              <a-input
+                size="small"
+                v-model:value={text}
+                onChange={(e) => this.onChangePassPrice(e, row)}
+                value={text}
+              />
+            ),
+          },
+          {
+            title: 'Duration',
+            dataIndex: 'Duration',
+            width: 100,
+            align: 'center',
+            ellipsis: true,
+            customRender: (text, row, index) => {
+              if (this.templateSelect.length > 0) {
+                // Property3
+                if (this.templateSelect[0].Name.indexOf('CN') != -1) {
+                  return (
+                    <a-input
+                      size="small"
+                      v-model:value={row.Property2}
+                      onChange={(e) => this.onChangeDuration(e, row)}
+                      value={row.Property2}
+                    />
+                  )
                 } else {
                   return (
-                    <a-input size="small" v-model:value={text} onChange={(e) => this.onChangeDuration(e, row)} value={text} />
+                    <a-input
+                      size="small"
+                      v-model:value={text}
+                      onChange={(e) => this.onChangeDuration(e, row)}
+                      value={text}
+                    />
                   )
                 }
-              },
+              } else {
+                return (
+                  <a-input
+                    size="small"
+                    v-model:value={text}
+                    onChange={(e) => this.onChangeDuration(e, row)}
+                    value={text}
+                  />
+                )
+              }
             },
-            {
-              title: 'DisCount',
-              dataIndex: 'DisCount',
-              width: 100,
-              align: 'center',
-              ellipsis: true,
-              customRender: (text, row, index) => (
-                <a-input size="small" v-model:value={text} onChange={(e) => this.onChangeDisCount(e, row)} value={text} />
-              ),
-            },
-            {
-              title: 'Scale',
-              dataIndex: 'Scale',
-              align: 'center',
-              width: 100,
-              ellipsis: true,
-              customRender: (text, row, index) => (
-                <a-input size="small" v-model:value={text} onChange={(e) => this.onChangeScale(e, row)} value={text} />
-              ),
-            },
-          ],
-        },
+          },
+          {
+            title: 'DisCount',
+            dataIndex: 'DisCount',
+            width: 100,
+            align: 'center',
+            ellipsis: true,
+            customRender: (text, row, index) => (
+              <a-input size="small" v-model:value={text} onChange={(e) => this.onChangeDisCount(e, row)} value={text} />
+            ),
+          },
+          {
+            title: 'Scale',
+            dataIndex: 'Scale',
+            align: 'center',
+            width: 100,
+            ellipsis: true,
+            customRender: (text, row, index) => (
+              <a-input size="small" v-model:value={text} onChange={(e) => this.onChangeScale(e, row)} value={text} />
+            ),
+          },
+        ],
+      },
+    }
+  },
+  computed: {
+    ...mapState({
+      lang: (state) => state.app.lang,
+      templateSelect: (state) => state.poc.templateSelect,
+      activitiesSelect: (state) => state.poc.activitiesSelect,
+    }),
+  },
+  watch: {
+    lang(val) {
+      this.setColumns(val)
+    },
+    activitiesSelect(list) {
+      this.selectActivityID = []
+      if (list.length > 0) {
+        list.forEach((item) => {
+          this.selectActivityID.push(item.ActivityID)
+        })
+        this.model.activityID = this.selectActivityID.join(',')
+        this.loadData()
       }
     },
-    computed: {
-      ...mapState({
-        lang: (state) => state.app.lang,
-        templateSelect: (state) => state.poc.templateSelect,
-        activitiesSelect: (state) => state.poc.activitiesSelect,
-      }),
+  },
+  mounted() {},
+  methods: {
+    ...mapMutations({
+      setSubActivitiesAll(commit, select) {
+        console.log('setSubActivitiesAll', select)
+        return commit('poc/setSubActivitiesAll', select)
+      },
+    }),
+    // 拖拽列
+    changeColumns(evt) {
+      console.log(evt, 'oldIndex', evt.oldIndex, 'newIndex', evt.newIndex)
+      let oldColumnsItem = _.cloneDeep(this.tableParams.columns[evt.oldIndex])
+      this.tableParams.columns.splice(evt.oldIndex, 1)
+      this.tableParams.columns.splice(evt.newIndex, 0, oldColumnsItem)
+      console.log('changeColumns', this.tableParams.columns)
     },
-    watch: {
-      lang(val) {
-        this.setColumns(val)
-      },
-      activitiesSelect(list) {
-        this.selectActivityID = []
-        if (list.length > 0) {
-          list.forEach((item) => {
-            this.selectActivityID.push(item.ActivityID)
-          })
-          this.model.activityID = this.selectActivityID.join(',')
-          this.loadData()
-        }
-      },
+    // 拖拽行
+    changeRow(evt) {
+      let list = _.cloneDeep(this.tableParams.dataSource)
+      console.log(evt, 'oldIndex', evt.oldIndex, 'newIndex', evt.newIndex)
+      let oldRowsItem = _.cloneDeep(list[evt.oldIndex])
+      list.splice(evt.oldIndex, 1)
+      list.splice(evt.newIndex, 0, oldRowsItem)
+      this.tableParams.dataSource = list
+      console.log('changeRow', this.tableParams.dataSource)
     },
-    mounted() {},
-    methods: {
-      ...mapMutations({
-        setSubActivitiesAll(commit, select) {
-          console.log('setSubActivitiesAll', select)
-          return commit('poc/setSubActivitiesAll', select)
-        },
-      }),
-      // 拖拽列
-      changeColumns(evt) {
-        console.log(evt, 'oldIndex', evt.oldIndex, 'newIndex', evt.newIndex)
-        let oldColumnsItem = _.cloneDeep(this.tableParams.columns[evt.oldIndex])
-        this.tableParams.columns.splice(evt.oldIndex, 1)
-        this.tableParams.columns.splice(evt.newIndex, 0, oldColumnsItem)
-        console.log('changeColumns', this.tableParams.columns)
-      },
-      // 拖拽行
-      changeRow(evt) {
-        let list = _.cloneDeep(this.tableParams.dataSource)
-        console.log(evt, 'oldIndex', evt.oldIndex, 'newIndex', evt.newIndex)
-        let oldRowsItem = _.cloneDeep(list[evt.oldIndex])
-        list.splice(evt.oldIndex, 1)
-        list.splice(evt.newIndex, 0, oldRowsItem)
-        this.tableParams.dataSource = list
-        console.log('changeRow', this.tableParams.dataSource)
-      },
-      // 选择Pipeline
-      changePipeline(list) {
-        console.log(list)
-        if (list.length > 0) {
-          this.model.activityID = list.join(',')
-        }
-      },
-      setColumns(lang) {
-        console.log(lang)
-        this.tableParams.columns.forEach((item) => {
-          item.i18n ? (item.title = this.$t(item.i18n)) : ''
-        })
-      },
-      refresh() {
-        this.model = {
-          activityID: [],
-          keyWords: '',
-        }
-        this.loadData()
-      },
-      loadData() {
-        if (this.model.activityID.length > 0) {
-          this.tableParams.loading = true
-          let url = 'GetSubActivitiesList'
-          if (this.templateSelect.length > 0) {
-            this.templateSelect[0].Name == 'POCCN' ? (url = 'GetSubActivitiesListCN') : ''
-          }
-          console.log(this.templateSelect[0].Name)
-          axios
-            .get(`http://123.56.242.202:8080//api/poc/${url}`, {
-              params: this.model,
-            })
-            .then((res) => {
-              console.log('GetSubActivitiesList/CN', res.data)
-              // this.setSubActivitiesAll(res.data)
-              this.tableParams.dataSource = res.data
-              this.tableParams.loading = false
-            })
-        }
-      },
-      changeEstimate(val, row) {
-        console.log(val, row)
-        this.tableParams.dataSource.forEach((item, i) => {
-          if (item.SubActivityID == row.SubActivityID) {
-            this.$set(this.tableParams.dataSource[i], 'Property10', val)
-            // this.setSubActivitiesAll(this.tableParams.dataSource)
-            // this.setSubActivitiesAll(this.selectionRows)
-          }
-        })
-      },
-      onChangePassPrice(e, row) {
-        this.tableParams.dataSource.forEach((item, i) => {
-          if (item.SubActivityID == row.SubActivityID) {
-            console.log('onChangePassPrice', e.target.value)
-            this.$set(this.tableParams.dataSource[i], 'PassThroughPrice', e.target.value)
-            // this.setSubActivitiesAll(this.tableParams.dataSource)
-            // this.setSubActivitiesAll(this.selectionRows)
-          }
-        })
-        console.log(this.tableParams.dataSource)
-      },
-      onChangeServicePrice(e, row) {
-        let text = 'Price'
+    // 选择Pipeline
+    changePipeline(list) {
+      console.log(list)
+      if (list.length > 0) {
+        this.model.activityID = list.join(',')
+      }
+    },
+    setColumns(lang) {
+      console.log(lang)
+      this.tableParams.columns.forEach((item) => {
+        item.i18n ? (item.title = this.$t(item.i18n)) : ''
+      })
+    },
+    refresh() {
+      this.model = {
+        activityID: [],
+        keyWords: '',
+      }
+      this.loadData()
+    },
+    loadData() {
+      if (this.model.activityID.length > 0) {
+        this.tableParams.loading = true
+        let url = 'GetSubActivitiesList'
         if (this.templateSelect.length > 0) {
-          if (this.templateSelect[0].Name == 'POCCN') {
-            text = 'Property3'
-          } else {
-            text = 'Price'
-          }
+          this.templateSelect[0].Name.indexOf('CN') != -1 ? (url = 'GetSubActivitiesListCN') : ''
         }
-        this.tableParams.dataSource.forEach((item, i) => {
-          if (item.SubActivityID == row.SubActivityID) {
-            console.log('onChangeServicePrice', e.target.value)
-            this.$set(this.tableParams.dataSource[i], text, e.target.value)
-            // this.setSubActivitiesAll(this.tableParams.dataSource)
-            // this.setSubActivitiesAll(this.selectionRows)
-          }
-        })
-      },
-      onChangeDuration(e, row) {
-        let text = 'Duration'
-        if (this.templateSelect.length > 0) {
-          if (this.templateSelect[0].Name == 'POCCN') {
-            text = 'Property2'
-          } else {
-            text = 'Duration'
-          }
-        }
-        this.tableParams.dataSource.forEach((item, i) => {
-          if (item.SubActivityID == row.SubActivityID) {
-            this.$set(this.tableParams.dataSource[i], text, e.target.value)
-            // this.setSubActivitiesAll(this.tableParams.dataSource)
-            // this.setSubActivitiesAll(this.selectionRows)
-          }
-        })
-      },
-      onChangeScale(e, row) {
-        this.tableParams.dataSource.forEach((item, i) => {
-          if (item.SubActivityID == row.SubActivityID) {
-            this.$set(this.tableParams.dataSource[i], 'Scale', e.target.value)
-            // this.setSubActivitiesAll(this.tableParams.dataSource)
-            // this.setSubActivitiesAll(this.selectionRows)
-          }
-        })
-      },
-      onChangeDisCount(e, row) {
-        this.tableParams.dataSource.forEach((item, i) => {
-          if (item.SubActivityID == row.SubActivityID) {
-            this.$set(this.tableParams.dataSource[i], 'DisCount', e.target.value)
-            // this.setSubActivitiesAll(this.tableParams.dataSource)
-            // this.setSubActivitiesAll(this.selectionRows)
-          }
-        })
-      },
-      selectionChange(keys, rows) {
-        this.selectionKeys = keys
-        this.selectionRows = rows
-        console.log(keys)
-        this.setSubActivitiesAll(this.selectionRows)
-      },
-      saveSubActivitiesAll() {
-        if (this.tableParams.dataSource.length > 0) {
-          let array = []
-          this.tableParams.dataSource.forEach((item) => {
-            if (this.selectionKeys.includes(item.SubActivityID)) {
-              array.push(item)
-            }
+        console.log(this.templateSelect[0].Name)
+        axios
+          .get(`http://localhost:44372//api/poc/${url}`, {
+            params: this.model,
           })
-          console.log('saveSubActivitiesAll', array)
-          this.setSubActivitiesAll(array)
+          .then((res) => {
+            console.log('GetSubActivitiesList/CN', res.data)
+            // this.setSubActivitiesAll(res.data)
+            this.tableParams.dataSource = res.data
+            this.tableParams.loading = false
+          })
+      }
+    },
+    changeEstimate(val, row) {
+      console.log(val, row)
+      this.tableParams.dataSource.forEach((item, i) => {
+        if (item.SubActivityID == row.SubActivityID) {
+          this.$set(this.tableParams.dataSource[i], 'Property10', val)
+          // this.setSubActivitiesAll(this.tableParams.dataSource)
+          // this.setSubActivitiesAll(this.selectionRows)
         }
-      },
+      })
     },
-    created() {
-      // this.refresh()
+    onChangePassPrice(e, row) {
+      this.tableParams.dataSource.forEach((item, i) => {
+        if (item.SubActivityID == row.SubActivityID) {
+          console.log('onChangePassPrice', e.target.value)
+          this.$set(this.tableParams.dataSource[i], 'PassThroughPrice', e.target.value)
+          // this.setSubActivitiesAll(this.tableParams.dataSource)
+          // this.setSubActivitiesAll(this.selectionRows)
+        }
+      })
+      console.log(this.tableParams.dataSource)
     },
-  }
+    onChangeServicePrice(e, row) {
+      let text = 'Price'
+      if (this.templateSelect.length > 0) {
+        if (this.templateSelect[0].indexOf('CN') != -1) {
+          text = 'Property3'
+        } else {
+          text = 'Price'
+        }
+      }
+      this.tableParams.dataSource.forEach((item, i) => {
+        if (item.SubActivityID == row.SubActivityID) {
+          console.log('onChangeServicePrice', e.target.value)
+          this.$set(this.tableParams.dataSource[i], text, e.target.value)
+          // this.setSubActivitiesAll(this.tableParams.dataSource)
+          // this.setSubActivitiesAll(this.selectionRows)
+        }
+      })
+    },
+    onChangeDuration(e, row) {
+      let text = 'Duration'
+      if (this.templateSelect.length > 0) {
+        if (this.templateSelect[0].Name.indexOf('CN') != -1) {
+          text = 'Property2'
+        } else {
+          text = 'Duration'
+        }
+      }
+      this.tableParams.dataSource.forEach((item, i) => {
+        if (item.SubActivityID == row.SubActivityID) {
+          this.$set(this.tableParams.dataSource[i], text, e.target.value)
+          // this.setSubActivitiesAll(this.tableParams.dataSource)
+          // this.setSubActivitiesAll(this.selectionRows)
+        }
+      })
+    },
+    onChangeScale(e, row) {
+      this.tableParams.dataSource.forEach((item, i) => {
+        if (item.SubActivityID == row.SubActivityID) {
+          this.$set(this.tableParams.dataSource[i], 'Scale', e.target.value)
+          // this.setSubActivitiesAll(this.tableParams.dataSource)
+          // this.setSubActivitiesAll(this.selectionRows)
+        }
+      })
+    },
+    onChangeDisCount(e, row) {
+      this.tableParams.dataSource.forEach((item, i) => {
+        if (item.SubActivityID == row.SubActivityID) {
+          this.$set(this.tableParams.dataSource[i], 'DisCount', e.target.value)
+          // this.setSubActivitiesAll(this.tableParams.dataSource)
+          // this.setSubActivitiesAll(this.selectionRows)
+        }
+      })
+    },
+    selectionChange(keys, rows) {
+      this.selectionKeys = keys
+      this.selectionRows = rows
+      console.log(keys)
+      this.setSubActivitiesAll(this.selectionRows)
+    },
+    saveSubActivitiesAll() {
+      if (this.tableParams.dataSource.length > 0) {
+        let array = []
+        this.tableParams.dataSource.forEach((item) => {
+          if (this.selectionKeys.includes(item.SubActivityID)) {
+            array.push(item)
+          }
+        })
+        console.log('saveSubActivitiesAll', array)
+        this.setSubActivitiesAll(array)
+      }
+    },
+  },
+  created() {
+    // this.refresh()
+  },
+}
 </script>
 
 <style lang="less" scoped>
