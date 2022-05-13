@@ -1,6 +1,7 @@
 <template>
   <div class="Generate">
     <iframe
+      v-if="iframeShow"
       sandbox="allow-forms allow-modals allow-popups allow-scripts allow-same-origin allow-downloads"
       id="Generate"
       @load="onload"
@@ -21,6 +22,7 @@
     },
     data() {
       return {
+        iframeShow: true,
         url: '/static/OnlineEditing.html'
       }
     },
@@ -35,8 +37,23 @@
         this.setColumns(val)
       },
     },
-    mounted() {},
+    mounted() {
+      window.addEventListener('message', this.pageListener);
+    },
     methods: {
+      pageListener(event) {
+        let { name, type } = event.data
+        if (type === 'reload') {
+          console.log('监听save保存操作', event);
+          this.iframeShow = false
+          this.$nextTick(() => {
+            this.iframeShow = true
+            setTimeout(() => {
+              this.sendName(name)
+            }, 500)
+          })
+        }
+      },
       sendName(name) {
         document.getElementById('Generate').contentWindow.postMessage({
           name

@@ -41,7 +41,7 @@
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 
     <script type="text/javascript" language="javascript">
-
+        var messageEvent
         var docEditor;
         var fileName = "";
         var lang = "en";
@@ -132,9 +132,8 @@
                     async: false,
                     success: function (json) {
                         if (json.Code == 200 || json.Code == '200') {
-                            var name = json.Data
-                            connectEditor(name) 
-                            window.location.reload()
+                            var name = json.data
+                            messageEvent.source.postMessage({ type: 'reload', name }, messageEvent.origin)
                         } else {
                             this.error(json, 'Save failed');
                         }
@@ -255,6 +254,7 @@
             if (name) {
                 console.log('message', name, event)
                 connectEditor(name)
+                messageEvent = event
             }
         })
     </script>
