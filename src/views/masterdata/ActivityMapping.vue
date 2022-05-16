@@ -15,6 +15,8 @@
       size="small"
       border
       show-overflow
+      :loading="loading"
+      :column-config="{resizable: true}"
       row-id="ActivityID"
       :row-config="{ isHover: true }"
       :data="actList"
@@ -22,21 +24,21 @@
       :tree-config="{ transform: true, rowField: 'ActivityID', parentField: 'ParentID', expandAll: true }"
     >
       <vxe-column type="radio" align="center" width="80" title=" "></vxe-column>
-      <vxe-column field="ActivityName" width="120" title="ActivityName" tree-node></vxe-column>
-      <vxe-column field="ActivityNameCN" width="150" title="ActivityName (Chinese)"></vxe-column>
-      <vxe-column field="ActivityDesc" width="120" title="ActivityDesc"></vxe-column>
-      <vxe-column field="ActivityDescCN" width="150" title="ActivityDesc (Chinese)"></vxe-column>
+      <vxe-column field="ActivityName" width="320" title="ActivityName" tree-node></vxe-column>
+      <vxe-column field="ActivityNameCN" width="200" title="ActivityName (Chinese)"></vxe-column>
+      <vxe-column field="ActivityDesc" width="110" title="ActivityDesc"></vxe-column>
+      <vxe-column field="ActivityDescCN" width="180" title="ActivityDesc (Chinese)"></vxe-column>
       <vxe-column field="ActivityShortName" width="120" title="ActivityShortName"></vxe-column>
       <vxe-column field="ActivityShortNameCN" width="150" title="ActivityShortName (Chinese)"></vxe-column>
       <vxe-column field="StageCN" width="150" title="Stage (Chinese)"></vxe-column>
       <vxe-column field="Stage" width="80" title="Stage"></vxe-column>
       <vxe-column field="Price" width="80" title="Price"></vxe-column>
       <vxe-column field="PriceMark" width="80" title="PriceMark"></vxe-column>
-      <vxe-column field="PassThroughPrice" width="120" title="PassThroughPrice"></vxe-column>
+      <vxe-column field="PassThroughPrice" width="150" title="PassThroughPrice"></vxe-column>
       <vxe-column field="PassThroughPriceMark" width="150" title="PassThroughPriceMark"></vxe-column>
-      <vxe-column field="StartTime" width="80" title="StartTime"></vxe-column>
+      <vxe-column field="StartTime" width="180" title="StartTime"></vxe-column>
       <vxe-column field="EndTime" width="80" title="EndTime"></vxe-column>
-      <vxe-column field="Duration" width="80" title="Duration"></vxe-column>
+      <vxe-column field="Duration" width="140" title="Duration"></vxe-column>
       <vxe-column field="DisCount" width="80" title="DisCount"></vxe-column>
       <vxe-column field="Scale" width="80" title="Scale"></vxe-column>
       <vxe-column field="Property2" width="90" title="Property2"></vxe-column>
@@ -323,6 +325,7 @@ export default {
   data() {
     return {
       open: false,
+      loading: false,
       title: '',
       formData: {},
       //节点数据
@@ -485,8 +488,10 @@ export default {
       this.open = false
     },
     getList() {
+      this.loading = true
       axios.post('http://123.56.242.202:8080//api/BaseData/GetBaseData').then((res) => {
         this.actList = res.data
+        this.loading = false
         setTimeout(() => {
           this.$refs.treeTable.setAllTreeExpand(true)
         }, 200)
