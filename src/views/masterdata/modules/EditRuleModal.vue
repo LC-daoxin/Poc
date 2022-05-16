@@ -10,6 +10,7 @@
       <a-select
         allowClear
         v-model="Type"
+        :dropdownStyle="{ 'z-index': 9999 }"
         @change="changeSeparateType"
       >
         <a-select-option

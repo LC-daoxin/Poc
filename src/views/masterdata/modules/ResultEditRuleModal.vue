@@ -3,7 +3,7 @@
     <template #default>
       <div class="selectType">
         <span class="ruleRowTop">IF The Separate Type is</span>
-        <a-select allowClear v-model="Type" @change="changeSeparateType">
+        <a-select allowClear v-model="Type" :dropdownStyle="{ 'z-index': 9999 }" @change="changeSeparateType">
           <a-select-option :value="item.value" :key="item.value" v-for="item in typeOptions">{{
             item.label
           }}</a-select-option>
