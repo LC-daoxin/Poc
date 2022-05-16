@@ -436,7 +436,7 @@ export default {
               break
             }
           }
-          selectRows.push(item)
+          selectRows.push(Obj)
           newList.push(Obj)
         } else {
           newList.push(item)
