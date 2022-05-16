@@ -230,6 +230,7 @@ export default {
         },
       ],
       listData: [],
+      BatchID: null
     }
   },
   computed: {
@@ -258,6 +259,7 @@ export default {
     // this.getTest()
     const { Type, BatchID } = this.$route.query
     if (Type == 'Relaunch') {
+      this.BatchID = BatchID
       this.getRejectedList(BatchID).then(res => {
         this.$refs.template.loadData()
         this.$refs.activities.loadData()
@@ -299,6 +301,7 @@ export default {
     }),
     newGenerate() {
       this.setTemplateSelect([])
+      this.BatchID = null
       this.$router.push({ path: '/dashboard/Workplace' })
       this.reload = false
       this.$nextTick(() => {
@@ -404,7 +407,7 @@ export default {
           Property15: item.Property15,
           Property16: item.Property16,
           Property17: item.Property17,
-          Property18: item.Property18,
+          Property18: this.BatchID || item.Property18,
           Property19: item.Property19,
           Property20: item.Property20,
           Sort: item.Sort,
@@ -448,7 +451,7 @@ export default {
           Property15: item.Property15,
           Property16: item.Property16,
           Property17: item.Property17,
-          Property18: item.Property18,
+          Property18: this.BatchID || item.Property18,
           Property19: item.Property19,
           Property20: item.Property20,
           Sort: item.Sort,
