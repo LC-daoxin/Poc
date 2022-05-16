@@ -10,7 +10,7 @@
           <div class="header">
             <a href="/">
               <img src="~@/assets/ym.png" class="logo" alt="logo">
-              <span class="title">CDP</span>
+              <span class="title">Quotation System</span>
             </a>
           </div>
         </div>

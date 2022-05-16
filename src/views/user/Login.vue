@@ -224,10 +224,7 @@ export default {
           state.loginBtn = true
           axios
             .post(
-              'http://localhost:44372//api/User/UserLogin?userName=' +
-                values.username +
-                '&password=' +
-                values.password
+              'http://123.56.242.202:8080//api/User/UserLogin?userName=' + values.username + '&password=' + values.password
             )
             .then((res) => {
               console.log('666666666666666666666')
@@ -326,6 +323,9 @@ export default {
           pathUrl = '/masterdata/ToDoList'
           break
         case '合同审批人':
+          pathUrl = '/masterdata/ToDoList'
+          break
+        case '报价申请审批人':
           pathUrl = '/masterdata/ToDoList'
           break
       }

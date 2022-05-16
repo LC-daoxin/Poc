@@ -33,6 +33,26 @@
         </template>
       </vxe-column>
     </vxe-table>
+
+    <vxe-modal v-model="open" title="Approval" width="400" height="200" resize>
+      <template #default>
+        <vxe-form :data="formData" title-align="center" title-width="80">
+          <vxe-form-item title="Action" field="Sex" span="24">
+            <template #default>
+              <vxe-select v-model="Approve" placeholder="Please select Approve" clearable>
+                <vxe-option value="Approved" label="Approved"></vxe-option>
+                <vxe-option value="Rejected" label="Rejected"></vxe-option>
+              </vxe-select>
+            </template>
+          </vxe-form-item>
+          <vxe-form-item align="center" span="24">
+            <template #default>
+              <vxe-button type="button" status="primary" @click="save">Approval</vxe-button>
+            </template>
+          </vxe-form-item>
+        </vxe-form>
+      </template>
+    </vxe-modal>
     <vxe-modal v-model="showDetails" title="File Information" width="1200" height="800" resize>
       <template #default>
         <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
@@ -96,6 +116,9 @@ export default {
       selectFileName: '',
       Template: '',
       activeName: 'first',
+      open: false,
+      Approve: '',
+      line: [],
     }
   },
   mounted() {
@@ -104,7 +127,7 @@ export default {
   methods: {
     handleClick(tab, event) {
       if (tab.name == 'second') {
-        axios.post('http://localhost:44372//api/user/GetByWordNameLog?fileName=' + this.selectFileName).then((res) => {
+        axios.post('http://123.56.242.202:8080//api/user/GetByWordNameLog?fileName=' + this.selectFileName).then((res) => {
           this.tableFileList = res.data
           setTimeout(() => {
             this.$refs.vxeTable.setAllTreeExpand(true)
@@ -137,7 +160,7 @@ export default {
       this.showDetails = true
       this.iframeShow = false
       this.selectFileName = row.FileName
-      axios.post('http://localhost:44372//api/user/GetByWordNameLog?fileName=' + row.FileName).then((res) => {
+      axios.post('http://123.56.242.202:8080//api/user/GetByWordNameLog?fileName=' + row.FileName).then((res) => {
         this.tableFileList = res.data
         setTimeout(() => {
           this.$refs.vxeTable.setAllTreeExpand(true)
@@ -157,7 +180,7 @@ export default {
     },
     getList(val) {
       var user = JSON.parse(sessionStorage.getItem('LoginUser'))
-      axios.post('http://localhost:44372//api/user/ToDoList?userID=' + user.UserID + '&approve=' + val).then((res) => {
+      axios.post('http://123.56.242.202:8080//api/user/ToDoList?userID=' + user.UserID + '&approve=' + val).then((res) => {
         this.tableList = res.data
         setTimeout(() => {
           this.$refs.vxeTable.setAllTreeExpand(true)
@@ -165,22 +188,66 @@ export default {
       })
     },
     Approved(row) {
-      this.$XModal.confirm('Are you sure you want to approve?','Message prompt', { cancelButtonText: 'cancel', confirmButtonText: 'sure' }).then((type) => {
-        if (type === 'confirm') {
-          this.$XModal.message({ id: 'loding', content: 'Data processing...', status: 'loading' })
-          axios
-            .post('http://localhost:44372//api/user/Approve?fileName=' + row.FileName + '&batchID=' + row.BatchID)
-            .then((res) => {
-              this.$XModal.close('loding')
-              if (res.data.Code == 200) {
-                this.$XModal.message({ content: 'Approval succeeded', status: 'success' })
-                this.getList()
-              } else {
-                this.$XModal.message({ content: 'Approval failed:' + res.data.Message, status: 'error' })
-              }
-            })
-        }
-      })
+      this.open = true
+      this.line = row
+      // this.$XModal
+      //   .confirm('Are you sure you want to approve?', 'Message prompt', {
+      //     cancelButtonText: 'cancel',
+      //     confirmButtonText: 'sure',
+      //   })
+      //   .then((type) => {
+      //     if (type === 'confirm') {
+      //       this.$XModal.message({ id: 'loding', content: 'Data processing...', status: 'loading' })
+      //       var user = JSON.parse(sessionStorage.getItem('LoginUser'))
+      //       var type = ''
+      //       if (user.name == '报价单审批人') {
+      //         type = 'Proposal'
+      //       } else {
+      //         type = 'Contract'
+      //       }
+      //       axios
+      //         .post('http://123.56.242.202:8080/api/user/Approve?type=' + type + '&batchID=' + row.BatchID)
+      //         .then((res) => {
+      //           this.$XModal.close('loding')
+      //           if (res.data.Code == 200) {
+      //             this.$XModal.message({ content: 'Approval succeeded', status: 'success' })
+      //             this.getList()
+      //           } else {
+      //             this.$XModal.message({ content: 'Approval failed:' + res.data.Message, status: 'error' })
+      //           }
+      //         })
+      //     }
+      //   })
+    },
+
+    save() {
+      debugger
+      var user = JSON.parse(sessionStorage.getItem('LoginUser'))
+      var type = ''
+      if (user.UserName == '报价单审批人') {
+        type = 'Proposal'
+      } else {
+        type = 'Contract'
+      }
+      
+      axios
+        .post(
+          'http://123.56.242.202:8080/api/user/Approve?type=' +
+            type +
+            '&batchID=' +
+            this.line.BatchID +
+            '&approveStatus=' +
+            this.Approve
+        )
+        .then((res) => {
+          if (res.data.Code == 200) {
+            this.$XModal.message({ content: 'Approval succeeded', status: 'success' })
+            this.getList()
+            this.open = false
+          } else {
+            this.$XModal.message({ content: 'Approval failed:' + res.data.Message, status: 'error' })
+          }
+        })
     },
   },
 }

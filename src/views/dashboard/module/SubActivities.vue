@@ -59,7 +59,6 @@ export default {
     PublicTable,
   },
   data() {
-    
     const EstimateOptions = [
       {
         label: '无',
@@ -116,9 +115,19 @@ export default {
             ellipsis: true,
             customRender: (text, row, index) => {
               if (this.templateSelect.length > 0) {
-                return this.templateSelect[0].Name.indexOf('CN') != -1 ? <b>{row.ActivityNameCN}</b> : <b>{text}</b>
+                return this.templateSelect[0].Name.indexOf('CN') != -1 ? (
+                  row.ActivityNameCN == '' ? (
+                    ''
+                  ) : (
+                    <a-input size="small" v-model:value={row.ActivityNameCN} value={row.ActivityNameCN} />
+                  )
+                ) : row.ActivityName == '' ? (
+                  ''
+                ) : (
+                  <a-input size="small" v-model:value={row.text} value={text} />
+                )
               } else {
-                return <b>{text}</b>
+                return row.text == '' ? '' : <a-input size="small" v-model:value={row.text} value={text} />
               }
             },
           },
@@ -130,9 +139,13 @@ export default {
             ellipsis: true,
             customRender: (text, row, index) => {
               if (this.templateSelect.length > 0) {
-                return this.templateSelect[0].Name.indexOf('CN') != -1 ? <b>{row.SubActivityNameCN}</b> : <b>{text}</b>
+                return this.templateSelect[0].Name.indexOf('CN') != -1 ? (
+                  <a-input size="small" v-model:value={row.SubActivityNameCN} value={row.SubActivityNameCN} />
+                ) : (
+                  <a-input size="small" v-model:value={row.text} value={text} />
+                )
               } else {
-                return <b>{text}</b>
+                return <a-input size="small" v-model:value={row.text} value={text} />
               }
             },
           },
@@ -144,9 +157,15 @@ export default {
             ellipsis: true,
             customRender: (text, row, index) => {
               if (this.templateSelect.length > 0) {
-                return this.templateSelect[0].Name.indexOf('CN') != -1 ? <b>{row.ActivityDescCN}</b> : <b>{text}</b>
+                return this.templateSelect[0].Name.indexOf('CN') != -1 ? (
+                  <a-input size="small" v-model:value={row.ActivityDescCN} value={row.ActivityDescCN} />
+                ) : row.text ? (
+                  ''
+                ) : (
+                  <a-input size="small" v-model:value={row.text} value={text} />
+                )
               } else {
-                return <b>{text}</b>
+                return <a-input size="small" v-model:value={row.text} value={text} />
               }
             },
           },
@@ -188,7 +207,7 @@ export default {
                   style="width: 100%"
                   size="small"
                   onChange={(val) => {
-                    this.changeEstimate(val, record)
+                    this.changeOptions(val, record)
                   }}
                 >
                   {Options.map((item) => {
@@ -394,7 +413,7 @@ export default {
         }
         console.log(this.templateSelect[0].Name)
         axios
-          .get(`http://localhost:44372//api/poc/${url}`, {
+          .get(`http://123.56.242.202:8080//api/poc/${url}`, {
             params: this.model,
           })
           .then((res) => {
@@ -410,6 +429,17 @@ export default {
       this.tableParams.dataSource.forEach((item, i) => {
         if (item.SubActivityID == row.SubActivityID) {
           this.$set(this.tableParams.dataSource[i], 'Property10', val)
+          // this.setSubActivitiesAll(this.tableParams.dataSource)
+          // this.setSubActivitiesAll(this.selectionRows)
+        }
+      })
+    },
+
+    changeOptions(val, row) {
+      console.log(val, row)
+      this.tableParams.dataSource.forEach((item, i) => {
+        if (item.SubActivityID == row.SubActivityID) {
+          this.$set(this.tableParams.dataSource[i], 'Property11', val)
           // this.setSubActivitiesAll(this.tableParams.dataSource)
           // this.setSubActivitiesAll(this.selectionRows)
         }
@@ -456,6 +486,9 @@ export default {
       this.tableParams.dataSource.forEach((item, i) => {
         if (item.SubActivityID == row.SubActivityID) {
           this.$set(this.tableParams.dataSource[i], text, e.target.value)
+          if ((item.ActivityNameCN == '项目管理')) {
+            item.ActivityDescCN = '预计项目完成周期' + e.target.value + '个月，每月100,000元项目管理费。'
+          }
           // this.setSubActivitiesAll(this.tableParams.dataSource)
           // this.setSubActivitiesAll(this.selectionRows)
         }

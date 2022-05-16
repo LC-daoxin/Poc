@@ -68,6 +68,16 @@ export default {
     PublicTable,
   },
   data() {
+    const Options = [
+      {
+        label: '无',
+        value: 'False',
+      },
+      {
+        label: 'Options',
+        value: 'True',
+      },
+    ]
     return {
       // data
       searchLabelCol: 9,
@@ -101,9 +111,15 @@ export default {
             ellipsis: true,
             customRender: (text, row, index) => {
               if (this.templateSelect.length > 0) {
-                return this.templateSelect[0].Name.indexOf('CN') != -1 ? <b>{row.ActivityNameCN}</b> : <b>{text}</b>
+                return this.templateSelect[0].Name.indexOf('CN') != -1 ? (
+                  <a-input size="small" v-model:value={row.ActivityNameCN} value={row.ActivityNameCN} />
+                ) : row.text ? (
+                  ''
+                ) : (
+                  <a-input size="small" v-model:value={row.text} value={text} />
+                )
               } else {
-                return <b>{text}</b>
+                return <a-input size="small" v-model:value={row.text} value={text} />
               }
             },
           },
@@ -113,6 +129,43 @@ export default {
             align: 'center',
             width: 180,
             ellipsis: true,
+            customRender: (text, row, index) => {
+              if (this.templateSelect.length > 0) {
+                return this.templateSelect[0].Name.indexOf('CN') != -1 ? (
+                  <a-input size="small" v-model:value={row.ActivityDescCN} value={row.ActivityDescCN} />
+                ) : row.text ? (
+                  ''
+                ) : (
+                  <a-input size="small" v-model:value={row.text} value={text} />
+                )
+              } else {
+                return <a-input size="small" v-model:value={row.text} value={text} />
+              }
+            },
+          },
+          {
+            title: 'Options',
+            dataIndex: 'Property11',
+            align: 'center',
+            width: 100,
+            ellipsis: true,
+            customRender: (text, record, index) => {
+              let val = text && text == 'True' ? 'True' : 'False'
+              return (
+                <a-select
+                  value={val}
+                  style="width: 100%"
+                  size="small"
+                  onChange={(val) => {
+                    this.changeOptions(val, record)
+                  }}
+                >
+                  {Options.map((item) => {
+                    return <a-select-option value={item.value}>{item.label}</a-select-option>
+                  })}
+                </a-select>
+              )
+            },
           },
           // {
           //   title: 'DisCount',
@@ -198,6 +251,16 @@ export default {
       this.tableParams.columns.splice(evt.newIndex, 0, oldColumnsItem)
       console.log('changeColumns', this.tableParams.columns)
     },
+    changeOptions(val, row) {
+      console.log(val, row)
+      this.tableParams.dataSource.forEach((item, i) => {
+        if (item.ActivityID == row.ActivityID) {
+          this.$set(this.tableParams.dataSource[i], 'Property11', val)
+          // this.setSubActivitiesAll(this.tableParams.dataSource)
+          // this.setSubActivitiesAll(this.selectionRows)
+        }
+      })
+    },
 
     changeProjectType1(id) {
       console.log(id)
@@ -228,9 +291,9 @@ export default {
       if (this.templateSelect.length > 0) {
         this.templateSelect[0].Name == 'POCCN' ? (url = 'GetActivitiesListCN') : ''
       }
-      console.log(1, `http://localhost:44372//api/poc/${url}`)
+      console.log(1, `http://123.56.242.202:8080//api/poc/${url}`)
       axios
-        .get(`http://localhost:44372//api/poc/${url}`, {
+        .get(`http://123.56.242.202:8080//api/poc/${url}`, {
           params: model,
         })
         .then((res) => {
@@ -241,7 +304,7 @@ export default {
     },
     getProposalPipeLine() {
       // this.tableParams.loading = true
-      axios.get('http://localhost:44372//api/poc/GetProposalPipeLine', {}).then((res) => {
+      axios.get('http://123.56.242.202:8080//api/poc/GetProposalPipeLine', {}).then((res) => {
         console.log('getProposalPipeLine', res)
         this.pipelineOptions = res.data
       })

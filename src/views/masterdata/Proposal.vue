@@ -33,6 +33,7 @@
       <vxe-column type="seq" title="Operation" width="600" :resizable="false" show-overflow>
         <template #default="{ row }">
           <vxe-button @click="showDetailEvent(row)">Generate Contract{{ row.batchID }}</vxe-button>
+          <vxe-button @click="Approved(row)">Submit</vxe-button>
           <vxe-button @click="SelectProposal(row.ProposalFileName, row)">View Proposal{{ row.batchID }}</vxe-button>
           <vxe-button @click="SelectContract(row.ContractFileName, row)">View Contract{{ row.batchID }}</vxe-button>
           <!-- <vxe-button @click="SelectContract1(row.ProposalFileName, row)"
@@ -304,7 +305,10 @@ export default {
     getDepList(name) {
       axios
         .post(
-          'http://localhost:44372/api/Contract/GetContractListProposal?fileName=' + name + '&approve=' + this.Template
+          'http://123.56.242.202:8080/api/Contract/GetContractListProposal?fileName=' +
+            name +
+            '&approve=' +
+            this.Template
         )
         .then((res) => {
           this.arrayToTree(res.data, 'ID', 'ParentID', this.depList)
@@ -312,12 +316,14 @@ export default {
     },
     handleClick(tab, event) {
       if (tab.name == 'second') {
-        axios.post('http://localhost:44372//api/user/GetByWordNameLog?fileName=' + this.selectFileName).then((res) => {
-          this.tableFileList = res.data
-          setTimeout(() => {
-            this.$refs.vxeTable.setAllTreeExpand(true)
-          }, 200)
-        })
+        axios
+          .post('http://123.56.242.202:8080//api/user/GetByWordNameLog?fileName=' + this.selectFileName)
+          .then((res) => {
+            this.tableFileList = res.data
+            setTimeout(() => {
+              this.$refs.vxeTable.setAllTreeExpand(true)
+            }, 200)
+          })
       }
     },
     formatDate({ cellValue }, format) {
@@ -333,6 +339,28 @@ export default {
       }
       return name
     },
+    Approved(row) {
+      this.$XModal
+        .confirm('Are you sure you want to approve?', 'Message prompt', {
+          cancelButtonText: 'cancel',
+          confirmButtonText: 'sure',
+        })
+        .then((type) => {
+          if (type === 'confirm') {
+            this.$XModal.message({ id: 'loding', content: 'Data processing...', status: 'loading' })
+            axios.post('http://123.56.242.202:8080/api/user/ApproveContract?&batchID=' + row.BatchID).then((res) => {
+              this.$XModal.close('loding')
+              if (res.data.Code == 200) {
+                this.$XModal.message({ content: 'Approval succeeded', status: 'success' })
+                this.getList('')
+              } else {
+                this.$XModal.message({ content: 'Approval failed:' + res.data.Message, status: 'error' })
+              }
+            })
+          }
+        })
+    },
+
     changeApprove() {
       this.getList('')
     },
@@ -341,7 +369,7 @@ export default {
       this.showDetails11 = true
       this.iframeShow = false
       this.selectFileName = row.ProposalFileName
-      axios.post('http://localhost:44372//api/user/GetByWordNameLog?fileName=' + row.FileName).then((res) => {
+      axios.post('http://123.56.242.202:8080//api/user/GetByWordNameLog?fileName=' + row.FileName).then((res) => {
         this.tableFileList = res.data
         setTimeout(() => {
           this.$refs.vxeTable.setAllTreeExpand(true)
@@ -362,23 +390,18 @@ export default {
     SelectContract(name, row) {
       name = row.ContractFileNameIP + '/default/' + name
 
-      if (row.Status == 'Not generated') {
-        this.$XModal.message({
-          content: 'This contract has not been generated and cannot be viewed',
-          status: 'warning',
-        })
-        return
-      }
       this.showDetails11 = true
       this.iframeShow = false
       this.selectFileName = row.ContractFileName
 
-      axios.post('http://localhost:44372//api/user/GetByWordNameLog?fileName=' + row.ContractFileName).then((res) => {
-        this.tableFileList = res.data
-        setTimeout(() => {
-          this.$refs.vxeTable.setAllTreeExpand(true)
-        }, 200)
-      })
+      axios
+        .post('http://123.56.242.202:8080//api/user/GetByWordNameLog?fileName=' + row.ContractFileName)
+        .then((res) => {
+          this.tableFileList = res.data
+          setTimeout(() => {
+            this.$refs.vxeTable.setAllTreeExpand(true)
+          }, 200)
+        })
       this.$nextTick(() => {
         this.iframeShow = true
       })
@@ -414,12 +437,14 @@ export default {
       this.iframeShow = false
       this.selectFileName = row.ContractFileName
 
-      axios.post('http://localhost:44372//api/user/GetByWordNameLog?fileName=' + row.ProposalFileName).then((res) => {
-        this.tableFileList = res.data
-        setTimeout(() => {
-          this.$refs.vxeTable.setAllTreeExpand(true)
-        }, 200)
-      })
+      axios
+        .post('http://123.56.242.202:8080//api/user/GetByWordNameLog?fileName=' + row.ProposalFileName)
+        .then((res) => {
+          this.tableFileList = res.data
+          setTimeout(() => {
+            this.$refs.vxeTable.setAllTreeExpand(true)
+          }, 200)
+        })
       this.$nextTick(() => {
         this.iframeShow = true
       })
@@ -443,9 +468,10 @@ export default {
         })
         return
       }
+      var user = JSON.parse(sessionStorage.getItem('LoginUser'))
 
       if (row.ProposalFileName.indexOf('EN') != -1) {
-        axios.post('http://localhost:44372//api/Contract/GetMasterData').then((res) => {
+        axios.post('http://123.56.242.202:8080//api/Contract/GetMasterData').then((res) => {
           this.selectRow = row
           this.showDetails = true
           this.formData.BatchID = row.BatchID
@@ -454,10 +480,11 @@ export default {
           this.formData.Address = res.data[0].FullAddress
           this.formData.Organization = res.data[0].Organization
           this.formData.Email = res.data[0].ClientEmail
+          this.formData.CreateUser = user.UserID
           this.formData.ClientTitle = res.data[0].ProjectName
         })
       } else {
-        axios.post('http://localhost:44372//api/Contract/GetMasterData').then((res) => {
+        axios.post('http://123.56.242.202:8080//api/Contract/GetMasterData').then((res) => {
           debugger
           this.selectRow = row
           this.showDetailsCN = true
@@ -466,11 +493,17 @@ export default {
           this.formData.ProjectName = res.data[0].ProjectNameCN
           this.formData.ClientName = res.data[0].ClientName
           this.formData.ClientAddress = res.data[0].FullAddress
+          this.formData.CreateUser = user.UserID
 
-          
           this.formData.ClientPhone = res.data[0].ClientPhone
           this.formData.ClientEmail = res.data[0].ClientEmail
           this.formData.TrusteeEmail = res.data[0].TechnicalContractCN
+          this.formData.Trustee = '无锡药明生物技术股份有限公司'
+          this.formData.TrusteeName = 'Li Lei'
+          this.formData.ClientTelephone = '0512-81879000'
+          this.formData.TrusteeTelephone = '4008200985'
+          this.formData.TrusteePhone = '13777777777'
+          this.formData.TrusteeAddress = '中国（上海）自由贸易试验区意威路31弄2号厂房'
         })
 
         return
@@ -512,12 +545,14 @@ export default {
     close() {
       this.showDetails = false
       this.showDetailsCN = false
-
     },
     getList(name) {
       axios
         .post(
-          'http://localhost:44372//api/Contract/GetContractListProposal?fileName=' + name + '&approve=' + this.Template
+          'http://123.56.242.202:8080//api/Contract/GetContractListProposal?fileName=' +
+            name +
+            '&approve=' +
+            this.Template
         )
         .then((res) => {
           this.tableList = res.data
@@ -534,7 +569,7 @@ export default {
           if (type === 'confirm') {
             this.$XModal.message({ id: 'loding', content: 'Data processing...', status: 'loading' })
 
-            axios.post('http://localhost:44372//api/Contract/DataContractCreate', [this.formData]).then((res) => {
+            axios.post('http://123.56.242.202:8080//api/Contract/DataContractCreate', [this.formData]).then((res) => {
               this.$XModal.close('loding')
               if (res.data.Code == 200) {
                 this.$XModal.message({ content: 'Generated successfully', status: 'success' })

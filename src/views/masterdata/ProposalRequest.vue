@@ -213,7 +213,7 @@ export default {
     },
     getList(val) {
       var user = JSON.parse(sessionStorage.getItem('LoginUser'))
-      axios.post('http://localhost:44372//api/user/GetMasterData?projectName=&corporateName=').then((res) => {
+      axios.post('http://123.56.242.202:8080//api/user/GetMasterData?projectName=&corporateName=').then((res) => {
         this.tableList = res.data
         setTimeout(() => {
           this.$refs.vxeTable.setAllTreeExpand(true)
@@ -226,7 +226,7 @@ export default {
         .then((type) => {
           if (type === 'confirm') {
             this.$XModal.message({ id: 'loding', content: 'Data processing...', status: 'loading' })
-            axios.post('http://localhost:44372//api/BaseData/MasterDataUpdate', [this.formData]).then((res) => {
+            axios.post('http://123.56.242.202:8080//api/BaseData/MasterDataUpdate', [this.formData]).then((res) => {
               this.$XModal.close('loding')
               if (res.data.Code == 200) {
                 this.$XModal.message({ content: 'Modified successfully', status: 'success' })
@@ -251,7 +251,7 @@ export default {
         .then((type) => {
           if (type === 'confirm') {
             this.$XModal.message({ id: 'loding', content: 'Data processing...', status: 'loading' })
-            axios.post('http://localhost:44372//api/user/MasterDataUpdate?masterID=' + row.MasterID).then((res) => {
+            axios.post('http://123.56.242.202:8080//api/user/MasterDataUpdate?masterID=' + row.MasterID).then((res) => {
               this.$XModal.close('loding')
               if (res.data.Code == 200) {
                 this.$XModal.message({ content: 'Approval succeeded', status: 'success' })

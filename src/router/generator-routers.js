@@ -33,7 +33,7 @@ const constantRouterComponents = {
   ToDoList: () => import('@/views/masterdata/ToDoList'),
   ProposalRequest: () => import('@/views/masterdata/ProposalRequest'),
 
-  
+
 
   WordLog: () => import('@/views/masterdata/WordLog'),
   ActivityMapping: () => import('@/views/masterdata/ActivityMapping'),
@@ -132,6 +132,9 @@ export const generatorDynamicRouter = token => {
             rootRouter.redirect = '/masterdata/ToDoList'
             break;
           case '合同审批人':
+            rootRouter.redirect = '/masterdata/ToDoList'
+            break;
+          case '报价申请审批人 ':
             rootRouter.redirect = '/masterdata/ToDoList'
             break;
         }
