@@ -21,7 +21,7 @@
         <template #default="{ row }">
           <vxe-button @click="ViewFile(row)">View File</vxe-button>
           <vxe-button @click="Approved(row)">Submit</vxe-button>
-          <vxe-button @click="Relaunch(row)">Relaunch</vxe-button>
+          <vxe-button v-if="row.ApproveStatus == 'Rejected'" @click="Relaunch(row)">Relaunch</vxe-button>
         </template>
       </vxe-column>
     </vxe-table>
@@ -94,6 +94,10 @@ export default {
     this.getList('')
   },
   methods: {
+    Relaunch(row) {
+      console.log('Relaunch', row)
+      this.$router.push({ path: '/dashboard/Workplace', query: { BatchID: row.BatchID, Type: 'Relaunch' } })
+    },
     handleClick(tab, event) {
       if (tab.name == 'second') {
         axios.post('http://123.56.242.202:8080//api/user/GetByWordNameLog?fileName=' + this.selectFileName).then((res) => {

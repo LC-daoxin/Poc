@@ -60,11 +60,10 @@
       :pagination="false"
       :params="tableParams"
       :multiple="false"
-      :rowSelection="true"
+      :rowSelection="{ selectedRowKeys: selectionKeys, onChange: selectionChange, type: 'radio'}"
       :rowKey="(record) => record.ID"
       @pageChange="loadData"
       @changeColumns="changeColumns"
-      @selectionChange="selectionChange"
     ></public-table>
   </div>
 </template>
@@ -132,6 +131,7 @@
       ...mapState({
         lang: (state) => state.app.lang,
         activitiesSelect: (state) => state.poc.activitiesSelect,
+        rejectedList: (state) => state.poc.rejectedList,
       }),
     },
     watch: {
@@ -140,7 +140,7 @@
       },
     },
     mounted() {
-      this.loadData()
+      // this.loadData()
     },
     methods: {
       ...mapMutations({
@@ -149,6 +149,16 @@
           return commit('poc/setTemplateSelect', select)
         },
       }),
+      edit(list) {
+        console.log('rejectedList', this.rejectedList)
+        list.forEach(item => {
+          if (item.ID == this.rejectedList[0].TemplateID) {
+            this.selectionKeys = []
+            this.selectionKeys.push(this.rejectedList[0].TemplateID)
+            this.setTemplateSelect([{ ...item }])
+          }
+        })
+      },
       // 拖拽列
       changeColumns(evt) {
         console.log(evt, 'oldIndex', evt.oldIndex, 'newIndex', evt.newIndex)
@@ -186,9 +196,12 @@
       loadData(model = {}) {
         this.tableParams.loading = true
         axios.get('http://123.56.242.202:8080//api/poc/GetDocumentsTempList').then((res) => {
-          console.log('loadData', res)
+          console.log('GetDocumentsTempList', res)
           this.tableParams.dataSource = res.data
           this.tableParams.loading = false
+          if (this.$route.query.Type == 'Relaunch') {
+            this.edit(res.data)
+          }
         })
       },
       selectionChange(keys, rows) {
@@ -198,7 +211,7 @@
       },
       checkSelect() {
         return new Promise((resolve, reject) => {
-          if (this.selectionRows.length > 0) {
+          if (this.selectionKeys.length > 0) {
             return resolve(true)
           } else {
             this.$message.warning('Please select a template！')

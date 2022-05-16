@@ -21,7 +21,7 @@
           @change="changePipeline"
         >
           <a-select-option :value="item.ActivityID" :key="item.ActivityID" v-for="item in activitiesSelect">{{
-            templateSelect[0].Name.indexOf('CN') != -1 ? item.ActivityNameCN : item.ActivityName
+            templateSelect.length > 0 && templateSelect[0].Name.indexOf('CN') != -1 ? item.ActivityNameCN : item.ActivityName
           }}</a-select-option>
         </a-select>
       </a-form-model-item>
@@ -34,13 +34,13 @@
       class="table"
       :pagination="false"
       :params="tableParams"
-      :rowSelection="true"
+      :rowSelection="{ selectedRowKeys: selectionKeys, onChange: selectionChange, type: 'checkbox'}"
       :draggableRow="true"
       :fixed="false"
       :rowKey="(record) => record.SubActivityID"
+      :showAlert="false"
       @pageChange="loadData"
       @changeRow="changeRow"
-      @selectionChange="selectionChange"
     ></public-table>
   </div>
 </template>
@@ -341,6 +341,7 @@ export default {
       lang: (state) => state.app.lang,
       templateSelect: (state) => state.poc.templateSelect,
       activitiesSelect: (state) => state.poc.activitiesSelect,
+      rejectedList: (state) => state.poc.rejectedList,
     }),
   },
   watch: {
@@ -404,14 +405,57 @@ export default {
       }
       this.loadData()
     },
+    edit(list) {
+      let arrIds = []
+      let selectRows = []
+      this.rejectedList.forEach(item => {
+        item.ActivityID && arrIds.push(item.ActivityID)
+      })
+      let actIds = [...new Set(arrIds)];
+      this.selectionKeys = actIds
+      console.log(actIds)
+      let newList = []
+      list.forEach(item => {
+        let Obj = {...item}
+        if (actIds.includes(item.SubActivityID)) {
+          for (let i = 0; i < this.rejectedList.length; i++) {
+            if (item.SubActivityID == this.rejectedList[i].ActivityID) {
+              Obj.SubActivityName = this.rejectedList[i].ActivityName
+              Obj.SubActivityNameCN = this.rejectedList[i].ActivityNameCN
+              Obj.ActivityDesc = this.rejectedList[i].ActivityDesc
+              Obj.ActivityDescCN = this.rejectedList[i].ActivityNameCN
+              Obj.Property10 = this.rejectedList[i].Property10
+              Obj.Property11 = this.rejectedList[i].Property11
+              Obj.Price = this.rejectedList[i].Price
+              Obj.Property3 = this.rejectedList[i].Property3
+              Obj.PassThroughPrice = this.rejectedList[i].PassThroughPrice
+              Obj.Duration = this.rejectedList[i].Duration
+              Obj.Property2 = this.rejectedList[i].Property2
+              Obj.DisCount = this.rejectedList[i].DisCount
+              Obj.Scale = this.rejectedList[i].Scale
+              break
+            }
+          }
+          selectRows.push(item)
+          newList.push(Obj)
+        } else {
+          newList.push(item)
+        }
+      })
+      this.tableParams.dataSource = newList
+      this.setSubActivitiesAll(selectRows)
+    },
     loadData() {
       if (this.model.activityID.length > 0) {
-        this.tableParams.loading = true
         let url = 'GetSubActivitiesList'
         if (this.templateSelect.length > 0) {
+          console.log(this.templateSelect[0].Name, this.templateSelect[0].Name.indexOf('CN'))
           this.templateSelect[0].Name.indexOf('CN') != -1 ? (url = 'GetSubActivitiesListCN') : ''
+        } else {
+          this.$message.warning('Please Select Template!')
+          return []
         }
-        console.log(this.templateSelect[0].Name)
+        this.tableParams.loading = true
         axios
           .get(`http://123.56.242.202:8080//api/poc/${url}`, {
             params: this.model,
@@ -421,6 +465,9 @@ export default {
             // this.setSubActivitiesAll(res.data)
             this.tableParams.dataSource = res.data
             this.tableParams.loading = false
+            if (this.$route.query.Type == 'Relaunch') {
+              this.edit(res.data)
+            }
           })
       }
     },

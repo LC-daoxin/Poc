@@ -8,6 +8,10 @@
         type: Function,
         default: (record) => record.id
       },
+      showAlert: {
+        type: Boolean,
+        default: true
+      },
 			draggableColumn: {
 				type: Boolean,
         default: false
@@ -91,6 +95,13 @@
       },
       renderAlert(createElement) {
         if (!this.rowSelection) return null
+        const type = typeof this.rowSelection;
+        if (type && type === 'object' && this.rowSelection.type == 'radio') {
+          return null;
+        }
+        if (!this.showAlert) {
+          return null
+        }
         return createElement(
           'a-alert',
           {
@@ -165,7 +176,7 @@
       createRowSelection() {
         const type = typeof this.rowSelection
         if (type && type === 'object') {
-          return type
+          return this.rowSelection
         }
         if (type && type === 'boolean' && this.rowSelection) {
           return this.renderRowSelection

@@ -45,11 +45,11 @@
       class="table"
       :pagination="false"
       :params="tableParams"
-      :rowSelection="true"
+      :rowSelection="{ selectedRowKeys: selectionKeys, onChange: selectionChange, type: 'checkbox'}"
       :rowKey="(record) => record.ActivityID"
+      :showAlert="false"
       @pageChange="loadData"
       @changeColumns="changeColumns"
-      @selectionChange="selectionChange"
     ></public-table>
   </div>
 </template>
@@ -210,6 +210,7 @@ export default {
     ...mapState({
       lang: (state) => state.app.lang,
       templateSelect: (state) => state.poc.templateSelect,
+      rejectedList: (state) => state.poc.rejectedList,
     }),
   },
   watch: {
@@ -234,7 +235,7 @@ export default {
     }
 
     this.getProposalPipeLine()
-    this.loadData(this.model)
+    // this.loadData(this.model)
   },
   methods: {
     ...mapMutations({
@@ -285,21 +286,39 @@ export default {
       }
       this.loadData(this.model)
     },
-    loadData(model = {}) {
+    edit(list) {
+      let arrIds = []
+      let rows = []
+      this.rejectedList.forEach(item => {
+        item.ParentID && arrIds.push(item.ParentID)
+      })
+      let actIds = [...new Set(arrIds)];
+      this.selectionKeys = actIds
+      console.log(actIds)
+      list.forEach(item => {
+        if (actIds.includes(item.ActivityID)) {
+          rows.push(item)
+        }
+      })
+      this.setActivitiesSelect(rows)
+    },
+    loadData(model = this.model) {
       this.tableParams.loading = true
       let url = 'GetActivitiesList'
       if (this.templateSelect.length > 0) {
         this.templateSelect[0].Name == 'POCCN' ? (url = 'GetActivitiesListCN') : ''
       }
-      console.log(1, `http://123.56.242.202:8080//api/poc/${url}`)
       axios
         .get(`http://123.56.242.202:8080//api/poc/${url}`, {
           params: model,
         })
         .then((res) => {
-          console.log('loadData', res)
+          console.log('Activities', res)
           this.tableParams.dataSource = res.data
           this.tableParams.loading = false
+          if (this.$route.query.Type == 'Relaunch') {
+            this.edit(res.data)
+          }
         })
     },
     getProposalPipeLine() {

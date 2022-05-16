@@ -4,6 +4,7 @@ export default {
     activitiesSelect: [],
     subActivitiesAll: [],
     templateSelect: [],
+    rejectedList: [],
     optionsList: {
       BuList: [],
       Property: []
@@ -19,6 +20,9 @@ export default {
     setTemplateSelect (state, select) {
       state.templateSelect = select
     },
+    setRejectedList (state, list) {
+      state.rejectedList = list
+    },
     setOptionsList (state, options) {
       state.optionsList = options
     },
@@ -32,6 +36,9 @@ export default {
     },
     setTemplateSelect (context, ref) {
       context.commit('setTemplateSelect', ref)
+    },
+    setRejectedList (context, ref) {
+      context.commit('setRejectedList', ref)
     },
     setOptionsList (context, obj) {
       context.commit('setOptionsList', obj)

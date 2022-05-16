@@ -38,7 +38,7 @@
       </div>
     </template> -->
 
-    <div>
+    <div v-if="reload">
       <a-row>
         <a-col :xl="24" :lg="24" :md="24" :sm="24" :xs="24">
           <a-card class="project-list" style="margin-bottom: 24px" :bordered="false" :body-style="{ padding: 0 }">
@@ -63,6 +63,9 @@
                 Done
               </a-button>
               <a-button v-if="current > 0" style="margin-left: 8px" @click="prev">Previous Step</a-button>
+              <a-button v-if="this.$route.query.Type == 'Relaunch'" style="margin-left: 8px" @click="newGenerate"
+                >New Generate</a-button
+              >
             </div>
             <a-steps v-model="current">
               <a-step
@@ -93,9 +96,9 @@
                 </div>
               </div>
             </div> -->
-            <activities v-show="current == 1" @updateSub="subActivitiesloadData" />
-            <sub-activities ref="subActivities" v-show="current == 2" />
             <template-list ref="template" v-show="current == 0" />
+            <activities ref="activities" v-show="current == 1" @updateSub="subActivitiesloadData" />
+            <sub-activities ref="subActivities" v-show="current == 2" />
             <generate ref="generate" v-show="current == 3" />
             <!-- <s-table
               size="default"
@@ -116,7 +119,7 @@
 
 <script>
 import { timeFix } from '@/utils/util'
-import { mapState } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 import { PageHeaderWrapper } from '@ant-design-vue/pro-layout'
 import { STable } from '@/components'
 import Activities from './module/Activities'
@@ -137,6 +140,7 @@ export default {
   },
   data() {
     return {
+      reload: true,
       current: 0,
       btnLoading: false,
       systemComputedTime: '',
@@ -252,22 +256,79 @@ export default {
   },
   mounted() {
     // this.getTest()
+    const { Type, BatchID } = this.$route.query
+    if (Type == 'Relaunch') {
+      this.getRejectedList(BatchID).then(res => {
+        this.$refs.template.loadData()
+        this.$refs.activities.loadData()
+      })
+    } else {
+      this.$nextTick(() => {
+        this.$refs.template.loadData()
+        this.$refs.activities.loadData()
+      })
+    }
   },
   watch: {
     current(val, oldval) {
       console.log('watch-current', val, oldval)
+      if ([1, 2, 3].includes(val) && this.templateSelect.length == 0) {
+        this.$message.warning('Please Select Template!')
+        this.toTemplate()
+      }
       if (val == 1 && this.selectedRows.length > 0) {
         this.subActivitiesloadData()
       }
       if (oldval == 2) {
         this.$refs.subActivities.saveSubActivitiesAll()
       }
-    },
+    }
   },
   methods: {
-    loadData(parameter) {
-      // 加载数据方法
-      return this.listData
+    // loadData(parameter) {
+    //   // 加载数据方法
+    //   return this.listData
+    // },
+    ...mapMutations({
+      setRejectedList(commit, list) {
+        return commit('poc/setRejectedList', list)
+      },
+      setTemplateSelect(commit, select) {
+        return commit('poc/setTemplateSelect', select)
+      },
+    }),
+    newGenerate() {
+      this.setTemplateSelect([])
+      this.$router.push({ path: '/dashboard/Workplace' })
+      this.reload = false
+      this.$nextTick(() => {
+        this.reload = true
+        setTimeout(() => {
+          this.$refs.template.loadData()
+          this.$refs.activities.loadData()
+        }, 300)
+      })
+      this.toTemplate()
+    },
+    toTemplate() {
+      this.current = 0
+    },
+    getRejectedList(BatchID) {
+      return new Promise((resolve, reject) => {
+        axios
+          .get('http://123.56.242.202:8080/api/POC/GetRejectedList', {
+            params: { BatchID },
+          })
+          .then(res => {
+            console.log('getRejectedList', res)
+            this.setRejectedList(res.data)
+            resolve()
+          })
+          .catch(err => {
+            reject(err)
+          })
+      })
+      
     },
     subActivitiesloadData() {
       this.$refs.subActivities.loadData()
