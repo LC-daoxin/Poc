@@ -19,9 +19,9 @@
       :radio-config="{ trigger: 'row' }"
     >
       <vxe-column type="radio" align="center" width="80" title=" "></vxe-column>
-      <vxe-column field="Name" width="700" title="Name"></vxe-column>
+      <vxe-column field="Name" width="500" title="Name"></vxe-column>
       <vxe-column field="TempDesc" width="220" title="TempDesc"></vxe-column>
-      <vxe-column field="URL" title="Document Address"></vxe-column>
+      <vxe-column field="URL" title="Document Address" width="180"></vxe-column>
       <vxe-column type="seq" title="Operation" width="200" :resizable="false" show-overflow>
         <template #default="{ row }">
           <vxe-button @click="ViewFile(row)">View Template</vxe-button>

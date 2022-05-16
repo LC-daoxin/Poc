@@ -41,12 +41,12 @@
       <vxe-column field="Duration" width="140" title="Duration"></vxe-column>
       <vxe-column field="DisCount" width="80" title="DisCount"></vxe-column>
       <vxe-column field="Scale" width="80" title="Scale"></vxe-column>
-      <vxe-column field="Property2" width="90" title="Property2"></vxe-column>
-      <vxe-column field="Property3" width="90" title="Property3"></vxe-column>
-      <vxe-column field="Property4" width="90" title="Property4"></vxe-column>
-      <vxe-column field="Property5" width="90" title="Property5"></vxe-column>
-      <vxe-column field="Property6" width="90" title="Property6" ></vxe-column>
-      <vxe-column field="Property7" width="90" title="Property7"></vxe-column>
+      <vxe-column field="Property2" width="100" :title="Property.Property2"></vxe-column>
+      <vxe-column field="Property3" width="100" :title="Property.Property3"></vxe-column>
+      <vxe-column field="Property4" width="100" :title="Property.Property4"></vxe-column>
+      <vxe-column field="Property5" width="100" :title="Property.Property5"></vxe-column>
+      <vxe-column field="Property6" width="100" :title="Property.Property6" ></vxe-column>
+      <vxe-column field="Property7" width="100" :title="Property.Property7"></vxe-column>
       <vxe-column field="Sort" width="80" title="Sort"></vxe-column>
       <vxe-column field="Version" width="80" title="Version"></vxe-column>
     </vxe-table>
@@ -190,103 +190,97 @@
             </template>
           </vxe-form-item>
 
-          <vxe-form-item title="Property2" field="Property2" span="12">
+          <vxe-form-item :title="Property.Property2" field="Property2" span="12">
             <template #default>
               <vxe-input v-model="formData.Property2" placeholder="Property2"></vxe-input>
             </template>
           </vxe-form-item>
-
-          <vxe-form-item title="Property2" field="Property2" span="12">
-            <template #default>
-              <vxe-input v-model="formData.Property2" placeholder="Property2"></vxe-input>
-            </template>
-          </vxe-form-item>
-          <vxe-form-item title="Property3" field="Property3" span="12">
+          <vxe-form-item :title="Property.Property3" field="Property3" span="12">
             <template #default>
               <vxe-input v-model="formData.Property3" placeholder="Property3"></vxe-input>
             </template>
           </vxe-form-item>
-          <vxe-form-item title="Property4" field="Property4" span="12">
+          <vxe-form-item :title="Property.Property4" field="Property4" span="12">
             <template #default>
               <vxe-input v-model="formData.Property4" placeholder="Property4"></vxe-input>
             </template>
           </vxe-form-item>
-          <vxe-form-item title="Property5" field="Property5" span="12">
+          <vxe-form-item :title="Property.Property5" field="Property5" span="12">
             <template #default>
               <vxe-input v-model="formData.Property5" placeholder="Property5"></vxe-input>
-            </template>
+            </template> 
           </vxe-form-item>
-          <vxe-form-item title="Property6" field="Property6" span="12">
+          <vxe-form-item :title="Property.Property6" field="Property6" span="12">
             <template #default>
               <vxe-input v-model="formData.Property6" placeholder="Property6"></vxe-input>
             </template>
           </vxe-form-item>
-          <vxe-form-item title="Property7" field="Property7" span="12">
+          <vxe-form-item :title="Property.Property7" field="Property7" span="12">
             <template #default>
               <vxe-input v-model="formData.Property7" placeholder="Property7"></vxe-input>
             </template>
           </vxe-form-item>
-          <vxe-form-item title="Property8" field="Property8" span="12">
+          <vxe-form-item :title="Property.Property8" field="Property8" span="12">
             <template #default>
               <vxe-input v-model="formData.Property8" placeholder="Property8"></vxe-input>
             </template>
           </vxe-form-item>
-          <vxe-form-item title="Property9" field="Property9" span="12">
+          <vxe-form-item :title="Property.Property9" field="Property9" span="12">
             <template #default>
               <vxe-input v-model="formData.Property9" placeholder="Property9"></vxe-input>
             </template>
           </vxe-form-item>
-          <vxe-form-item title="Property10" field="Property10" span="12">
+          <vxe-form-item :title="Property.Property10" field="Property10" span="12">
             <template #default>
               <vxe-input v-model="formData.Property10" placeholder="Property10"></vxe-input>
             </template>
           </vxe-form-item>
-          <vxe-form-item title="Property11" field="Property11" span="12">
+          <vxe-form-item :title="Property.Property11" field="Property11" span="12">
             <template #default>
               <vxe-input v-model="formData.Property11" placeholder="Property11"></vxe-input>
             </template>
           </vxe-form-item>
-          <vxe-form-item title="Property12" field="Property12" span="12">
+          <vxe-form-item :title="Property.Property12" field="Property12" span="12">
             <template #default>
               <vxe-input v-model="formData.Property12" placeholder="Property12"></vxe-input>
             </template>
           </vxe-form-item>
-          <vxe-form-item title="Property13" field="Property13" span="12">
+          <vxe-form-item :title="Property.Property13" field="Property13" span="12">
             <template #default>
               <vxe-input v-model="formData.Property13" placeholder="Property13"></vxe-input>
             </template>
           </vxe-form-item>
-          <vxe-form-item title="Property14" field="Property14" span="12">
+          <vxe-form-item :title="Property.Property14" field="Property14" span="12">
             <template #default>
               <vxe-input v-model="formData.Property14" placeholder="Property14"></vxe-input>
             </template>
           </vxe-form-item>
-          <vxe-form-item title="Property15" field="Property15" span="12">
+          <vxe-form-item :title="Property.Property15" field="Property15" span="12">
             <template #default>
               <vxe-input v-model="formData.Property15" placeholder="Property15"></vxe-input>
             </template>
           </vxe-form-item>
-          <vxe-form-item title="Property16" field="Property16" span="12">
+          <vxe-form-item :title="Property.Property16" field="Property16" span="12">
             <template #default>
               <vxe-input v-model="formData.Property16" placeholder="Property16"></vxe-input>
             </template>
           </vxe-form-item>
-          <vxe-form-item title="Property17" field="Property17" span="12">
+          <vxe-form-item :title="Property.Property17" field="Property17" span="12">
             <template #default>
               <vxe-input v-model="formData.Property17" placeholder="Property17"></vxe-input>
             </template>
           </vxe-form-item>
-          <vxe-form-item title="Property18" field="Property18" span="12">
+          <vxe-form-item :title="Property.Property18" field="Property18" span="12">
             <template #default>
               <vxe-input v-model="formData.Property18" placeholder="Property18"></vxe-input>
             </template>
           </vxe-form-item>
-          <vxe-form-item title="Property19" field="Property19" span="12">
+          <vxe-form-item :title="Property.Property19" field="Property19" span="12">
             <template #default>
               <vxe-input v-model="formData.Property19" placeholder="Property19"></vxe-input>
             </template>
           </vxe-form-item>
-          <vxe-form-item title="Property20" field="Property20" span="12">
+          <vxe-form-item :title="Property.Property20" field="Property20" span="12">
             <template #default>
               <vxe-input v-model="formData.Property20" placeholder="Property20"></vxe-input>
             </template>
@@ -333,6 +327,7 @@ export default {
       searchKey: '',
       projectList: [],
       activityList: [],
+      Property: {}
     }
   },
   mounted() {
@@ -344,6 +339,13 @@ export default {
     axios.post('http://123.56.242.202:8080//api/BaseData/GetActivityType?name=').then((res) => {
       this.activityList = this.arrayToTree(res.data, 'TypeID', 'ParentID', [])
       this.activityList = this.getActTree(this.activityList)
+    })
+    // 获取属性列表
+    axios.post('http://123.56.242.202:8080//api/BaseData/GetPropertyMapping').then((res) => {
+      console.log('PropertyList', res.data)
+      res.data.forEach(item => {
+        this.Property[item.PropertyNum] = item.PropertyName
+      })
     })
   },
   methods: {
