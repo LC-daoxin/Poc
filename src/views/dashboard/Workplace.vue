@@ -410,7 +410,7 @@ export default {
           Property18: this.BatchID || item.Property18,
           Property19: item.Property19,
           Property20: item.Property20,
-          Sort: item.Sort,
+          Sort: i + 1,
           CreateUser:JSON.parse(sessionStorage.getItem("LoginUser")).UserID
         }
       })
@@ -454,7 +454,7 @@ export default {
           Property18: this.BatchID || item.Property18,
           Property19: item.Property19,
           Property20: item.Property20,
-          Sort: item.Sort,
+          Sort: i + 1,
           CreateUser:JSON.parse(sessionStorage.getItem("LoginUser")).UserID
         })
       })

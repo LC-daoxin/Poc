@@ -449,7 +449,6 @@ export default {
       if (this.model.activityID.length > 0) {
         let url = 'GetSubActivitiesList'
         if (this.templateSelect.length > 0) {
-          console.log(this.templateSelect[0].Name, this.templateSelect[0].Name.indexOf('CN'))
           this.templateSelect[0].Name.indexOf('CN') != -1 ? (url = 'GetSubActivitiesListCN') : ''
         } else {
           this.$message.warning('Please Select Template!')
@@ -476,8 +475,6 @@ export default {
       this.tableParams.dataSource.forEach((item, i) => {
         if (item.SubActivityID == row.SubActivityID) {
           this.$set(this.tableParams.dataSource[i], 'Property10', val)
-          // this.setSubActivitiesAll(this.tableParams.dataSource)
-          // this.setSubActivitiesAll(this.selectionRows)
         }
       })
     },
@@ -487,8 +484,6 @@ export default {
       this.tableParams.dataSource.forEach((item, i) => {
         if (item.SubActivityID == row.SubActivityID) {
           this.$set(this.tableParams.dataSource[i], 'Property11', val)
-          // this.setSubActivitiesAll(this.tableParams.dataSource)
-          // this.setSubActivitiesAll(this.selectionRows)
         }
       })
     },
@@ -497,8 +492,6 @@ export default {
         if (item.SubActivityID == row.SubActivityID) {
           console.log('onChangePassPrice', e.target.value)
           this.$set(this.tableParams.dataSource[i], 'PassThroughPrice', e.target.value)
-          // this.setSubActivitiesAll(this.tableParams.dataSource)
-          // this.setSubActivitiesAll(this.selectionRows)
         }
       })
       console.log(this.tableParams.dataSource)
@@ -506,7 +499,7 @@ export default {
     onChangeServicePrice(e, row) {
       let text = 'Price'
       if (this.templateSelect.length > 0) {
-        if (this.templateSelect[0].indexOf('CN') != -1) {
+        if (this.templateSelect[0].Name.indexOf('CN') != -1) {
           text = 'Property3'
         } else {
           text = 'Price'
@@ -516,8 +509,6 @@ export default {
         if (item.SubActivityID == row.SubActivityID) {
           console.log('onChangeServicePrice', e.target.value)
           this.$set(this.tableParams.dataSource[i], text, e.target.value)
-          // this.setSubActivitiesAll(this.tableParams.dataSource)
-          // this.setSubActivitiesAll(this.selectionRows)
         }
       })
     },
@@ -536,8 +527,6 @@ export default {
           if ((item.ActivityNameCN == '项目管理')) {
             item.ActivityDescCN = '预计项目完成周期' + e.target.value + '个月，每月100,000元项目管理费。'
           }
-          // this.setSubActivitiesAll(this.tableParams.dataSource)
-          // this.setSubActivitiesAll(this.selectionRows)
         }
       })
     },
