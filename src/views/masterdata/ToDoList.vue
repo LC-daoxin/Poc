@@ -40,7 +40,7 @@
           <vxe-form-item title="Action" field="Sex" span="24">
             <template #default>
               <vxe-select v-model="Approve" placeholder="Please select Approve" clearable>
-                <vxe-option value="Approved" label="Approved"></vxe-option>
+                <vxe-option value="Approve" label="Approve"></vxe-option>
                 <vxe-option value="Rejected" label="Rejected"></vxe-option>
               </vxe-select>
             </template>
@@ -67,7 +67,7 @@
               />
             </div>
           </el-tab-pane>
-          <el-tab-pane label="Adjustment record" name="second">
+          <!-- <el-tab-pane label="Adjustment record" name="second" style="display: :none;">
             <vxe-table
               ref="vxeTable"
               size="small"
@@ -83,7 +83,7 @@
               <vxe-column field="Author" width="120" title="Modifier"></vxe-column>
               <vxe-column field="UpdateTime" width="300" title="Modification time" :formatter="formatDate"></vxe-column>
             </vxe-table>
-          </el-tab-pane>
+          </el-tab-pane> -->
         </el-tabs>
       </template>
     </vxe-modal>

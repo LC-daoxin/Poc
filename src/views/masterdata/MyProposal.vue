@@ -39,7 +39,7 @@
               />
             </div>
           </el-tab-pane>
-          <el-tab-pane label="Adjustment record" name="second">
+          <!-- <el-tab-pane label="Adjustment record" name="second" style="display: :none;">
             <vxe-table
               ref="vxeTable"
               size="small"
@@ -55,7 +55,7 @@
               <vxe-column field="Author" width="120" title="Modifier"></vxe-column>
               <vxe-column field="UpdateTime" width="300" title="Modification time" :formatter="formatDate"></vxe-column>
             </vxe-table>
-          </el-tab-pane>
+          </el-tab-pane> -->
         </el-tabs>
       </template>
     </vxe-modal>
