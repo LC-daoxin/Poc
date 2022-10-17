@@ -1,4 +1,3 @@
-
 <template>
   <div>
     <vxe-toolbar style="padding-left: 10px; margin-bottom: 10px; border-radius: 5px">
@@ -36,7 +35,7 @@
         <vxe-form :data="formData" title-align="right" title-width="80">
           <vxe-form-item title="Name" field="Name" span="12">
             <template #default>
-              <vxe-input v-model="formData.Name" placeholder="Please enter Name" ></vxe-input>
+              <vxe-input v-model="formData.Name" placeholder="Please enter Name"></vxe-input>
             </template>
           </vxe-form-item>
           <vxe-form-item title="TempDesc" field="TempDesc" span="12">
@@ -91,7 +90,7 @@ export default {
       depList: [],
       url: '/static/SelectOnlineEditing.html',
       showDetails: false,
-      iframeShow: true,
+      iframeShow: true
     }
   },
 
@@ -101,7 +100,7 @@ export default {
   },
   methods: {
     getDepList(name) {
-      axios.post('http://123.56.242.202:8080//api/User/GetDepartmentInfo?departmentName=' + name).then((res) => {
+      axios.post('http://47.103.127.217:8080/api/User/GetDepartmentInfo?departmentName=' + name).then(res => {
         this.arrayToTree(res.data, 'ID', 'ParentID', this.depList)
       })
     },
@@ -163,7 +162,7 @@ export default {
       setTimeout(() => {
         document.getElementById('Generate').contentWindow.postMessage(
           {
-            name,
+            name
           },
           '*'
         )
@@ -192,12 +191,12 @@ export default {
       }
       this.$XModal
         .confirm('Are you sure to delete?', 'Message prompt', { cancelButtonText: 'cancel', confirmButtonText: 'sure' })
-        .then((type) => {
+        .then(type => {
           if (type === 'confirm') {
             this.$XModal.message({ id: 'loding', content: 'Data processing...', status: 'loading' })
             axios
-              .post('http://123.56.242.202:8080//api/BaseData/ProposalInstanceDelete?instanceID=' + checked.ID)
-              .then((res) => {
+              .post('http://47.103.127.217:8080/api/BaseData/ProposalInstanceDelete?instanceID=' + checked.ID)
+              .then(res => {
                 this.$XModal.close('loding')
                 if (res.data.Code == 200) {
                   this.$XModal.message({ content: 'Deleted successfully', status: 'success' })
@@ -213,31 +212,35 @@ export default {
     save() {
       this.$XModal
         .confirm('Are you sure to save?', 'Message prompt', { cancelButtonText: 'cancel', confirmButtonText: 'sure' })
-        .then((type) => {
+        .then(type => {
           if (type === 'confirm') {
             this.$XModal.message({ id: 'loding', content: 'Data processing...', status: 'loading' })
             if (this.formData.ID == null) {
-              axios.post('http://123.56.242.202:8080//api/BaseData/ProposalInstanceCreate', [this.formData]).then((res) => {
-                this.$XModal.close('loding')
-                if (res.data.Code == 200) {
-                  this.$XModal.message({ content: 'Added successfully', status: 'success' })
-                  this.open = false
-                  this.getList('')
-                } else {
-                  this.$XModal.message({ content: 'Add failed:' + res.data.Message, status: 'error' })
-                }
-              })
+              axios
+                .post('http://47.103.127.217:8080/api/BaseData/ProposalInstanceCreate', [this.formData])
+                .then(res => {
+                  this.$XModal.close('loding')
+                  if (res.data.Code == 200) {
+                    this.$XModal.message({ content: 'Added successfully', status: 'success' })
+                    this.open = false
+                    this.getList('')
+                  } else {
+                    this.$XModal.message({ content: 'Add failed:' + res.data.Message, status: 'error' })
+                  }
+                })
             } else {
-              axios.post('http://123.56.242.202:8080//api/BaseData/ProposalInstanceUpdate', [this.formData]).then((res) => {
-                this.$XModal.close('loding')
-                if (res.data.Code == 200) {
-                  this.$XModal.message({ content: 'Modified successfully', status: 'success' })
-                  this.open = false
-                  this.getList('')
-                } else {
-                  this.$XModal.message({ content: 'Modification failed:' + res.data.Message, status: 'error' })
-                }
-              })
+              axios
+                .post('http://47.103.127.217:8080/api/BaseData/ProposalInstanceUpdate', [this.formData])
+                .then(res => {
+                  this.$XModal.close('loding')
+                  if (res.data.Code == 200) {
+                    this.$XModal.message({ content: 'Modified successfully', status: 'success' })
+                    this.open = false
+                    this.getList('')
+                  } else {
+                    this.$XModal.message({ content: 'Modification failed:' + res.data.Message, status: 'error' })
+                  }
+                })
             }
           }
         })
@@ -247,15 +250,15 @@ export default {
     },
     getList(name) {
       axios
-        .post('http://123.56.242.202:8080//api/BaseData/GetProposalInstance?departmentID=&userName=' + name)
-        .then((res) => {
+        .post('http://47.103.127.217:8080/api/BaseData/GetProposalInstance?departmentID=&userName=' + name)
+        .then(res => {
           this.tableList = res.data
           setTimeout(() => {
             this.$refs.vxeTable.setAllTreeExpand(true)
           }, 200)
         })
-    },
-  },
+    }
+  }
 }
 </script>
 <style lang="less" scoped>

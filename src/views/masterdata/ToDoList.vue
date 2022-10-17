@@ -1,4 +1,3 @@
-
 <template>
   <div>
     <vxe-toolbar style="padding-left: 10px; margin-bottom: 10px; border-radius: 5px">
@@ -90,7 +89,6 @@
   </div>
 </template>
 
-
 <script>
 import _ from 'lodash'
 import axios from 'axios'
@@ -118,7 +116,7 @@ export default {
       activeName: 'first',
       open: false,
       Approve: '',
-      line: [],
+      line: []
     }
   },
   mounted() {
@@ -127,7 +125,7 @@ export default {
   methods: {
     handleClick(tab, event) {
       if (tab.name == 'second') {
-        axios.post('http://123.56.242.202:8080//api/user/GetByWordNameLog?fileName=' + this.selectFileName).then((res) => {
+        axios.post('http://47.103.127.217:8080/api/user/GetByWordNameLog?fileName=' + this.selectFileName).then(res => {
           this.tableFileList = res.data
           setTimeout(() => {
             this.$refs.vxeTable.setAllTreeExpand(true)
@@ -160,7 +158,7 @@ export default {
       this.showDetails = true
       this.iframeShow = false
       this.selectFileName = row.FileName
-      axios.post('http://123.56.242.202:8080//api/user/GetByWordNameLog?fileName=' + row.FileName).then((res) => {
+      axios.post('http://47.103.127.217:8080/api/user/GetByWordNameLog?fileName=' + row.FileName).then(res => {
         this.tableFileList = res.data
         setTimeout(() => {
           this.$refs.vxeTable.setAllTreeExpand(true)
@@ -172,7 +170,7 @@ export default {
       setTimeout(() => {
         document.getElementById('Generate').contentWindow.postMessage(
           {
-            name,
+            name
           },
           '*'
         )
@@ -180,7 +178,7 @@ export default {
     },
     getList(val) {
       var user = JSON.parse(sessionStorage.getItem('LoginUser'))
-      axios.post('http://123.56.242.202:8080//api/user/ToDoList?userID=' + user.UserID + '&approve=' + val).then((res) => {
+      axios.post('http://47.103.127.217:8080/api/user/ToDoList?userID=' + user.UserID + '&approve=' + val).then(res => {
         this.tableList = res.data
         setTimeout(() => {
           this.$refs.vxeTable.setAllTreeExpand(true)
@@ -206,7 +204,7 @@ export default {
       //         type = 'Contract'
       //       }
       //       axios
-      //         .post('http://123.56.242.202:8080/api/user/Approve?type=' + type + '&batchID=' + row.BatchID)
+      //         .post('http://47.103.127.217:8080/api/user/Approve?type=' + type + '&batchID=' + row.BatchID)
       //         .then((res) => {
       //           this.$XModal.close('loding')
       //           if (res.data.Code == 200) {
@@ -224,22 +222,22 @@ export default {
       debugger
       var user = JSON.parse(sessionStorage.getItem('LoginUser'))
       var type = ''
-      if (user.UserName == '报价单审批人') {
+      if (user.UserName == 'ProposalApproval') {
         type = 'Proposal'
       } else {
         type = 'Contract'
       }
-      
+
       axios
         .post(
-          'http://123.56.242.202:8080/api/user/Approve?type=' +
+          'http://47.103.127.217:8080/api/user/Approve?type=' +
             type +
             '&batchID=' +
             this.line.BatchID +
             '&approveStatus=' +
             this.Approve
         )
-        .then((res) => {
+        .then(res => {
           if (res.data.Code == 200) {
             this.$XModal.message({ content: 'Approval succeeded', status: 'success' })
             this.getList()
@@ -248,8 +246,8 @@ export default {
             this.$XModal.message({ content: 'Approval failed:' + res.data.Message, status: 'error' })
           }
         })
-    },
-  },
+    }
+  }
 }
 </script>
 <style lang="less" scoped>

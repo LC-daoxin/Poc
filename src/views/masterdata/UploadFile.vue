@@ -270,7 +270,7 @@ import _ from 'lodash'
 import axios from 'axios'
 import XEUtils from 'xe-utils'
 export default {
-  name: 'Proposal',
+  name: 'UploadFile',
   data() {
     return {
       value1: [new Date(2016, 9, 10, 8, 40), new Date(2016, 9, 10, 9, 40)],

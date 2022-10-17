@@ -45,8 +45,8 @@
       class="table"
       :pagination="false"
       :params="tableParams"
-      :rowSelection="{ selectedRowKeys: selectionKeys, onChange: selectionChange, type: 'checkbox'}"
-      :rowKey="(record) => record.ActivityID"
+      :rowSelection="{ selectedRowKeys: selectionKeys, onChange: selectionChange, type: 'checkbox' }"
+      :rowKey="record => record.ActivityID"
       :showAlert="false"
       @pageChange="loadData"
       @changeColumns="changeColumns"
@@ -65,18 +65,18 @@ export default {
   name: 'Activities',
   components: {
     PageHeaderWrapper,
-    PublicTable,
+    PublicTable
   },
   data() {
     const Options = [
       {
         label: '无',
-        value: 'False',
+        value: 'False'
       },
       {
         label: 'Options',
-        value: 'True',
-      },
+        value: 'True'
+      }
     ]
     return {
       // data
@@ -86,7 +86,7 @@ export default {
       selectionRows: [],
       model: {
         proposalPipelineID: '',
-        activityName: '',
+        activityName: ''
       },
       pipelineOptions: [],
       projectType1Disabled: true,
@@ -96,7 +96,7 @@ export default {
       pagination: {
         total: 0,
         current: 1,
-        pageSize: 10,
+        pageSize: 10
       },
       tableParams: {
         loading: false,
@@ -121,7 +121,7 @@ export default {
               } else {
                 return <a-input size="small" v-model:value={row.text} value={text} />
               }
-            },
+            }
           },
           {
             title: 'Activity Short Desc',
@@ -141,7 +141,7 @@ export default {
               } else {
                 return <a-input size="small" v-model:value={row.text} value={text} />
               }
-            },
+            }
           },
           {
             title: 'Options',
@@ -156,17 +156,17 @@ export default {
                   value={val}
                   style="width: 100%"
                   size="small"
-                  onChange={(val) => {
+                  onChange={val => {
                     this.changeOptions(val, record)
                   }}
                 >
-                  {Options.map((item) => {
+                  {Options.map(item => {
                     return <a-select-option value={item.value}>{item.label}</a-select-option>
                   })}
                 </a-select>
               )
-            },
-          },
+            }
+          }
           // {
           //   title: 'DisCount',
           //   dataIndex: 'DisCount',
@@ -202,16 +202,16 @@ export default {
           //   align: 'center',
           //   customRender: (text, row, index) => <span>{text}</span>,
           // },
-        ],
-      },
+        ]
+      }
     }
   },
   computed: {
     ...mapState({
-      lang: (state) => state.app.lang,
-      templateSelect: (state) => state.poc.templateSelect,
-      rejectedList: (state) => state.poc.rejectedList,
-    }),
+      lang: state => state.app.lang,
+      templateSelect: state => state.poc.templateSelect,
+      rejectedList: state => state.poc.rejectedList
+    })
   },
   watch: {
     lang(val) {
@@ -226,12 +226,12 @@ export default {
       if (list.length > 0) {
         this.loadData(this.model)
       }
-    },
+    }
   },
   mounted() {
     this.model = {
       proposalPipelineID: '',
-      activityName: '',
+      activityName: ''
     }
 
     this.getProposalPipeLine()
@@ -242,7 +242,7 @@ export default {
       setActivitiesSelect(commit, select) {
         console.log('setActivitiesSelect', select)
         return commit('poc/setActivitiesSelect', select)
-      },
+      }
     }),
     // 拖拽列
     changeColumns(evt) {
@@ -275,14 +275,14 @@ export default {
     },
     setColumns(lang) {
       console.log(lang)
-      this.tableParams.columns.forEach((item) => {
+      this.tableParams.columns.forEach(item => {
         item.i18n ? (item.title = this.$t(item.i18n)) : ''
       })
     },
     refresh() {
       this.model = {
         proposalPipelineID: '',
-        activityName: '',
+        activityName: ''
       }
       this.loadData(this.model)
     },
@@ -292,7 +292,7 @@ export default {
       this.rejectedList.forEach(item => {
         item.ParentID && arrIds.push(item.ParentID)
       })
-      let actIds = [...new Set(arrIds)];
+      let actIds = [...new Set(arrIds)]
       this.selectionKeys = actIds
       console.log(actIds)
       list.forEach(item => {
@@ -309,10 +309,10 @@ export default {
         this.templateSelect[0].Name == 'POCCN' ? (url = 'GetActivitiesListCN') : ''
       }
       axios
-        .get(`http://123.56.242.202:8080//api/poc/${url}`, {
-          params: model,
+        .get(`http://47.103.127.217:8080/api/poc/${url}`, {
+          params: model
         })
-        .then((res) => {
+        .then(res => {
           console.log('Activities', res)
           this.tableParams.dataSource = res.data
           this.tableParams.loading = false
@@ -323,7 +323,7 @@ export default {
     },
     getProposalPipeLine() {
       // this.tableParams.loading = true
-      axios.get('http://123.56.242.202:8080//api/poc/GetProposalPipeLine', {}).then((res) => {
+      axios.get('http://47.103.127.217:8080/api/poc/GetProposalPipeLine', {}).then(res => {
         console.log('getProposalPipeLine', res)
         this.pipelineOptions = res.data
       })
@@ -355,11 +355,11 @@ export default {
           }
         }
       })
-    },
+    }
   },
   created() {
     // this.refresh()
-  },
+  }
 }
 </script>
 

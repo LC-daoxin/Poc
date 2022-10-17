@@ -2,9 +2,9 @@
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta http-equiv="Access-Control-Allow-Origin" content="*">
+    <link rel="icon" href="/favicon.ico" type="image/x-icon" />
     <title>
-        123
+        Spire.Office
     </title>
 
     <style>
@@ -37,19 +37,17 @@
     </style>
 
     <script language="javascript" type="text/javascript"
-        src="http://116.62.116.60:8000/web/editors/api/documenteditor.js"></script>
-    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+        src="https://api.e-iceblue.cn/web/editors/spireapi/SpireCloudEditor.js"></script>
 
     <script type="text/javascript" language="javascript">
 
         var docEditor;
         var fileName = "";
-        var lang = "en";
+        var lang = "zh";
         var fileType = "";
         var token = null;
-        var appid = null;
-        var appkey = null;
-        var user = JSON.parse(sessionStorage.getItem("LoginUser"))
+        var appid = "***";
+        var appkey = "***";
 
         var innerAlert = function (message) {
             if (console && console.log)
@@ -67,7 +65,7 @@
         };
 
         var onRequestEditRights = function () {
-            location.href = location.href.replace(RegExp("action=home\&?", "i"), "");
+            location.href = location.href.replace(RegExp("action=view\&?", "i"), "");
         };
 
         var onError = function (event) {
@@ -115,36 +113,34 @@
             }
         }
         var callbackfn = function (result) {
-            debugger
+            console.log(result.data);
             if (result && result.data) {
                 var data = result.data,
                     fileName = data[0],
                     url = data[1];
                 if (fileName.indexOf('=') > -1)
                     fileName = fileName.split('=')[1];
-
-                var host = 'http://123.56.242.202:8080//api/Contract/Save';
-
-                $.ajax({
-                    url: host,
+                var host = location.hostname;
+                ajax({
+                    url: '自定义后端保存编辑后的文档数据的接口地址',
                     type: 'post',
-                    data: { 'filename': fileName, 'fileuri': url, 'userid': user.UserID },
+                    data: { 'filename': fileName, 'fileuri': url },
+                    dataType: 'json',
                     async: false,
                     success: function (json) {
-                        if (json.Code == 200 || json.Code == '200') {
-                            alert('Saved successfully');
+                        if (json.code == 200 || json.code == '200') {
+                            alert('保存成功');
                         } else {
-                            this.error(json, 'Save failed');
+                            this.error(json, '保存失败');
                         }
                     },
                     error: function (json, msg) {
-                        alert(msg);
+                        alert(+msg);
                     }
                 });
             }
         };
-        function connectEditor(name) {
-
+        var connectEditor = function (name) {
             var type = 'desktop';
             if (type == "desktop") {
                 var app = navigator.appVersion;
@@ -154,13 +150,11 @@
                     type = "mobile";
                 }
             };
-            var urlString = ''
-            if (name) {
-                urlString = "http://116.62.116.60:3000/files/" + name;
-            } else {
-                urlString = "http://116.62.116.60:3000/files/123.56.242.202/default/abb.docx";
+            debugger
+            var urlString = "http://47.103.120.213:3000/files/" + name;
+            if (name.indexOf('/Template') != -1) {
+                urlString = urlString.replaceAll(' ', '_');
             }
-
             var arrfn = urlString.split(".");
             var strp = arrfn[arrfn.length - 1];
             var documentTypeValue = null;
@@ -196,51 +190,79 @@
                     break;
             }
 
-            docEditor = new OfficeAPI.DocumentEditor("iframeEditor",
+            docEditor = new SpireCloudEditor.OpenApi("iframeEditor",
                 {
-                    width: "100%",
-                    height: "100%",
-                    editorType: type,
-                    isReadOnly: 'False',
-                    documentType: documentTypeValue,
-                    document: {
-                        key: "",
-                        title: fileName,
-                        url: urlString,
-
-                        fileType: fileType,
-                        info: {
-                            author: "Me",
-                            created: "2019/11/22"
-                        }
-                    },
-                    editorConfig: {
-                        mode: 'True',
-                        lang: lang,
-                        callbackUrl: "",
-                        user: {
-                            id: user.UserID,
-                            name: user.UserName,
-                            token: user.Token,
-                            appid: appid,
-                            appkey: appkey
+                    fileAttrs: {
+                        fileInfo: {
+                            name: '',
+                            ext: '',
+                            primary: '',
+                            creator: '',
+                            createTime: new Date('20210505')
                         },
+                        sourceUrl: urlString,
+                        createUrl: '',
+                        callbackUrl: '',////This item can be empty, but only if the 'onSave' callback function must be defined in events. If the callback function is undefined and this item is empty, Cloud Editor will not provide save function.
+                        verification: null,//用户文件系统下载文件时若需要验证类似token的数据可以写在这里
+                        canEdit: true
+                    },
+                    user: {
+                        primary: '',
+                        name: '',
+                        canSave: true,
                         customization: {
-                            goback: {
-                                url: ""
+                            public: {
+                                common: {
+                                    whiteLabel: false,
+                                    defaultZoom: 1,
+                                    openReviewChanges: false,
+                                    permGroups: ['everyone'],//限制编辑分组
+                                    viewVersion: false,
+                                    header: {
+                                        hideTitle: false,
+                                        defaultView: 'full'
+                                    }
+                                },
+                                word: null,//doc定制
+                                powerpoint: null,//ppt定制
+                                excel: null//xls定制
                             },
-                            "openReviewChanges": true,
+                            "private": {
+                                "token": null,
+                                "appid": null,
+                                "appkey": null
+                            }
                         }
                     },
-                    events: {
-                        'onReady': onReady,
-                        'onDocumentStateChange': onDocumentStateChange,
-                        'onRequestEditRights': onRequestEditRights,
-                        'onError': onError,
-                        'onOutdatedVersion': onOutdatedVersion,
-                        'onSave': callbackfn
+                    editorAttrs: {//编辑器配置
+                        editorWidth: '100%',
+                        editorHeight: '100%',
+                        editorMode: 'edit',
+                        editorType: 'document',//编辑器类型，可不配置，程序根据文件类型获取，结果为 document,presentation,spreadsheet
+                        platform: 'windows',//编辑器平台类型，可选windows， mobile， embedded
+                        viewLanguage: 'zh',//平台界面展示语言可选en/zh
+                        canChat: true,//是否可聊天
+                        canComment: true,//是否可批注
+                        canReview: true,
+                        canDownload: true,
+                        canForcesave: true,
+                        embedded: {
+                            saveUrl: '',
+                            embedUrl: '',
+                            shareUrl: ''
+                        },
+                        events: {
+                            'onReady': onReady,
+                            'onDocumentStateChange': onDocumentStateChange,
+                            'onError': onError,
+                            'onRequestEditRights': onRequestEditRights,
+                            'onOutdatedVersion': onOutdatedVersion,
+                            'onSave': callbackfn
+                        }
                     }
-                }
+                },
+                appid,
+                appkey
             );
         };
         // if (window.addEventListener) {
@@ -248,6 +270,7 @@
         // } else if (window.attachEvent) {
         //     window.attachEvent("load", connectEditor);
         // }
+
         window.addEventListener('message', function (event) {
             let { name } = event.data
             if (name) {
@@ -255,6 +278,7 @@
                 connectEditor(name)
             }
         })
+
     </script>
 </head>
 
@@ -264,9 +288,7 @@
             <input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE"
                 value="/wEPDwUKMTkyMjc5MTU4M2RkBQQQBsVcOHQbzTlwYapiES2Trc9Z/U4CC+r9rluZubc=" />
         </div>
-
         <div>
-
             <input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="C2EAC0DE" />
         </div>
         <div id="iframeEditor">

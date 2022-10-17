@@ -1,4 +1,3 @@
-
 <template>
   <div>
     <vxe-toolbar style="padding-left: 10px; margin-bottom: 10px; border-radius: 5px">
@@ -16,7 +15,7 @@
       border
       show-overflow
       :loading="loading"
-      :column-config="{resizable: true}"
+      :column-config="{ resizable: true }"
       row-id="ActivityID"
       :row-config="{ isHover: true }"
       :data="actList"
@@ -45,7 +44,7 @@
       <vxe-column field="Property3" width="100" :title="Property.Property3"></vxe-column>
       <vxe-column field="Property4" width="100" :title="Property.Property4"></vxe-column>
       <vxe-column field="Property5" width="100" :title="Property.Property5"></vxe-column>
-      <vxe-column field="Property6" width="100" :title="Property.Property6" ></vxe-column>
+      <vxe-column field="Property6" width="100" :title="Property.Property6"></vxe-column>
       <vxe-column field="Property7" width="100" :title="Property.Property7"></vxe-column>
       <vxe-column field="Sort" width="80" title="Sort"></vxe-column>
       <vxe-column field="Version" width="80" title="Version"></vxe-column>
@@ -208,7 +207,7 @@
           <vxe-form-item :title="Property.Property5" field="Property5" span="12">
             <template #default>
               <vxe-input v-model="formData.Property5" placeholder="Property5"></vxe-input>
-            </template> 
+            </template>
           </vxe-form-item>
           <vxe-form-item :title="Property.Property6" field="Property6" span="12">
             <template #default>
@@ -332,16 +331,16 @@ export default {
   },
   mounted() {
     this.getList('')
-    axios.post('http://123.56.242.202:8080//api/BaseData/GetMasterData?projectName=&corporateName=').then((res) => {
+    axios.post('http://47.103.127.217:8080/api/BaseData/GetMasterData?projectName=&corporateName=').then(res => {
       this.projectList = res.data
     })
 
-    axios.post('http://123.56.242.202:8080//api/BaseData/GetActivityType?name=').then((res) => {
+    axios.post('http://47.103.127.217:8080/api/BaseData/GetActivityType?name=').then(res => {
       this.activityList = this.arrayToTree(res.data, 'TypeID', 'ParentID', [])
       this.activityList = this.getActTree(this.activityList)
     })
     // 获取属性列表
-    axios.post('http://123.56.242.202:8080//api/BaseData/GetPropertyMapping').then((res) => {
+    axios.post('http://47.103.127.217:8080/api/BaseData/GetPropertyMapping').then(res => {
       console.log('PropertyList', res.data)
       res.data.forEach(item => {
         this.Property[item.PropertyNum] = item.PropertyName
@@ -427,14 +426,14 @@ export default {
           content: 'Are you sure to delete?',
           cancelButtonText: 'cancel',
           confirmButtonText: 'sure',
-          title: 'Message prompt',
+          title: 'Message prompt'
         })
-        .then((type) => {
+        .then(type => {
           if (type === 'confirm') {
             this.$XModal.message({ id: 'loding', content: 'Data processing...', status: 'loading' })
             axios
-              .post('http://123.56.242.202:8080//api/BaseData/BaseDataDelete?baseDataID=' + checked.ActivityID)
-              .then((res) => {
+              .post('http://47.103.127.217:8080/api/BaseData/BaseDataDelete?baseDataID=' + checked.ActivityID)
+              .then(res => {
                 this.$XModal.close('loding')
                 if (res.data.Code == 200) {
                   this.$XModal.message({ content: 'Deleted successfully', status: 'success' })
@@ -450,12 +449,12 @@ export default {
     save() {
       this.$XModal
         .confirm('Are you sure to save?', 'Message prompt', { cancelButtonText: 'cancel', confirmButtonText: 'sure' })
-        .then((type) => {
+        .then(type => {
           if (type === 'confirm') {
             this.$XModal.message({ id: 'loding', content: 'Data processing...', status: 'loading' })
 
             if (this.formData.ActivityID == null) {
-              axios.post('http://123.56.242.202:8080//api/BaseData/BaseDataCreate', [this.formData]).then((res) => {
+              axios.post('http://47.103.127.217:8080/api/BaseData/BaseDataCreate', [this.formData]).then(res => {
                 this.$XModal.close('loding')
                 if (res.data.Code == 200) {
                   this.$XModal.message({ content: 'Added successfully', status: 'success' })
@@ -466,7 +465,7 @@ export default {
                 }
               })
             } else {
-              axios.post('http://123.56.242.202:8080//api/BaseData/BaseDataUpdate', [this.formData]).then((res) => {
+              axios.post('http://47.103.127.217:8080/api/BaseData/BaseDataUpdate', [this.formData]).then(res => {
                 this.$XModal.close('loding')
                 if (res.data.Code == 200) {
                   this.$XModal.message({ content: 'Modified successfully', status: 'success' })
@@ -491,16 +490,15 @@ export default {
     },
     getList() {
       this.loading = true
-      axios.post('http://123.56.242.202:8080//api/BaseData/GetBaseData').then((res) => {
+      axios.post('http://47.103.127.217:8080/api/BaseData/GetBaseData').then(res => {
         this.actList = res.data
         this.loading = false
         setTimeout(() => {
           this.$refs.treeTable.setAllTreeExpand(true)
         }, 200)
       })
-    },
-  },
+    }
+  }
 }
 </script>
-<style lang="less" scoped>
-</style>
+<style lang="less" scoped></style>

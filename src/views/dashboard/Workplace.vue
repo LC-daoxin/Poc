@@ -136,7 +136,7 @@ export default {
     Activities,
     SubActivities,
     TemplateList,
-    Generate,
+    Generate
   },
   data() {
     return {
@@ -155,24 +155,24 @@ export default {
         {
           id: 1,
           title: 'Select Template',
-          status: 'success',
+          status: 'success'
         },
         {
           id: 2,
           title: 'Building Activities',
-          status: 'success',
+          status: 'success'
         },
         {
           id: 3,
           title: 'Building Sub Activities',
-          status: 'success',
+          status: 'success'
         },
 
         {
           id: 4,
           title: 'Generate Proposal',
-          status: 'success',
-        },
+          status: 'success'
+        }
       ],
       stepStyle: {},
       columns: [
@@ -180,14 +180,14 @@ export default {
           title: '任务/数据状态',
           dataIndex: 'name',
           width: 200,
-          align: 'center',
+          align: 'center'
         },
         {
           title: '任务状态汇总',
           dataIndex: 'status',
           width: 140,
           align: 'center',
-          customRender: (status) => {
+          customRender: status => {
             const renderElement = []
             switch (status) {
               case 'Successded':
@@ -207,27 +207,27 @@ export default {
                 break
             }
             return renderElement
-          },
+          }
         },
         {
           title: '任务开始时间',
           dataIndex: 'startTime',
           width: 220,
-          align: 'center',
+          align: 'center'
         },
         {
           title: '任务结束时间',
           dataIndex: 'endTime',
           width: 220,
-          align: 'center',
+          align: 'center'
         },
         {
           title: '说明',
           width: 240,
           align: 'center',
-          dataIndex: 'description',
+          dataIndex: 'description'
           // scopedSlots: { customRender: 'action' }
-        },
+        }
       ],
       listData: [],
       BatchID: null
@@ -235,21 +235,21 @@ export default {
   },
   computed: {
     ...mapState({
-      nickname: (state) => state.user.nickname,
-      welcome: (state) => state.user.welcome,
-      activitiesSelect: (state) => state.poc.activitiesSelect,
-      subActivitiesAll: (state) => state.poc.subActivitiesAll,
-      templateSelect: (state) => state.poc.templateSelect,
+      nickname: state => state.user.nickname,
+      welcome: state => state.user.welcome,
+      activitiesSelect: state => state.poc.activitiesSelect,
+      subActivitiesAll: state => state.poc.subActivitiesAll,
+      templateSelect: state => state.poc.templateSelect
     }),
     currentUser() {
       return {
         name: '李承',
-        avatar: 'https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png',
+        avatar: 'https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png'
       }
     },
     userInfo() {
       return this.$store.getters.userInfo
-    },
+    }
   },
   created() {
     this.user = this.userInfo
@@ -297,7 +297,7 @@ export default {
       },
       setTemplateSelect(commit, select) {
         return commit('poc/setTemplateSelect', select)
-      },
+      }
     }),
     newGenerate() {
       this.setTemplateSelect([])
@@ -319,8 +319,8 @@ export default {
     getRejectedList(BatchID) {
       return new Promise((resolve, reject) => {
         axios
-          .get('http://123.56.242.202:8080/api/POC/GetRejectedList', {
-            params: { BatchID },
+          .get('http://47.103.127.217:8080/api/POC/GetRejectedList', {
+            params: { BatchID }
           })
           .then(res => {
             console.log('getRejectedList', res)
@@ -331,7 +331,6 @@ export default {
             reject(err)
           })
       })
-      
     },
     subActivitiesloadData() {
       this.$refs.subActivities.loadData()
@@ -356,7 +355,7 @@ export default {
     },
     next() {
       if (this.current == 2) {
-        this.$refs.template.checkSelect().then((val) => {
+        this.$refs.template.checkSelect().then(val => {
           if (val) {
             this.SaveProposal()
           }
@@ -376,20 +375,20 @@ export default {
           Price: item.Price,
           PriceMark: item.PriceMark,
           ServicePrice: item.ServicePrice,
-          StartTime:item.StartTime,
+          StartTime: item.StartTime,
           PassThroughPrice: item.PassThroughPrice,
           Duration: item.Duration,
-          ParentID:item.ActivityID,
-          ActivityName:item.SubActivityName,
+          ParentID: item.ActivityID,
+          ActivityName: item.SubActivityName,
           ProjectID: item.ProjectID,
-          ActivityNameCN:item.SubActivityNameCN,
-          ActivityDescCN:item.ActivityDescCN,
-          ActivityShortNameCN:item.ActivityShortNameCN,
-          Stage:item.Stage,
-          StageCN:item.StageCN,
-          DisCount:item.DisCount,
-          Scale:item.Scale,
-          ParentID:item.ParentID,
+          ActivityNameCN: item.SubActivityNameCN,
+          ActivityDescCN: item.ActivityDescCN,
+          ActivityShortNameCN: item.ActivityShortNameCN,
+          Stage: item.Stage,
+          StageCN: item.StageCN,
+          DisCount: item.DisCount,
+          Scale: item.Scale,
+          ParentID: item.ParentID,
           Property1: item.Property1,
           Property2: item.Property2,
           Property3: item.Property3,
@@ -411,27 +410,27 @@ export default {
           Property19: item.Property19,
           Property20: item.Property20,
           Sort: i + 1,
-          CreateUser:JSON.parse(sessionStorage.getItem("LoginUser")).UserID
+          CreateUser: JSON.parse(sessionStorage.getItem('LoginUser')).UserID
         }
       })
       this.activitiesSelect.forEach((item, i) => {
         ProposalJson.push({
           ActivityID: item.ActivityID,
-          ParentID:item.ParentID,
+          ParentID: item.ParentID,
           TemplateID: this.templateSelect[0].ID || item.TemplateID,
           Price: item.Price,
           PriceMark: item.PriceMark,
           ServicePrice: item.ServicePrice,
           PassThroughPrice: item.PassThroughPrice,
-          ActivityName:item.ActivityName,
-          StartTime:item.StartTime,
-          ActivityNameCN:item.ActivityNameCN,
-          ActivityDescCN:item.ActivityDescCN,
-          ActivityShortNameCN:item.ActivityShortNameCN,
-          Stage:item.Stage,
-          StageCN:item.StageCN,
-          Scale:item.Scale,
-          DisCount:item.DisCount,
+          ActivityName: item.ActivityName,
+          StartTime: item.StartTime,
+          ActivityNameCN: item.ActivityNameCN,
+          ActivityDescCN: item.ActivityDescCN,
+          ActivityShortNameCN: item.ActivityShortNameCN,
+          Stage: item.Stage,
+          StageCN: item.StageCN,
+          Scale: item.Scale,
+          DisCount: item.DisCount,
           ProjectID: item.ProjectID,
           Duration: item.Duration,
           Property1: item.Property1,
@@ -455,24 +454,24 @@ export default {
           Property19: item.Property19,
           Property20: item.Property20,
           Sort: i + 1,
-          CreateUser:JSON.parse(sessionStorage.getItem("LoginUser")).UserID
+          CreateUser: JSON.parse(sessionStorage.getItem('LoginUser')).UserID
         })
       })
-      debugger  
+      debugger
 
-      axios.post('http://123.56.242.202:8080//api/poc/SaveProposal', ProposalJson).then((res) => {
+      axios.post('http://47.103.127.217:8080/api/poc/SaveProposal', ProposalJson).then(res => {
         console.log('SaveProposal', res)
         axios
-          .get('http://123.56.242.202:8080//api/poc/CreateProposalInstance', {
-            params: { batchID: res.data.Data },
+          .get('http://47.103.127.217:8080/api/poc/CreateProposalInstance', {
+            params: { batchID: res.data.Data }
           })
-          .then((val) => {
+          .then(val => {
             console.log('CreateProposalInstance', val)
             axios
-              .get('http://123.56.242.202:8080//api/poc/GetDocumentsName', {
-                params: { batchID: res.data.Data }, 
+              .get('http://47.103.127.217:8080/api/poc/GetDocumentsName', {
+                params: { batchID: res.data.Data }
               })
-              .then((res) => {
+              .then(res => {
                 console.log('GetDocumentsName', res.data)
                 this.current++
                 this.btnLoading = false
@@ -518,16 +517,16 @@ export default {
       const params = { date }
       this.$http
         .get('http://118.31.45.238:8089/common/GetExectResults', {
-          params,
+          params
         })
-        .then((res) => {
+        .then(res => {
           console.log(res)
           this.loading = false
         })
     },
     getTest() {
       this.loading = true
-      this.$http.get('/common/GetExectResults').then((res) => {
+      this.$http.get('/common/GetExectResults').then(res => {
         console.log(res)
         this.Results = res.result?.data.map((node, i) => {
           if (node.status === 'current') {
@@ -543,8 +542,8 @@ export default {
     onSelectChange(selectedRowKeys, selectedRows) {
       this.selectedRowKeys = selectedRowKeys
       this.selectedRows = selectedRows
-    },
-  },
+    }
+  }
 }
 </script>
 

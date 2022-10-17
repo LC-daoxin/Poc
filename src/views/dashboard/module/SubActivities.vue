@@ -21,7 +21,9 @@
           @change="changePipeline"
         >
           <a-select-option :value="item.ActivityID" :key="item.ActivityID" v-for="item in activitiesSelect">{{
-            templateSelect.length > 0 && templateSelect[0].Name.indexOf('CN') != -1 ? item.ActivityNameCN : item.ActivityName
+            templateSelect.length > 0 && templateSelect[0].Name.indexOf('CN') != -1
+              ? item.ActivityNameCN
+              : item.ActivityName
           }}</a-select-option>
         </a-select>
       </a-form-model-item>
@@ -34,10 +36,10 @@
       class="table"
       :pagination="false"
       :params="tableParams"
-      :rowSelection="{ selectedRowKeys: selectionKeys, onChange: selectionChange, type: 'checkbox'}"
+      :rowSelection="{ selectedRowKeys: selectionKeys, onChange: selectionChange, type: 'checkbox' }"
       :draggableRow="true"
       :fixed="false"
-      :rowKey="(record) => record.SubActivityID"
+      :rowKey="record => record.SubActivityID"
       :showAlert="false"
       @pageChange="loadData"
       @changeRow="changeRow"
@@ -56,29 +58,29 @@ export default {
   name: 'SubActivities',
   components: {
     PageHeaderWrapper,
-    PublicTable,
+    PublicTable
   },
   data() {
     const EstimateOptions = [
       {
         label: '无',
-        value: 'False',
+        value: 'False'
       },
       {
         label: 'Estimate',
-        value: 'True',
-      },
+        value: 'True'
+      }
     ]
 
     const Options = [
       {
         label: '无',
-        value: 'False',
+        value: 'False'
       },
       {
         label: 'Options',
-        value: 'True',
-      },
+        value: 'True'
+      }
     ]
     return {
       // data
@@ -89,7 +91,7 @@ export default {
       selectActivityID: [],
       model: {
         activityID: [],
-        keyWords: '',
+        keyWords: ''
       },
       pipelineOptions: [],
       projectType1Disabled: true,
@@ -99,7 +101,7 @@ export default {
       pagination: {
         total: 0,
         current: 1,
-        pageSize: 10,
+        pageSize: 10
       },
       tableParams: {
         loading: false,
@@ -129,7 +131,7 @@ export default {
               } else {
                 return row.text == '' ? '' : <a-input size="small" v-model:value={row.text} value={text} />
               }
-            },
+            }
           },
           {
             title: 'Sub Activity Name',
@@ -147,7 +149,7 @@ export default {
               } else {
                 return <a-input size="small" v-model:value={row.text} value={text} />
               }
-            },
+            }
           },
           {
             title: 'Sub Activity Desc',
@@ -167,7 +169,7 @@ export default {
               } else {
                 return <a-input size="small" v-model:value={row.text} value={text} />
               }
-            },
+            }
           },
           {
             title: 'Estimate',
@@ -182,16 +184,16 @@ export default {
                   value={val}
                   style="width: 100%"
                   size="small"
-                  onChange={(val) => {
+                  onChange={val => {
                     this.changeEstimate(val, record)
                   }}
                 >
-                  {EstimateOptions.map((item) => {
+                  {EstimateOptions.map(item => {
                     return <a-select-option value={item.value}>{item.label}</a-select-option>
                   })}
                 </a-select>
               )
-            },
+            }
           },
           {
             title: 'Options',
@@ -206,16 +208,16 @@ export default {
                   value={val}
                   style="width: 100%"
                   size="small"
-                  onChange={(val) => {
+                  onChange={val => {
                     this.changeOptions(val, record)
                   }}
                 >
-                  {Options.map((item) => {
+                  {Options.map(item => {
                     return <a-select-option value={item.value}>{item.label}</a-select-option>
                   })}
                 </a-select>
               )
-            },
+            }
           },
           {
             title: 'Service Price',
@@ -231,7 +233,7 @@ export default {
                     <a-input
                       size="small"
                       v-model:value={row.Property3}
-                      onChange={(e) => this.onChangeServicePrice(e, row)}
+                      onChange={e => this.onChangeServicePrice(e, row)}
                       value={row.Property3}
                     />
                   )
@@ -240,7 +242,7 @@ export default {
                     <a-input
                       size="small"
                       v-model:value={text}
-                      onChange={(e) => this.onChangeServicePrice(e, row)}
+                      onChange={e => this.onChangeServicePrice(e, row)}
                       value={text}
                     />
                   )
@@ -250,12 +252,12 @@ export default {
                   <a-input
                     size="small"
                     v-model:value={text}
-                    onChange={(e) => this.onChangeServicePrice(e, row)}
+                    onChange={e => this.onChangeServicePrice(e, row)}
                     value={text}
                   />
                 )
               }
-            },
+            }
           },
           {
             title: 'Pass Though Price',
@@ -264,13 +266,8 @@ export default {
             width: 150,
             ellipsis: true,
             customRender: (text, row, index) => (
-              <a-input
-                size="small"
-                v-model:value={text}
-                onChange={(e) => this.onChangePassPrice(e, row)}
-                value={text}
-              />
-            ),
+              <a-input size="small" v-model:value={text} onChange={e => this.onChangePassPrice(e, row)} value={text} />
+            )
           },
           {
             title: 'Duration',
@@ -286,7 +283,7 @@ export default {
                     <a-input
                       size="small"
                       v-model:value={row.Property2}
-                      onChange={(e) => this.onChangeDuration(e, row)}
+                      onChange={e => this.onChangeDuration(e, row)}
                       value={row.Property2}
                     />
                   )
@@ -295,7 +292,7 @@ export default {
                     <a-input
                       size="small"
                       v-model:value={text}
-                      onChange={(e) => this.onChangeDuration(e, row)}
+                      onChange={e => this.onChangeDuration(e, row)}
                       value={text}
                     />
                   )
@@ -305,12 +302,12 @@ export default {
                   <a-input
                     size="small"
                     v-model:value={text}
-                    onChange={(e) => this.onChangeDuration(e, row)}
+                    onChange={e => this.onChangeDuration(e, row)}
                     value={text}
                   />
                 )
               }
-            },
+            }
           },
           {
             title: 'DisCount',
@@ -319,8 +316,8 @@ export default {
             align: 'center',
             ellipsis: true,
             customRender: (text, row, index) => (
-              <a-input size="small" v-model:value={text} onChange={(e) => this.onChangeDisCount(e, row)} value={text} />
-            ),
+              <a-input size="small" v-model:value={text} onChange={e => this.onChangeDisCount(e, row)} value={text} />
+            )
           },
           {
             title: 'Scale',
@@ -329,20 +326,20 @@ export default {
             width: 100,
             ellipsis: true,
             customRender: (text, row, index) => (
-              <a-input size="small" v-model:value={text} onChange={(e) => this.onChangeScale(e, row)} value={text} />
-            ),
-          },
-        ],
-      },
+              <a-input size="small" v-model:value={text} onChange={e => this.onChangeScale(e, row)} value={text} />
+            )
+          }
+        ]
+      }
     }
   },
   computed: {
     ...mapState({
-      lang: (state) => state.app.lang,
-      templateSelect: (state) => state.poc.templateSelect,
-      activitiesSelect: (state) => state.poc.activitiesSelect,
-      rejectedList: (state) => state.poc.rejectedList,
-    }),
+      lang: state => state.app.lang,
+      templateSelect: state => state.poc.templateSelect,
+      activitiesSelect: state => state.poc.activitiesSelect,
+      rejectedList: state => state.poc.rejectedList
+    })
   },
   watch: {
     lang(val) {
@@ -351,13 +348,13 @@ export default {
     activitiesSelect(list) {
       this.selectActivityID = []
       if (list.length > 0) {
-        list.forEach((item) => {
+        list.forEach(item => {
           this.selectActivityID.push(item.ActivityID)
         })
         this.model.activityID = this.selectActivityID.join(',')
         this.loadData()
       }
-    },
+    }
   },
   mounted() {},
   methods: {
@@ -365,7 +362,7 @@ export default {
       setSubActivitiesAll(commit, select) {
         console.log('setSubActivitiesAll', select)
         return commit('poc/setSubActivitiesAll', select)
-      },
+      }
     }),
     // 拖拽列
     changeColumns(evt) {
@@ -394,14 +391,14 @@ export default {
     },
     setColumns(lang) {
       console.log(lang)
-      this.tableParams.columns.forEach((item) => {
+      this.tableParams.columns.forEach(item => {
         item.i18n ? (item.title = this.$t(item.i18n)) : ''
       })
     },
     refresh() {
       this.model = {
         activityID: [],
-        keyWords: '',
+        keyWords: ''
       }
       this.loadData()
     },
@@ -411,12 +408,12 @@ export default {
       this.rejectedList.forEach(item => {
         item.ActivityID && arrIds.push(item.ActivityID)
       })
-      let actIds = [...new Set(arrIds)];
+      let actIds = [...new Set(arrIds)]
       this.selectionKeys = actIds
       console.log(actIds)
       let newList = []
       list.forEach(item => {
-        let Obj = {...item}
+        let Obj = { ...item }
         if (actIds.includes(item.SubActivityID)) {
           for (let i = 0; i < this.rejectedList.length; i++) {
             if (item.SubActivityID == this.rejectedList[i].ActivityID) {
@@ -456,10 +453,10 @@ export default {
         }
         this.tableParams.loading = true
         axios
-          .get(`http://123.56.242.202:8080//api/poc/${url}`, {
-            params: this.model,
+          .get(`http://47.103.127.217:8080/api/poc/${url}`, {
+            params: this.model
           })
-          .then((res) => {
+          .then(res => {
             console.log('GetSubActivitiesList/CN', res.data)
             // this.setSubActivitiesAll(res.data)
             this.tableParams.dataSource = res.data
@@ -524,7 +521,7 @@ export default {
       this.tableParams.dataSource.forEach((item, i) => {
         if (item.SubActivityID == row.SubActivityID) {
           this.$set(this.tableParams.dataSource[i], text, e.target.value)
-          if ((item.ActivityNameCN == '项目管理')) {
+          if (item.ActivityNameCN == '项目管理') {
             item.ActivityDescCN = '预计项目完成周期' + e.target.value + '个月，每月100,000元项目管理费。'
           }
         }
@@ -557,7 +554,7 @@ export default {
     saveSubActivitiesAll() {
       if (this.tableParams.dataSource.length > 0) {
         let array = []
-        this.tableParams.dataSource.forEach((item) => {
+        this.tableParams.dataSource.forEach(item => {
           if (this.selectionKeys.includes(item.SubActivityID)) {
             array.push(item)
           }
@@ -565,11 +562,11 @@ export default {
         console.log('saveSubActivitiesAll', array)
         this.setSubActivitiesAll(array)
       }
-    },
+    }
   },
   created() {
     // this.refresh()
-  },
+  }
 }
 </script>
 

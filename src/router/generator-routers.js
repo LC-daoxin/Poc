@@ -29,6 +29,11 @@ const constantRouterComponents = {
   MasterBase: () => import('@/views/masterdata/MasterBase'),
   PropertyMapping: () => import('@/views/masterdata/PropertyMapping'),
   MyProposal: () => import('@/views/masterdata/MyProposal'),
+  UploadFile: () => import('@/views/masterdata/UploadFile'),
+
+  
+  MyTask: () => import('@/views/masterdata/MyTask'),
+
   SplitRuleManagement: () => import('@/views/masterdata/SplitRuleManagement'),
   ToDoList: () => import('@/views/masterdata/ToDoList'),
   ProposalRequest: () => import('@/views/masterdata/ProposalRequest'),

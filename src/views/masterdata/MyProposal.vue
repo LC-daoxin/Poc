@@ -1,4 +1,3 @@
-
 <template>
   <div>
     <vxe-table
@@ -62,7 +61,6 @@
   </div>
 </template>
 
-
 <script>
 import _ from 'lodash'
 import axios from 'axios'
@@ -87,7 +85,7 @@ export default {
       iframeShow: true,
       selectFileName: '',
       Template: '',
-      activeName: 'first',
+      activeName: 'first'
     }
   },
   mounted() {
@@ -100,7 +98,7 @@ export default {
     },
     handleClick(tab, event) {
       if (tab.name == 'second') {
-        axios.post('http://123.56.242.202:8080//api/user/GetByWordNameLog?fileName=' + this.selectFileName).then((res) => {
+        axios.post('http://47.103.127.217:8080/api/user/GetByWordNameLog?fileName=' + this.selectFileName).then(res => {
           this.tableFileList = res.data
           setTimeout(() => {
             this.$refs.vxeTable.setAllTreeExpand(true)
@@ -133,7 +131,7 @@ export default {
       this.showDetails = true
       this.iframeShow = false
       this.selectFileName = row.FileName
-      axios.post('http://123.56.242.202:8080//api/user/GetByWordNameLog?fileName=' + row.FileName).then((res) => {
+      axios.post('http://47.103.127.217:8080/api/user/GetByWordNameLog?fileName=' + row.FileName).then(res => {
         this.tableFileList = res.data
         setTimeout(() => {
           this.$refs.vxeTable.setAllTreeExpand(true)
@@ -145,7 +143,7 @@ export default {
       setTimeout(() => {
         document.getElementById('Generate').contentWindow.postMessage(
           {
-            name,
+            name
           },
           '*'
         )
@@ -153,7 +151,7 @@ export default {
     },
     getList(val) {
       var user = JSON.parse(sessionStorage.getItem('LoginUser'))
-      axios.post('http://123.56.242.202:8080/api/user/MyProposal?userID=' + user.UserID ).then((res) => {
+      axios.post('http://47.103.127.217:8080/api/user/MyProposal?userID=' + user.UserID).then(res => {
         this.tableList = res.data
         setTimeout(() => {
           this.$refs.vxeTable.setAllTreeExpand(true)
@@ -164,19 +162,19 @@ export default {
       this.$XModal
         .confirm('Are you sure you want to approve?', 'Message prompt', {
           cancelButtonText: 'cancel',
-          confirmButtonText: 'sure',
+          confirmButtonText: 'sure'
         })
-        .then((type) => {
+        .then(type => {
           if (type === 'confirm') {
             this.$XModal.message({ id: 'loding', content: 'Data processing...', status: 'loading' })
             axios
               .post(
-                'http://123.56.242.202:8080/api/user/Approve?type=Proposal' +
+                'http://47.103.127.217:8080/api/user/Approve?type=Proposal' +
                   '&batchID=' +
                   row.BatchID +
                   '&approveStatus=Submitted'
               )
-              .then((res) => {
+              .then(res => {
                 this.$XModal.close('loding')
                 if (res.data.Code == 200) {
                   this.$XModal.message({ content: 'Approval succeeded', status: 'success' })
@@ -187,8 +185,8 @@ export default {
               })
           }
         })
-    },
-  },
+    }
+  }
 }
 </script>
 <style lang="less" scoped>

@@ -1,4 +1,3 @@
-
 <template>
   <div>
     <vxe-toolbar style="padding-left: 10px; margin-bottom: 10px; border-radius: 5px">
@@ -65,7 +64,10 @@
 
           <vxe-form-item title="CorporateName (Chinese)" field="CorporateNameCN" span="12">
             <template #default>
-              <vxe-input v-model="formData.CorporateNameCN" placeholder="Please enter the CorporateName(Chinese)"></vxe-input>
+              <vxe-input
+                v-model="formData.CorporateNameCN"
+                placeholder="Please enter the CorporateName(Chinese)"
+              ></vxe-input>
             </template>
           </vxe-form-item>
 
@@ -95,7 +97,10 @@
 
           <vxe-form-item title="Organization (Chinese)" field="OrganizationCN" span="12">
             <template #default>
-              <vxe-input v-model="formData.OrganizationCN" placeholder="Please enter the Organization(Chinese)"></vxe-input>
+              <vxe-input
+                v-model="formData.OrganizationCN"
+                placeholder="Please enter the Organization(Chinese)"
+              ></vxe-input>
             </template>
           </vxe-form-item>
 
@@ -107,7 +112,10 @@
 
           <vxe-form-item title="FullAddress (Chinese)" field="FullAddressCN" span="12">
             <template #default>
-              <vxe-input v-model="formData.FullAddressCN" placeholder="Please enter the FullAddress(Chinese)"></vxe-input>
+              <vxe-input
+                v-model="formData.FullAddressCN"
+                placeholder="Please enter the FullAddress(Chinese)"
+              ></vxe-input>
             </template>
           </vxe-form-item>
 
@@ -131,31 +139,46 @@
 
           <vxe-form-item title="TechnicalContract (Chinese)" field="TechnicalContractCN" span="12">
             <template #default>
-              <vxe-input v-model="formData.TechnicalContractCN" placeholder="Please enter the TechnicalContract(Chinese)"></vxe-input>
+              <vxe-input
+                v-model="formData.TechnicalContractCN"
+                placeholder="Please enter the TechnicalContract(Chinese)"
+              ></vxe-input>
             </template>
           </vxe-form-item>
 
           <vxe-form-item title="TechnicalContract" field="TechnicalContract" span="12">
             <template #default>
-              <vxe-input v-model="formData.TechnicalContract" placeholder="Please enter the TechnicalContract"></vxe-input>
+              <vxe-input
+                v-model="formData.TechnicalContract"
+                placeholder="Please enter the TechnicalContract"
+              ></vxe-input>
             </template>
           </vxe-form-item>
 
           <vxe-form-item title="BusinessContract (Chinese)" field="BusinessContractCN" span="12">
             <template #default>
-              <vxe-input v-model="formData.BusinessContractCN" placeholder="Please enter the BusinessContract (Chinese)"></vxe-input>
+              <vxe-input
+                v-model="formData.BusinessContractCN"
+                placeholder="Please enter the BusinessContract (Chinese)"
+              ></vxe-input>
             </template>
           </vxe-form-item>
 
           <vxe-form-item title="BusinessContract" field="BusinessContract" span="12">
             <template #default>
-              <vxe-input v-model="formData.BusinessContract" placeholder="Please enter the BusinessContract"></vxe-input>
+              <vxe-input
+                v-model="formData.BusinessContract"
+                placeholder="Please enter the BusinessContract"
+              ></vxe-input>
             </template>
           </vxe-form-item>
 
           <vxe-form-item title="CustomerService (Chinese)" field="CustomerServiceCN" span="12">
             <template #default>
-              <vxe-input v-model="formData.CustomerServiceCN" placeholder="Please enter the CustomerService(Chinese)"></vxe-input>
+              <vxe-input
+                v-model="formData.CustomerServiceCN"
+                placeholder="Please enter the CustomerService(Chinese)"
+              ></vxe-input>
             </template>
           </vxe-form-item>
 
@@ -167,7 +190,11 @@
 
           <vxe-form-item title="DateIssued" field="DateIssued" span="12">
             <template #default>
-              <vxe-input v-model="formData.DateIssued" placeholder="Please enter the release date" type="date"></vxe-input>
+              <vxe-input
+                v-model="formData.DateIssued"
+                placeholder="Please enter the release date"
+                type="date"
+              ></vxe-input>
             </template>
           </vxe-form-item>
 
@@ -189,7 +216,6 @@
               <vxe-button type="button" @click="close">Close</vxe-button>
             </template>
           </vxe-form-item>
-
         </vxe-form>
       </template>
     </vxe-modal>
@@ -208,7 +234,7 @@ export default {
       formData: {},
       //用户数据
       dataList: [],
-      searchData: { projectName: '', corporateName: '' },
+      searchData: { projectName: '', corporateName: '' }
     }
   },
   mounted() {
@@ -272,51 +298,57 @@ export default {
         this.$XModal.message({ content: 'Please select the data to delete', status: 'warning' })
         return
       }
-      this.$XModal.confirm('Are you sure to delete?','Message prompt', { cancelButtonText: 'cancel', confirmButtonText: 'sure' }).then((type) => {
-        if (type === 'confirm') {
-          this.$XModal.message({ id: 'loding', content: 'Data processing...', status: 'loading' })
-          axios.post('http://123.56.242.202:8080//api/BaseData/MasterDataDelete?MasterID=' + checked.MasterID).then((res) => {
-            this.$XModal.close('loding')
-            if (res.data.Code == 200) {
-              this.$XModal.message({ content: 'Deleted successfully', status: 'success' })
-              this.open = false
-              this.getList('', '')
-            } else {
-              this.$XModal.message({ content: 'Delete failed' + res.data.Message, status: 'error' })
-            }
-          })
-        }
-      })
+      this.$XModal
+        .confirm('Are you sure to delete?', 'Message prompt', { cancelButtonText: 'cancel', confirmButtonText: 'sure' })
+        .then(type => {
+          if (type === 'confirm') {
+            this.$XModal.message({ id: 'loding', content: 'Data processing...', status: 'loading' })
+            axios
+              .post('http://47.103.127.217:8080/api/BaseData/MasterDataDelete?MasterID=' + checked.MasterID)
+              .then(res => {
+                this.$XModal.close('loding')
+                if (res.data.Code == 200) {
+                  this.$XModal.message({ content: 'Deleted successfully', status: 'success' })
+                  this.open = false
+                  this.getList('', '')
+                } else {
+                  this.$XModal.message({ content: 'Delete failed' + res.data.Message, status: 'error' })
+                }
+              })
+          }
+        })
     },
     save() {
-      this.$XModal.confirm('Are you sure to save?','Message prompt', { cancelButtonText: 'cancel', confirmButtonText: 'sure' }).then((type) => {
-        if (type === 'confirm') {
-          this.$XModal.message({ id: 'loding', content: 'Data processing...', status: 'loading' })
-          if (this.formData.MasterID == null) {
-            axios.post('http://123.56.242.202:8080//api/BaseData/MasterDataCreate', [this.formData]).then((res) => {
-              this.$XModal.close('loding')
-              if (res.data.Code == 200) {
-                this.$XModal.message({ content: 'Added successfully', status: 'success' })
-                this.open = false
-                this.getList('', '')
-              } else {
-                this.$XModal.message({ content: 'Add failed:' + res.data.Message, status: 'error' })
-              }
-            })
-          } else {
-            axios.post('http://123.56.242.202:8080//api/BaseData/MasterDataUpdate',[this.formData]).then((res) => {
-              this.$XModal.close('loding')
-              if (res.data.Code == 200) {
-                this.$XModal.message({ content: 'Modified successfully', status: 'success' })
-                this.open = false
-                this.getList('', '')
-              } else {
-                this.$XModal.message({ content: 'Modification failed:' + res.data.Message, status: 'error' })
-              }
-            })
+      this.$XModal
+        .confirm('Are you sure to save?', 'Message prompt', { cancelButtonText: 'cancel', confirmButtonText: 'sure' })
+        .then(type => {
+          if (type === 'confirm') {
+            this.$XModal.message({ id: 'loding', content: 'Data processing...', status: 'loading' })
+            if (this.formData.MasterID == null) {
+              axios.post('http://47.103.127.217:8080/api/BaseData/MasterDataCreate', [this.formData]).then(res => {
+                this.$XModal.close('loding')
+                if (res.data.Code == 200) {
+                  this.$XModal.message({ content: 'Added successfully', status: 'success' })
+                  this.open = false
+                  this.getList('', '')
+                } else {
+                  this.$XModal.message({ content: 'Add failed:' + res.data.Message, status: 'error' })
+                }
+              })
+            } else {
+              axios.post('http://47.103.127.217:8080/api/BaseData/MasterDataUpdate', [this.formData]).then(res => {
+                this.$XModal.close('loding')
+                if (res.data.Code == 200) {
+                  this.$XModal.message({ content: 'Modified successfully', status: 'success' })
+                  this.open = false
+                  this.getList('', '')
+                } else {
+                  this.$XModal.message({ content: 'Modification failed:' + res.data.Message, status: 'error' })
+                }
+              })
+            }
           }
-        }
-      })
+        })
     },
     close() {
       this.open = false
@@ -324,17 +356,16 @@ export default {
     getList(projectName, corporateName) {
       axios
         .post(
-          'http://123.56.242.202:8080//api/BaseData/GetMasterData?projectName=' +
+          'http://47.103.127.217:8080/api/BaseData/GetMasterData?projectName=' +
             projectName +
             '&corporateName= ' +
             corporateName
         )
-        .then((res) => {
+        .then(res => {
           this.dataList = res.data
         })
-    },
-  },
+    }
+  }
 }
 </script>
-<style lang="less" scoped>
-</style>
+<style lang="less" scoped></style>

@@ -368,20 +368,20 @@ export const constantRouterMap = [
           }
         ]
       },
-      {
-        name: "Proposal",
-        path: '/Proposal',
-        meta: { icon: 'dashboard', title: 'Proposal', show: true },
-        component: RouteView,
-        children: [
-          {
-            path : '/dashboard/Workplace',
-            meta: { title: 'Generate Proposal', show: true },
-            name : 'Workplace',
-            component: () => import('@/views/dashboard/Workplace')
-          },
-        ]
-      },
+      // {
+      //   name: "Proposal",
+      //   path: '/Proposal',
+      //   meta: { icon: 'dashboard', title: 'Proposal', show: true },
+      //   component: RouteView,
+      //   children: [
+      //     {
+      //       path : '/dashboard/Workplace',
+      //       meta: { title: 'Generate Proposal', show: true },
+      //       name : 'Workplace',
+      //       component: () => import('@/views/dashboard/Workplace')
+      //     },
+      //   ]
+      // },
       {
         name: "Contract",
         path: '/Contract',

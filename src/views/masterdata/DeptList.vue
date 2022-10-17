@@ -1,4 +1,3 @@
-
 <template>
   <div>
     <vxe-toolbar style="padding-left: 10px; margin-bottom: 10px; border-radius: 5px">
@@ -74,18 +73,18 @@ export default {
       formData: {},
       //组织数据
       depList: [],
-      searchKey: '',
+      searchKey: ''
     }
   },
   mounted() {
-    this.getList("")
+    this.getList('')
   },
   methods: {
     search() {
       this.getList(this.searchKey)
     },
     add() {
-      this.formData={};
+      this.formData = {}
       var checked = this.$refs.treeTable.getRadioRecord()
       if (checked != null) {
         this.formData.ParentID = checked.ID
@@ -113,66 +112,69 @@ export default {
         this.$XModal.message({ content: 'The data to be deleted has sub organizations', status: 'warning' })
         return
       }
-      this.$XModal.confirm('Are you sure to delete?','Message prompt', { cancelButtonText: 'cancel', confirmButtonText: 'sure' }).then((type) => {
-        if (type === 'confirm') {
-          this.$XModal.message({ id: 'loding', content: 'Data processing...', status: 'loading' })
-          axios.post('http://123.56.242.202:8080//api/User/DepartmentDelete?userID=' + checked.ID).then((res) => {
-            this.$XModal.close('loding')
-            if (res.data.Code == 200) {
-              this.$XModal.message({ content: 'Deleted successfully', status: 'success' })
-              this.open = false
-              this.getList("")
-            } else {
-              this.$XModal.message({ content: 'Delete failed' + res.data.Message, status: 'error' })
-            }
-          })
-        }
-      })
-    },
-    save() {
-      this.$XModal.confirm('Are you sure to save?','Message prompt', { cancelButtonText: 'cancel', confirmButtonText: 'sure' }).then((type) => {
-        if (type === 'confirm') {
-          this.$XModal.message({ id: 'loding', content: 'Data processing...', status: 'loading' })
-
-          if (this.formData.ID == null) {
-            axios.post('http://123.56.242.202:8080//api/User/DepartmentCreate', [this.formData]).then((res) => {
+      this.$XModal
+        .confirm('Are you sure to delete?', 'Message prompt', { cancelButtonText: 'cancel', confirmButtonText: 'sure' })
+        .then(type => {
+          if (type === 'confirm') {
+            this.$XModal.message({ id: 'loding', content: 'Data processing...', status: 'loading' })
+            axios.post('http://47.103.127.217:8080/api/User/DepartmentDelete?userID=' + checked.ID).then(res => {
               this.$XModal.close('loding')
               if (res.data.Code == 200) {
-                this.$XModal.message({ content: 'Added successfully', status: 'success' })
+                this.$XModal.message({ content: 'Deleted successfully', status: 'success' })
                 this.open = false
-                this.getList("")
+                this.getList('')
               } else {
-                this.$XModal.message({ content: 'Add failed:' + res.data.Message, status: 'error' })
-              }
-            })
-          } else {
-            axios.post('http://123.56.242.202:8080//api/User/DepartmentUpdate', this.formData).then((res) => {
-              this.$XModal.close('loding')
-              if (res.data.Code == 200) {
-                this.$XModal.message({ content: 'Modified successfully', status: 'success' })
-                this.open = false
-                this.getList("")
-              } else {
-                this.$XModal.message({ content: 'Modification failed:' + res.data.Message, status: 'error' })
+                this.$XModal.message({ content: 'Delete failed' + res.data.Message, status: 'error' })
               }
             })
           }
-        }
-      })
+        })
+    },
+    save() {
+      this.$XModal
+        .confirm('Are you sure to save?', 'Message prompt', { cancelButtonText: 'cancel', confirmButtonText: 'sure' })
+        .then(type => {
+          if (type === 'confirm') {
+            this.$XModal.message({ id: 'loding', content: 'Data processing...', status: 'loading' })
+
+            if (this.formData.ID == null) {
+              axios.post('http://47.103.127.217:8080/api/User/DepartmentCreate', [this.formData]).then(res => {
+                this.$XModal.close('loding')
+                if (res.data.Code == 200) {
+                  this.$XModal.message({ content: 'Added successfully', status: 'success' })
+                  this.open = false
+                  this.getList('')
+                } else {
+                  this.$XModal.message({ content: 'Add failed:' + res.data.Message, status: 'error' })
+                }
+              })
+            } else {
+              axios.post('http://47.103.127.217:8080/api/User/DepartmentUpdate', this.formData).then(res => {
+                this.$XModal.close('loding')
+                if (res.data.Code == 200) {
+                  this.$XModal.message({ content: 'Modified successfully', status: 'success' })
+                  this.open = false
+                  this.getList('')
+                } else {
+                  this.$XModal.message({ content: 'Modification failed:' + res.data.Message, status: 'error' })
+                }
+              })
+            }
+          }
+        })
     },
     close() {
       this.open = false
     },
     getList(name) {
-      axios.post('http://123.56.242.202:8080//api/User/GetDepartmentInfo?departmentName='+name).then((res) => {
+      axios.post('http://47.103.127.217:8080/api/User/GetDepartmentInfo?departmentName=' + name).then(res => {
         this.depList = res.data
         setTimeout(() => {
           this.$refs.treeTable.setAllTreeExpand(true)
         }, 200)
       })
-    },
-  },
+    }
+  }
 }
 </script>
-<style lang="less" scoped>
-</style>
+<style lang="less" scoped></style>

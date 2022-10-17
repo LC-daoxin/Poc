@@ -47,8 +47,8 @@ export default {
   name: 'EditRuleModal',
   props: {
     isDisabledEdit: {
-      type: Boolean,
-    },
+      type: Boolean
+    }
   },
   data() {
     return {
@@ -61,16 +61,16 @@ export default {
       typeOptions: [
         {
           label: '按固定比例拆分',
-          value: 1,
+          value: 1
         },
         {
           label: '按条件拆分',
-          value: 2,
+          value: 2
         },
         {
           label: '按周期拆分',
-          value: 3,
-        },
+          value: 3
+        }
       ],
       Rules1: {
         // 默认-固定拆分
@@ -79,7 +79,7 @@ export default {
         ActivityID: '',
         SplitRuleID: '',
         tierIndex: 1,
-        Then: [],
+        Then: []
       },
       Rules2: {
         // 默认-条件拆分
@@ -95,14 +95,14 @@ export default {
             tierIndex: 2,
             leftOperatorExpression: {
               type: '2',
-              value: 'Scale',
+              value: 'Scale'
             },
             compareOperation: '=',
             rightOperatorExpression: {
               type: '1',
-              value: 50,
+              value: 50
             },
-            Then: [],
+            Then: []
           },
           {
             type: 'ELSE',
@@ -110,21 +110,21 @@ export default {
             tierIndex: 2,
             leftOperatorExpression: {
               type: '2',
-              value: 'Scale',
+              value: 'Scale'
             },
             compareOperation: '=',
             rightOperatorExpression: {
               type: '1',
-              value: 50,
+              value: 50
             },
-            Then: [],
-          },
-        ],
+            Then: []
+          }
+        ]
       },
       optionsList: {
         BuList: [],
-        Property: [],
-      },
+        Property: []
+      }
     }
   },
   mounted() {},
@@ -133,7 +133,7 @@ export default {
       setOptionsList(commit, obj) {
         console.log('setOptionsList', obj)
         return commit('poc/setOptionsList', obj)
-      },
+      }
     }),
     open(record) {
       debugger
@@ -151,11 +151,11 @@ export default {
       // ?ActivityID=${record.ActivityID}&&userID=${JSON.parse(sessionStorage.getItem("LoginUser")).UserID}
       axios
         .post(
-          `http://123.56.242.202:8080//api/SplitRule/GetActivitySplit?lang=${lang}&&ActivityID=${
+          `http://47.103.127.217:8080/api/SplitRule/GetActivitySplit?lang=${lang}&&ActivityID=${
             record.ActivityID
           }&&userID=${JSON.parse(sessionStorage.getItem('LoginUser')).UserID}`
         )
-        .then((res) => {
+        .then(res => {
           console.log('GetActivitySplit', res, JSON.parse(res.data))
 
           if (res.data == '[]') {
@@ -188,24 +188,24 @@ export default {
         axios.spread((res1, res2) => {
           console.log('getBuList', res1.data)
           console.log('getProperty', res2.data)
-          res1.data.forEach((item) => {
+          res1.data.forEach(item => {
             item.isLeaf = false
             item.loading = false
             // item.children = []
           })
           this.optionsList = {
             BuList: res1.data,
-            Property: res2.data,
+            Property: res2.data
           }
           this.setOptionsList(clonedeep(this.optionsList))
         })
       )
     },
     getBuList() {
-      return axios.get(`http://123.56.242.202:8080//api/SplitRule/GetBuList`)
+      return axios.get(`http://47.103.127.217:8080/api/SplitRule/GetBuList`)
     },
     getProperty() {
-      return axios.get(`http://123.56.242.202:8080//api/SplitRule/GetProperty`)
+      return axios.get(`http://47.103.127.217:8080/api/SplitRule/GetProperty`)
     },
     changeSeparateType(val) {
       if (val == 1) {
@@ -235,41 +235,41 @@ export default {
         debugger
         this.currentRow
         axios
-          .post(`http://123.56.242.202:8080//api/SplitRule/DataUserSplitUpdate`, [
+          .post(`http://47.103.127.217:8080/api/SplitRule/DataUserSplitUpdate`, [
             {
               ID: this.currentRow.ID,
               // SplitRuleID: this.currentRow.SplitRuleID,
               batchID: this.currentRow.BatchID,
               UserID: JSON.parse(sessionStorage.getItem('LoginUser')).UserID,
               ActivityID: this.currentRow.ActivityID,
-              json: this.rules.Then,
-            },
+              json: this.rules.Then
+            }
           ])
-          .then((res) => {
+          .then(res => {
             console.log('DataUserSplitUpdate', res)
             this.rules = {}
             this.handleCancel()
             this.$emit('refresh')
           })
         // if (!this.isEdit) { // 创建
-        //   axios.post(`http://123.56.242.202:8080//api/SplitRule/DataSplitCreate`, this.rules.Then).then((res) => {
+        //   axios.post(`http://47.103.127.217:8080/api/SplitRule/DataSplitCreate`, this.rules.Then).then((res) => {
         //     console.log('DataSplitCreate', res)
         //     this.rules = {}
         //     this.handleCancel()
         //   })
         // } else { // 更新
-        //   axios.post(`http://123.56.242.202:8080//api/SplitRule/DataSplitUpdate`, this.rules.Then).then((res) => {
+        //   axios.post(`http://47.103.127.217:8080/api/SplitRule/DataSplitUpdate`, this.rules.Then).then((res) => {
         //     console.log('DataSplitUpdate', res)
         //     this.rules = {}
         //     this.handleCancel()
         //   })
         // }
       }
-    },
+    }
   },
   components: {
-    rule,
-  },
+    rule
+  }
 }
 </script>
 

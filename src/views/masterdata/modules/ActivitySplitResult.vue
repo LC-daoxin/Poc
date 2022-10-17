@@ -26,7 +26,7 @@
       class="table"
       :pagination="false"
       :params="tableParams"
-      :rowKey="(record) => record.ID"
+      :rowKey="record => record.ID"
       :rowSelection="true"
       :draggableRow="false"
       @pageChange="loadData"
@@ -53,7 +53,7 @@ export default {
     PageHeaderWrapper,
     PublicTable,
     AddResultRowModal,
-    ResultEditRuleModal,
+    ResultEditRuleModal
   },
   data() {
     return {
@@ -66,7 +66,7 @@ export default {
       currentRow: null,
       model: {
         activityID: [],
-        keyWords: '',
+        keyWords: ''
       },
       pipelineOptions: [],
       projectType1Disabled: true,
@@ -76,7 +76,7 @@ export default {
       pagination: {
         total: 0,
         current: 1,
-        pageSize: 10,
+        pageSize: 10
       },
       tableParams: {
         loading: false,
@@ -92,14 +92,14 @@ export default {
             ellipsis: true,
             customRender: (text, row, index) => {
               return <b>{text}</b>
-            },
+            }
           },
           {
             title: 'Description',
             dataIndex: 'Description',
             align: 'center',
             width: 350,
-            ellipsis: true,
+            ellipsis: true
           },
           {
             title: 'Revenue',
@@ -107,20 +107,20 @@ export default {
             align: 'center',
             width: 150,
             ellipsis: true,
-            customRender: (text) => {
+            customRender: text => {
               if (text === 0) {
                 return <b style="color: red;">{0}</b>
               } else {
                 return text
               }
-            },
+            }
           },
           {
             title: 'Discount',
             dataIndex: 'Discount',
             align: 'center',
             width: 100,
-            ellipsis: true,
+            ellipsis: true
           },
           {
             title: 'ActualRevenue',
@@ -128,76 +128,76 @@ export default {
             align: 'center',
             width: 150,
             ellipsis: true,
-            customRender: (text) => {
+            customRender: text => {
               if (text === 0) {
                 return <b style="color: red;">{0}</b>
               } else {
                 return text
               }
-            },
+            }
           },
           {
             title: 'BU',
             dataIndex: 'BU',
             width: 100,
             align: 'center',
-            ellipsis: true,
+            ellipsis: true
           },
           {
             title: 'SubBU',
             dataIndex: 'SubBU',
             width: 100,
             align: 'center',
-            ellipsis: true,
+            ellipsis: true
           },
           {
             title: 'MilestoneCode',
             dataIndex: 'MilestoneCode',
             align: 'center',
             width: 100,
-            ellipsis: true,
+            ellipsis: true
           },
           {
             title: 'Batch',
             dataIndex: 'Batch',
             align: 'center',
             width: 100,
-            ellipsis: true,
+            ellipsis: true
           },
           {
             title: 'StartDate',
             dataIndex: 'StartDate',
             align: 'center',
             width: 180,
-            ellipsis: true,
+            ellipsis: true
           },
           {
             title: 'ReportDeliverDate',
             dataIndex: 'ReportDeliverDate',
             align: 'center',
             width: 180,
-            ellipsis: true,
+            ellipsis: true
           },
           {
             title: 'RRDate',
             dataIndex: 'RRDate',
             align: 'center',
             width: 100,
-            ellipsis: true,
+            ellipsis: true
           },
           {
             title: 'Deliverables',
             dataIndex: 'Deliverables',
             align: 'center',
             width: 100,
-            ellipsis: true,
+            ellipsis: true
           },
           {
             title: 'Comments',
             dataIndex: 'Comments',
             align: 'center',
             width: 100,
-            ellipsis: true,
+            ellipsis: true
           },
           {
             title: 'Operation', // 操作
@@ -246,17 +246,17 @@ export default {
               //   </a-popconfirm>
               // );
               return <a-space>{renderElement}</a-space>
-            },
-          },
-        ],
-      },
+            }
+          }
+        ]
+      }
     }
   },
   computed: {
     ...mapState({
-      lang: (state) => state.app.lang,
-      activitiesSelect: (state) => state.poc.activitiesSelect,
-    }),
+      lang: state => state.app.lang,
+      activitiesSelect: state => state.poc.activitiesSelect
+    })
   },
   watch: {
     lang(val) {
@@ -265,13 +265,13 @@ export default {
     activitiesSelect(list) {
       this.selectActivityID = []
       if (list.length > 0) {
-        list.forEach((item) => {
+        list.forEach(item => {
           this.selectActivityID.push(item.ActivityID)
         })
         this.model.activityID = this.selectActivityID.join(',')
         this.loadData()
       }
-    },
+    }
   },
   mounted() {},
   methods: {
@@ -279,7 +279,7 @@ export default {
       setSubActivitiesAll(commit, select) {
         console.log('setSubActivitiesAll', select)
         return commit('poc/setSubActivitiesAll', select)
-      },
+      }
     }),
     addRow() {
       this.$refs.AddResultRowModal.open()
@@ -318,14 +318,14 @@ export default {
     },
     setColumns(lang) {
       console.log(lang)
-      this.tableParams.columns.forEach((item) => {
+      this.tableParams.columns.forEach(item => {
         item.i18n ? (item.title = this.$t(item.i18n)) : ''
       })
     },
     refresh() {
       this.model = {
         activityID: [],
-        keyWords: '',
+        keyWords: ''
       }
       this.loadData()
     },
@@ -336,8 +336,8 @@ export default {
     loadData() {
       this.tableParams.loading = true
       axios
-        .post(`http://123.56.242.202:8080//api/SplitRule/GetPMSDataSplitResult?BatchID=${this.currentRow.BatchID}`)
-        .then((res) => {
+        .post(`http://47.103.127.217:8080/api/SplitRule/GetPMSDataSplitResult?BatchID=${this.currentRow.BatchID}`)
+        .then(res => {
           console.log(res.data)
           // this.setSubActivitiesAll(res.data)
           this.tableParams.dataSource = res.data
@@ -346,7 +346,7 @@ export default {
     },
     exportData() {
       // axios
-      //   .post(`http://123.56.242.202:8080//api/SplitRule/GetPMSDataSplitResultFile?BatchID=${this.currentRow.BatchID}`)
+      //   .post(`http://47.103.127.217:8080/api/SplitRule/GetPMSDataSplitResultFile?BatchID=${this.currentRow.BatchID}`)
       //   .then((res) => {
       //     const blob = new Blob([res.data], { type: 'application/vnd.ms-excel' })
       //     const url = window.URL.createObjectURL(blob)
@@ -358,10 +358,10 @@ export default {
       //   })
 
       axios({
-        url: `http://123.56.242.202:8080//api/SplitRule/GetPMSDataSplitResultFile?BatchID=${this.currentRow.BatchID}`,
+        url: `http://47.103.127.217:8080/api/SplitRule/GetPMSDataSplitResultFile?BatchID=${this.currentRow.BatchID}`,
         responseType: 'blob', //表明返回服务器返回的数据类型
-        method: 'post', //请求方式
-      }).then((res) => {
+        method: 'post' //请求方式
+      }).then(res => {
         //请求成功之后
         //创建一个隐藏的a链接
         const link = document.createElement('a')
@@ -377,11 +377,11 @@ export default {
       this.selectionKeys = keys
       this.selectionRows = rows
       this.setSubActivitiesAll(this.selectionRows)
-    },
+    }
   },
   created() {
     // this.refresh()
-  },
+  }
 }
 </script>
 

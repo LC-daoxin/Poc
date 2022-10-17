@@ -2,20 +2,9 @@
   <page-header-wrapper>
     <div>
       <a-row>
-        <a-col
-          :xl="24"
-          :lg="24"
-          :md="24"
-          :sm="24"
-          :xs="24"
-        >
-          <a-card
-            class="project-list"
-            style="margin-bottom: 24px"
-            :bordered="false"
-            :body-style="{ padding: 0 }"
-          >
-            <activities/>
+        <a-col :xl="24" :lg="24" :md="24" :sm="24" :xs="24">
+          <a-card class="project-list" style="margin-bottom: 24px" :bordered="false" :body-style="{ padding: 0 }">
+            <activities />
           </a-card>
         </a-col>
       </a-row>
@@ -24,188 +13,188 @@
 </template>
 
 <script>
-  import { timeFix } from '@/utils/util'
-  import { mapState } from 'vuex'
-  import { PageHeaderWrapper } from '@ant-design-vue/pro-layout'
-  import { STable } from '@/components'
-  import Activities from './modules/Activities.vue'
-  import axios from 'axios'
+import { timeFix } from '@/utils/util'
+import { mapState } from 'vuex'
+import { PageHeaderWrapper } from '@ant-design-vue/pro-layout'
+import { STable } from '@/components'
+import Activities from './modules/Activities.vue'
+import axios from 'axios'
 
-  export default {
-    name: 'SplitRuleManagement',
-    components: {
-      PageHeaderWrapper,
-      STable,
-      Activities,
-    },
-    data() {
+export default {
+  name: 'SplitRuleManagement',
+  components: {
+    PageHeaderWrapper,
+    STable,
+    Activities
+  },
+  data() {
+    return {
+      current: 0,
+      btnLoading: false,
+      systemComputedTime: '',
+      timeFix: timeFix(),
+      avatar: '',
+      user: {},
+      loading: false,
+      // data
+      selectedRowKeys: [],
+      selectedRows: [],
+      stepStyle: {},
+      listData: []
+    }
+  },
+  computed: {
+    ...mapState({
+      nickname: state => state.user.nickname,
+      welcome: state => state.user.welcome,
+      activitiesSelect: state => state.poc.activitiesSelect,
+      subActivitiesAll: state => state.poc.subActivitiesAll,
+      templateSelect: state => state.poc.templateSelect
+    }),
+    currentUser() {
       return {
-        current: 0,
-        btnLoading: false,
-        systemComputedTime: '',
-        timeFix: timeFix(),
-        avatar: '',
-        user: {},
-        loading: false,
-        // data
-        selectedRowKeys: [],
-        selectedRows: [],
-        stepStyle: {},
-        listData: [],
+        name: '李承',
+        avatar: 'https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png'
       }
     },
-    computed: {
-      ...mapState({
-        nickname: (state) => state.user.nickname,
-        welcome: (state) => state.user.welcome,
-        activitiesSelect: (state) => state.poc.activitiesSelect,
-        subActivitiesAll: (state) => state.poc.subActivitiesAll,
-        templateSelect: (state) => state.poc.templateSelect,
-      }),
-      currentUser() {
-        return {
-          name: '李承',
-          avatar: 'https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png',
+    userInfo() {
+      return this.$store.getters.userInfo
+    }
+  },
+  created() {
+    this.user = this.userInfo
+    this.avatar = this.userInfo.avatar
+  },
+  mounted() {
+    // this.getTest()
+  },
+  // watch: {
+  //   current(val) {
+  //     if (val == 1 && this.selectedRows.length > 0) {
+  //       this.$refs.subActivities.loadData()
+  //     }
+  //   },
+  // },
+  methods: {
+    loadData(parameter) {
+      // 加载数据方法
+      return this.listData
+    },
+    SaveProposal() {
+      this.btnLoading = true
+      let ProposalJson = []
+      console.log(this.templateSelect[0].ID)
+      this.subActivitiesAll.forEach((item, i) => {
+        ProposalJson[i] = {
+          ActivityID: item.ParentID,
+          SubActivityID: item.SubActivityID,
+          TemplateID: this.templateSelect[0].ID || item.TemplateID,
+          Price: item.Price,
+          ServicePrice: item.ServicePrice,
+          PassThroughPrice: item.PassThroughPrice,
+          Duration: item.Duration,
+          Property1: item.Property1,
+          Property2: item.Property2,
+          Property3: item.Property3,
+          Property4: item.Property4,
+          Property5: item.Property5,
+          Property6: item.Property6,
+          Property7: item.Property7,
+          Property8: item.Property8,
+          Property9: item.Property9,
+          Property10: item.Property10,
+          Property11: item.Property11,
+          Property12: item.Property12,
+          Property13: item.Property13,
+          Property14: item.Property14,
+          Property15: item.Property15,
+          Property16: item.Property16,
+          Property17: item.Property17,
+          Property18: item.Property18,
+          Property19: item.Property19,
+          Property20: item.Property20,
+          Sort: item.Sort
         }
-      },
-      userInfo() {
-        return this.$store.getters.userInfo
-      },
-    },
-    created() {
-      this.user = this.userInfo
-      this.avatar = this.userInfo.avatar
-    },
-    mounted() {
-      // this.getTest()
-    },
-    // watch: {
-    //   current(val) {
-    //     if (val == 1 && this.selectedRows.length > 0) {
-    //       this.$refs.subActivities.loadData()
-    //     }
-    //   },
-    // },
-    methods: {
-      loadData(parameter) {
-        // 加载数据方法
-        return this.listData
-      },
-      SaveProposal() {
-        this.btnLoading = true
-        let ProposalJson = []
-        console.log(this.templateSelect[0].ID)
-        this.subActivitiesAll.forEach((item, i) => {
-          ProposalJson[i] = {
-            ActivityID: item.ParentID,
-            SubActivityID: item.SubActivityID,
-            TemplateID: this.templateSelect[0].ID || item.TemplateID,
-            Price: item.Price,
-            ServicePrice: item.ServicePrice,
-            PassThroughPrice: item.PassThroughPrice,
-            Duration: item.Duration,
-            Property1: item.Property1,
-            Property2: item.Property2,
-            Property3: item.Property3,
-            Property4: item.Property4,
-            Property5: item.Property5,
-            Property6: item.Property6,
-            Property7: item.Property7,
-            Property8: item.Property8,
-            Property9: item.Property9,
-            Property10: item.Property10,
-            Property11: item.Property11,
-            Property12: item.Property12,
-            Property13: item.Property13,
-            Property14: item.Property14,
-            Property15: item.Property15,
-            Property16: item.Property16,
-            Property17: item.Property17,
-            Property18: item.Property18,
-            Property19: item.Property19,
-            Property20: item.Property20,
-            Sort: item.Sort,
-          }
-        })
-        axios.post('http://123.56.242.202:8080//api/poc/SaveProposal', ProposalJson).then((res) => {
-          console.log('SaveProposal', res)
-          axios
-            .get('http://123.56.242.202:8080//api/poc/CreateProposalInstance', {
-              params: { batchID: res.data.Data },
-            })
-            .then((val) => {
-              console.log('CreateProposalInstance', val)
-              axios
-                .get('http://123.56.242.202:8080//api/poc/GetDocumentsName', {
-                  params: { batchID: res.data.Data },
-                })
-                .then((res) => {
-                  console.log('GetDocumentsName', res.data)
-                  this.current++
-                  this.btnLoading = false
-                  this.$nextTick(() => {
-                    this.$refs.generate.sendName(res.data)
-                  })
-                })
-            })
-        })
-      },
-      setCss(status) {
-        let css = ''
-        switch (status) {
-          case 'success':
-            css = 'green'
-            break
-          case 'error':
-            css = 'red'
-            break
-          case 'current':
-            css = 'blue'
-            break
-          default:
-            css = 'gray'
-            break
-        }
-        return css
-      },
-      selectMonth(dates, dateStrings) {
-        this.systemComputedTime = dates
-        this.loading = true
-        this.getExectResults(dates)
-        console.log(dates, dateStrings)
-      },
-      getExectResults(date) {
-        const params = { date }
-        this.$http
-          .get('http://118.31.45.238:8089/common/GetExectResults', {
-            params,
+      })
+      axios.post('http://47.103.127.217:8080/api/poc/SaveProposal', ProposalJson).then(res => {
+        console.log('SaveProposal', res)
+        axios
+          .get('http://47.103.127.217:8080/api/poc/CreateProposalInstance', {
+            params: { batchID: res.data.Data }
           })
-          .then((res) => {
-            console.log(res)
-            this.loading = false
+          .then(val => {
+            console.log('CreateProposalInstance', val)
+            axios
+              .get('http://47.103.127.217:8080/api/poc/GetDocumentsName', {
+                params: { batchID: res.data.Data }
+              })
+              .then(res => {
+                console.log('GetDocumentsName', res.data)
+                this.current++
+                this.btnLoading = false
+                this.$nextTick(() => {
+                  this.$refs.generate.sendName(res.data)
+                })
+              })
           })
-      },
-      getTest() {
-        this.loading = true
-        this.$http.get('/common/GetExectResults').then((res) => {
+      })
+    },
+    setCss(status) {
+      let css = ''
+      switch (status) {
+        case 'success':
+          css = 'green'
+          break
+        case 'error':
+          css = 'red'
+          break
+        case 'current':
+          css = 'blue'
+          break
+        default:
+          css = 'gray'
+          break
+      }
+      return css
+    },
+    selectMonth(dates, dateStrings) {
+      this.systemComputedTime = dates
+      this.loading = true
+      this.getExectResults(dates)
+      console.log(dates, dateStrings)
+    },
+    getExectResults(date) {
+      const params = { date }
+      this.$http
+        .get('http://118.31.45.238:8089/common/GetExectResults', {
+          params
+        })
+        .then(res => {
           console.log(res)
-          this.Results = res.result?.data.map((node, i) => {
-            if (node.status === 'current') {
-              this.current = i
-            }
-            return node
-          })
-          this.listData = this.Results[this.Results.length - 1].list
-          this.$refs.table.refresh()
           this.loading = false
         })
-      },
-      onSelectChange(selectedRowKeys, selectedRows) {
-        this.selectedRowKeys = selectedRowKeys
-        this.selectedRows = selectedRows
-      },
     },
+    getTest() {
+      this.loading = true
+      this.$http.get('/common/GetExectResults').then(res => {
+        console.log(res)
+        this.Results = res.result?.data.map((node, i) => {
+          if (node.status === 'current') {
+            this.current = i
+          }
+          return node
+        })
+        this.listData = this.Results[this.Results.length - 1].list
+        this.$refs.table.refresh()
+        this.loading = false
+      })
+    },
+    onSelectChange(selectedRowKeys, selectedRows) {
+      this.selectedRowKeys = selectedRowKeys
+      this.selectedRows = selectedRows
+    }
   }
+}
 </script>
 
 <style lang="less" scoped>

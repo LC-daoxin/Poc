@@ -1,4 +1,3 @@
-
 <template>
   <div>
     <vxe-toolbar style="padding-left: 10px; margin-bottom: 10px; border-radius: 5px">
@@ -200,7 +199,6 @@
   </div>
 </template>
 
-
 <script>
 import _ from 'lodash'
 import axios from 'axios'
@@ -209,7 +207,7 @@ import ActivitySplitResult from './modules/ActivitySplitResult.vue'
 export default {
   name: 'Proposal2',
   components: {
-    ActivitySplitResult,
+    ActivitySplitResult
   },
   data() {
     return {
@@ -228,7 +226,7 @@ export default {
       //部门数据
       depList: [],
       url: '/static/SelectOnlineEditing.html',
-      iframeShow: true,
+      iframeShow: true
     }
   },
   mounted() {
@@ -237,7 +235,7 @@ export default {
   },
   methods: {
     getDepList(name) {
-      axios.post('http://123.56.242.202:8080//api/Contract/GetPMS?fileName=' + name).then((res) => {
+      axios.post('http://47.103.127.217:8080/api/Contract/GetPMS?fileName=' + name).then(res => {
         this.arrayToTree(res.data, 'ID', 'ParentID', this.depList)
       })
     },
@@ -299,7 +297,7 @@ export default {
       this.showDetails = false
     },
     getList(name) {
-      axios.post('http://123.56.242.202:8080//api/Contract/GetPMS?fileName=' + name).then((res) => {
+      axios.post('http://47.103.127.217:8080/api/Contract/GetPMS?fileName=' + name).then(res => {
         this.tableList = res.data
         setTimeout(() => {
           this.$refs.vxeTable.setAllTreeExpand(true)
@@ -307,10 +305,10 @@ export default {
       })
     },
     save() {
-      this.$XModal.confirm('确定保存？', 'Message prompt').then((type) => {
+      this.$XModal.confirm('确定保存？', 'Message prompt').then(type => {
         if (type === 'confirm') {
           this.$XModal.message({ id: 'loding', content: '数据处理中...', status: 'loading' })
-          axios.post('http://123.56.242.202:8080//api/Contract/DataContractCreate', [this.formData]).then((res) => {
+          axios.post('http://47.103.127.217:8080/api/Contract/DataContractCreate', [this.formData]).then(res => {
             this.$XModal.close('loding')
             if (res.data.Code == 200) {
               this.$XModal.message({ content: '生成成功', status: 'success' })
@@ -322,8 +320,8 @@ export default {
           })
         }
       })
-    },
-  },
+    }
+  }
 }
 </script>
 <style lang="less" scoped>

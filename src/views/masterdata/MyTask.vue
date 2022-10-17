@@ -18,11 +18,7 @@
 
       <vxe-column type="seq" title="Operation" width="350" :resizable="false" show-overflow>
         <template #default="{ row }">
-          <vxe-button @click="ViewFile(row)">Details</vxe-button>
-
-          <vxe-button @click="Approved(row)">Approved</vxe-button>
-
-          <vxe-button @click="Approved1()">Send Proposal Team</vxe-button>
+          <vxe-button @click="Approved()">Generate Proposal</vxe-button>
         </template>
       </vxe-column>
     </vxe-table>
@@ -242,9 +238,9 @@ export default {
     close() {
       this.showDetails = false
     },
-    Approved(row) {
+    Approved1(row) {
       this.$XModal
-        .confirm('Are you sure you want to approve?', 'Message prompt', {
+        .confirm('Are you sure you want to create proposal?', 'Message prompt', {
           cancelButtonText: 'cancel',
           confirmButtonText: 'sure'
         })
@@ -264,15 +260,15 @@ export default {
         })
     },
 
-    Approved1() {
+    Approved() {
       this.$XModal
-        .confirm('Are you sure you want to Send Proposal Team?', 'Message prompt', {
+        .confirm('Are you sure you want to create proposal?', 'Message prompt', {
           cancelButtonText: 'cancel',
           confirmButtonText: 'sure'
         })
         .then(type => {
           if (type === 'confirm') {
-            this.$XModal.message({ content: 'Submitted successfully', status: 'success' })
+            this.$router.push('/dashboard/workplace')
           }
         })
     }

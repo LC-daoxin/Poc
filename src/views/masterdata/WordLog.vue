@@ -1,4 +1,3 @@
-
 <template>
   <div>
     <vxe-table
@@ -48,8 +47,7 @@ export default {
       showDetails: false,
       tableList: [],
       url: '/static/SelectOnlineEditing.html',
-      iframeShow: true,
-
+      iframeShow: true
     }
   },
   mounted() {
@@ -60,12 +58,12 @@ export default {
       return XEUtils.toDateString(cellValue, format || 'yyyy-MM-dd HH:mm:ss')
     },
     getList() {
-      axios.post('http://123.56.242.202:8080//api/User/GetWordLog').then((res) => {
+      axios.post('http://47.103.127.217:8080/api/User/GetWordLog').then(res => {
         this.tableList = res.data
       })
     },
     OnloadFile(row) {
-      axios.post('http://123.56.242.202:8080///api/Contract/GetFile?fileName=' + row.FileName).then((res) => {
+      axios.post('http://47.103.127.217:8080//api/Contract/GetFile?fileName=' + row.FileName).then(res => {
         debugger
         this.tableList = res.data
         var name = res.data.IP + '/default/' + row.FileName
@@ -77,14 +75,14 @@ export default {
         setTimeout(() => {
           document.getElementById('Generate').contentWindow.postMessage(
             {
-              name,
+              name
             },
             '*'
           )
         }, 500)
       })
-    },
-  },
+    }
+  }
 }
 </script>
 <style lang="less" scoped>

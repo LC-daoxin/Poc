@@ -24,10 +24,10 @@
                 {
                   rules: [
                     { required: true, message: $t('user.userName.required') },
-                    { validator: handleUsernameOrEmail },
+                    { validator: handleUsernameOrEmail }
                   ],
-                  validateTrigger: 'change',
-                },
+                  validateTrigger: 'change'
+                }
               ]"
             >
               <a-icon slot="prefix" type="user" :style="{ color: 'rgba(0,0,0,.25)' }" />
@@ -40,10 +40,11 @@
               :placeholder="$t('user.login.password.placeholder')"
               v-decorator="[
                 'password',
-                { rules: [{ required: true, message: $t('user.password.required') }], validateTrigger: 'blur' },
+                { rules: [{ required: true, message: $t('user.password.required') }], validateTrigger: 'blur' }
               ]"
             >
               <a-icon slot="prefix" type="lock" :style="{ color: 'rgba(0,0,0,.25)' }" />
+              123
             </a-input-password>
           </a-form-item>
         </a-tab-pane>
@@ -57,8 +58,8 @@
                 'mobile',
                 {
                   rules: [{ required: true, pattern: /^1[34578]\d{9}$/, message: $t('user.login.mobile.placeholder') }],
-                  validateTrigger: 'change',
-                },
+                  validateTrigger: 'change'
+                }
               ]"
             >
               <a-icon slot="prefix" type="mobile" :style="{ color: 'rgba(0,0,0,.25)' }" />
@@ -76,8 +77,8 @@
                     'captcha',
                     {
                       rules: [{ required: true, message: $t('user.verification-code.required') }],
-                      validateTrigger: 'blur',
-                    },
+                      validateTrigger: 'blur'
+                    }
                   ]"
                 >
                   <a-icon slot="prefix" type="mail" :style="{ color: 'rgba(0,0,0,.25)' }" />
@@ -152,7 +153,7 @@ import axios from 'axios'
 
 export default {
   components: {
-    TwoStepCaptcha,
+    TwoStepCaptcha
   },
   data() {
     return {
@@ -169,13 +170,13 @@ export default {
         loginBtn: false,
         // login type: 0 email, 1 username, 2 telephone
         loginType: 0,
-        smsSendBtn: false,
-      },
+        smsSendBtn: false
+      }
     }
   },
   created() {
     get2step({})
-      .then((res) => {
+      .then(res => {
         this.requiredTwoStepCaptcha = res.result.stepCode
       })
       .catch(() => {
@@ -206,7 +207,7 @@ export default {
         form: { validateFields },
         state,
         customActiveKey,
-        Login,
+        Login
       } = this
 
       state.loginBtn = true
@@ -224,9 +225,12 @@ export default {
           state.loginBtn = true
           axios
             .post(
-              'http://123.56.242.202:8080//api/User/UserLogin?userName=' + values.username + '&password=' + values.password
+              'http://47.103.127.217:8080/api/User/UserLogin?userName=' +
+                values.username +
+                '&password=' +
+                values.password
             )
-            .then((res) => {
+            .then(res => {
               console.log('666666666666666666666')
               console.log(res)
               if (res.data.Code == 200) {
@@ -247,7 +251,7 @@ export default {
       e.preventDefault()
       const {
         form: { validateFields },
-        state,
+        state
       } = this
 
       validateFields(['mobile'], { force: true }, (err, values) => {
@@ -264,15 +268,15 @@ export default {
 
           const hide = this.$message.loading('验证码发送中..', 0)
           getSmsCaptcha({ mobile: values.mobile })
-            .then((res) => {
+            .then(res => {
               setTimeout(hide, 2500)
               this.$notification['success']({
                 message: '提示',
                 description: '验证码获取成功，您的验证码为：' + res.result.captcha,
-                duration: 8,
+                duration: 8
               })
             })
-            .catch((err) => {
+            .catch(err => {
               setTimeout(hide, 1)
               clearInterval(interval)
               state.time = 60
@@ -335,7 +339,7 @@ export default {
       setTimeout(() => {
         this.$notification.success({
           message: 'Welcome',
-          description: `${timeFix()}，Welcome`,
+          description: `${timeFix()}，Welcome`
         })
       }, 1000)
       this.isLoginError = false
@@ -345,10 +349,10 @@ export default {
       this.$notification['error']({
         message: '错误',
         description: ((err.response || {}).data || {}).message || '请求出现错误，请稍后再试',
-        duration: 4,
+        duration: 4
       })
-    },
-  },
+    }
+  }
 }
 </script>
 
