@@ -166,7 +166,7 @@ export default {
           },
           '*'
         )
-      }, 500)
+      }, 200)
     },
     add() {
       this.title = 'Add Template'

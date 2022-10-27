@@ -174,7 +174,7 @@ export default {
           },
           '*'
         )
-      }, 500)
+      }, 200)
     },
     getList(val) {
       var user = JSON.parse(sessionStorage.getItem('LoginUser'))
@@ -222,7 +222,7 @@ export default {
       debugger
       var user = JSON.parse(sessionStorage.getItem('LoginUser'))
       var type = ''
-      if (user.UserName == 'ProposalApproval') {
+      if (user.UserName == '报价单审批') {
         type = 'Proposal'
       } else {
         type = 'Contract'

@@ -381,7 +381,7 @@ export default {
           },
           '*'
         )
-      }, 500)
+      }, 200)
     },
     SelectContract(name, row) {
       name = row.ContractFileNameIP + '/default/' + name
@@ -406,7 +406,7 @@ export default {
           },
           '*'
         )
-      }, 500)
+      }, 200)
     },
     SelectContract1(name, row) {
       debugger
@@ -447,7 +447,7 @@ export default {
           },
           '*'
         )
-      }, 500)
+      }, 200)
     },
 
     showDetailEvent(row) {

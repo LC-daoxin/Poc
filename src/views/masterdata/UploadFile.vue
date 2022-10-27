@@ -2,233 +2,19 @@
   <div>
     <vxe-toolbar style="padding-left: 10px; margin-bottom: 10px; border-radius: 5px">
       <template #buttons>
-        <a-select allowClear :disabled="ActivityLoading" v-model="Template" @change="changeApprove" style="width: 13%">
-          <a-select-option value="">Not generated</a-select-option>
-          <a-select-option value="true">Generated</a-select-option>
-        </a-select>
-        &nbsp;
-        <vxe-input v-model="searchKey" placeholder="FileName"></vxe-input>
-        <vxe-button status="primary" icon="fa vxe-icon--search" @click="search">Search</vxe-button>
+        <el-upload
+          action=""
+          class="avatar-uploader"
+          ref="upload"
+          :show-file-list="false"
+          :limit="1"
+          :http-request="uploadCover"
+        >
+          <el-button size="small" type="primary" :loading="upLoading">点击上传</el-button>
+        </el-upload>
       </template>
     </vxe-toolbar>
-    <vxe-table
-      ref="vxeTable"
-      size="small"
-      border
-      show-overflow
-      row-id="ID"
-      :row-config="{ isHover: true }"
-      :data="tableList"
-      :radio-config="{ trigger: 'row' }"
-    >
-      <vxe-column field="ProjectID" width="100" title="ProjectID"></vxe-column>
-      <vxe-column field="ProjectName" width="180" title="ProjectName"></vxe-column>
-      <vxe-column field="ProposalFileName" width="330" title="ProposalFileName"></vxe-column>
-      <vxe-column field="ContractFileName" width="230" title="ContractFileName"></vxe-column>
-      <vxe-column field="CreateDate" width="160" title="CreateDate"></vxe-column>
-      <vxe-column field="UserName" width="100" title="CreateUser"></vxe-column>
-      <vxe-column field="Status" width="80" title="Status"></vxe-column>
-
-      <vxe-column type="seq" title="Operation" width="600" :resizable="false" show-overflow>
-        <template #default="{ row }">
-          <vxe-button @click="showDetailEvent(row)">Generate Contract{{ row.batchID }}</vxe-button>
-          <vxe-button @click="Approved(row)">Submit</vxe-button>
-          <vxe-button @click="SelectProposal(row.ProposalFileName, row)">View Proposal{{ row.batchID }}</vxe-button>
-          <vxe-button @click="SelectContract(row.ContractFileName, row)">View Contract{{ row.batchID }}</vxe-button>
-          <!-- <vxe-button @click="SelectContract1(row.ProposalFileName, row)"
-            >View Contract Proposal{{ row.batchID }}</vxe-button
-          > -->
-        </template>
-      </vxe-column>
-    </vxe-table>
-
-    <vxe-modal v-model="showDetails" title="English contract information" width="700" height="600" resize>
-      <template #default>
-        <vxe-form :data="formData" title-align="right" title-width="200">
-          <vxe-form-item title="CompanyName" field="CompanyName" span="16">
-            <template #default>
-              <vxe-input v-model="formData.CompanyName" placeholder="Please enter the CompanyName"></vxe-input>
-            </template>
-          </vxe-form-item>
-          <vxe-form-item title="Address" field="Address" span="16">
-            <template #default>
-              <vxe-input v-model="formData.Address" placeholder="Please enter the Address"></vxe-input>
-            </template>
-          </vxe-form-item>
-          <vxe-form-item title="Postal Code" field="PostalCode" span="16">
-            <template #default>
-              <vxe-input v-model="formData.PostalCode" placeholder="Please enter the Postal Code"></vxe-input>
-            </template>
-          </vxe-form-item>
-          <vxe-form-item title="Organization" field="Organization" span="16">
-            <template #default>
-              <vxe-input v-model="formData.Organization" placeholder="Please enter the Organization"></vxe-input>
-            </template>
-          </vxe-form-item>
-          <vxe-form-item title="Email" field="Email" span="16">
-            <template #default>
-              <vxe-input v-model="formData.Email" placeholder="Please enter the Email"></vxe-input>
-            </template>
-          </vxe-form-item>
-          <vxe-form-item title="ClientName" field="ClientName" span="16">
-            <template #default>
-              <vxe-input v-model="formData.ClientName" placeholder="Please enter ClientName"></vxe-input>
-            </template>
-          </vxe-form-item>
-
-          <vxe-form-item title="ClientTitle" field="ClientTitle" span="16">
-            <template #default>
-              <vxe-input v-model="formData.ClientTitle" placeholder="Please enter the ClientTitle"></vxe-input>
-            </template>
-          </vxe-form-item>
-
-          <vxe-form-item title="ClientBy" field="ClientBy" span="16">
-            <template #default>
-              <vxe-input v-model="formData.ClientBy" placeholder="Please enter the ClientBy"></vxe-input>
-            </template>
-          </vxe-form-item>
-
-          <vxe-form-item title="Payment Date" field="PaymentDate" span="16">
-            <template #default>
-              <vxe-select v-model="formData.PaymentDate" placeholder="Payment Date" clearable>
-                <vxe-option value="within 30 days" label="within 30 days"></vxe-option>
-                <vxe-option value="other formats" label="other formats"></vxe-option>
-              </vxe-select>
-            </template>
-          </vxe-form-item>
-          <vxe-form-item align="right" span="24">
-            <template #default>
-              <vxe-button type="button" status="primary" @click="save">Save</vxe-button>
-              <vxe-button type="button" @click="close">Close</vxe-button>
-            </template>
-          </vxe-form-item>
-        </vxe-form>
-      </template>
-    </vxe-modal>
-
-    <vxe-modal v-model="showDetailsCN" title="Chinese contract information" width="1100" height="650" resize>
-      <template #default>
-        <vxe-form :data="formData" title-align="right" title-width="120">
-          <vxe-form-item title="ProjectName" field="ProjectName" span="20">
-            <template #default>
-              <vxe-input v-model="formData.ProjectName" placeholder="Please enter the project name"></vxe-input>
-            </template>
-          </vxe-form-item>
-
-          <vxe-form-item title="Client" field="Client" span="10">
-            <template #default>
-              <vxe-input v-model="formData.Client" placeholder="Please enter the Client"></vxe-input>
-            </template>
-          </vxe-form-item>
-
-          <vxe-form-item title="Trustee" field="Trustee" span="10">
-            <template #default>
-              <vxe-input v-model="formData.Trustee" placeholder="Please enter the Trustee"></vxe-input>
-            </template>
-          </vxe-form-item>
-
-          <vxe-form-item title="BeginDate" field="BeginDate" span="10">
-            <vxe-input v-model="formData.BeginDate" placeholder="Please enter the BeginDate" type="date"></vxe-input>
-          </vxe-form-item>
-          <vxe-form-item title="EndDate" field="EndDate" span="10">
-            <vxe-input v-model="formData.EndDate" placeholder="Please enter the EndDate" type="date"></vxe-input>
-          </vxe-form-item>
-
-          <vxe-form-item title="ClientName" field="ClientName" span="10">
-            <template #default>
-              <vxe-input v-model="formData.ClientName" placeholder="Please enter the ClientName"></vxe-input>
-            </template>
-          </vxe-form-item>
-          <vxe-form-item title="TrusteeName" field="TrusteeName" span="10">
-            <template #default>
-              <vxe-input v-model="formData.TrusteeName" placeholder="Please enter the TrusteeName"></vxe-input>
-            </template>
-          </vxe-form-item>
-          <vxe-form-item title="ClientTelephone" field="ClientTelephone" span="10">
-            <template #default>
-              <vxe-input v-model="formData.ClientTelephone" placeholder="Please enter the ClientTelephone"></vxe-input>
-            </template>
-          </vxe-form-item>
-          <vxe-form-item title="TrusteeTelephone" field="TrusteeTelephone" span="10">
-            <template #default>
-              <vxe-input
-                v-model="formData.TrusteeTelephone"
-                placeholder="Please enter the TrusteeTelephone"
-              ></vxe-input>
-            </template>
-          </vxe-form-item>
-          <vxe-form-item title="ClientPhone" field="ClientPhone" span="10">
-            <template #default>
-              <vxe-input v-model="formData.ClientPhone" placeholder="Please enter the ClientPhone"></vxe-input>
-            </template>
-          </vxe-form-item>
-          <vxe-form-item title="TrusteePhone" field="TrusteePhone" span="10">
-            <template #default>
-              <vxe-input v-model="formData.TrusteePhone" placeholder="Please enter the TrusteePhone"></vxe-input>
-            </template>
-          </vxe-form-item>
-          <vxe-form-item title="ClientEmail" field="ClientEmail" span="10">
-            <template #default>
-              <vxe-input v-model="formData.ClientEmail" placeholder="Please enter the ClientEmail"></vxe-input>
-            </template>
-          </vxe-form-item>
-          <vxe-form-item title="TrusteeEmail" field="TrusteeEmail" span="10">
-            <template #default>
-              <vxe-input v-model="formData.TrusteeEmail" placeholder="Please enter the TrusteeEmail"></vxe-input>
-            </template>
-          </vxe-form-item>
-          <vxe-form-item title="ClientAddress" field="ClientAddress" span="10">
-            <template #default>
-              <vxe-input v-model="formData.ClientAddress" placeholder="Please enter the Client Address"></vxe-input>
-            </template>
-          </vxe-form-item>
-          <vxe-form-item title="TrusteeAddress" field="TrusteeAddress" span="10">
-            <template #default>
-              <vxe-input
-                v-model="formData.TrusteeAddress"
-                placeholder="Please enter the mailing address of the entrusted party"
-              ></vxe-input>
-            </template>
-          </vxe-form-item>
-
-          <vxe-form-item title="Total expenses (RMB)" field="Total" span="10">
-            <template #default>
-              <vxe-input v-model="formData.Total" placeholder="Please enter the total fee (RMB)"></vxe-input>
-            </template>
-          </vxe-form-item>
-
-          <vxe-form-item title="Project start-up funds" field="StartUpFunds" span="10">
-            <template #default>
-              <vxe-input
-                v-model="formData.StartUpFunds"
-                placeholder="Please enter the project start-up fund"
-              ></vxe-input>
-            </template>
-          </vxe-form-item>
-
-          <vxe-form-item title="One time material cost" field="OneFee" span="10">
-            <template #default>
-              <vxe-input v-model="formData.OneFee" placeholder="Please enter the total fee (RMB)"></vxe-input>
-            </template>
-          </vxe-form-item>
-
-          <vxe-form-item title="Filler cost" field="FillerCost" span="10">
-            <template #default>
-              <vxe-input v-model="formData.FillerCost" placeholder="Please enter the filling fee"></vxe-input>
-            </template>
-          </vxe-form-item>
-
-          <vxe-form-item align="right" span="24">
-            <template #default>
-              <vxe-button type="button" status="primary" @click="save">Generate</vxe-button>
-              <vxe-button type="button" @click="close">Cancel</vxe-button>
-            </template>
-          </vxe-form-item>
-        </vxe-form>
-      </template>
-    </vxe-modal>
-
-    <vxe-modal v-model="showDetails11" title="File Information" width="1200" height="800" resize>
+    <vxe-modal v-model="showDetails" title="File Information" width="1200" height="800" resize>
       <template #default>
         <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
           <el-tab-pane label="Document content" name="first">
@@ -300,6 +86,37 @@ export default {
     this.getDepList('')
   },
   methods: {
+    uploadCover(params) {
+      this.upLoading = true
+      // 在这里进行一系列的校验
+      const formData = new FormData()
+      formData.append('Files', params.file)
+      axios
+        .post('http://47.103.127.217:8080/api/Contract/ProcessRequest', formData, {
+          'Content-type': 'multipart/form-data'
+        })
+        .then(res => {
+          debugger
+          var name = res.data
+          this.showDetails = true
+          this.iframeShow = false
+          setTimeout(() => {
+            this.$refs.vxeTable.setAllTreeExpand(true)
+          }, 200)
+          this.$nextTick(() => {
+            this.iframeShow = true
+          })
+          setTimeout(() => {
+            document.getElementById('Generate').contentWindow.postMessage(
+              {
+                name
+              },
+              '*'
+            )
+          }, 200)
+        })
+    },
+
     getDepList(name) {
       axios
         .post(
@@ -381,7 +198,7 @@ export default {
           },
           '*'
         )
-      }, 500)
+      }, 200)
     },
     SelectContract(name, row) {
       name = row.ContractFileNameIP + '/default/' + name
@@ -406,7 +223,11 @@ export default {
           },
           '*'
         )
-      }, 500)
+      }, 200)
+    },
+    handleUpload() {
+      alert(123)
+      this.$refs.UploadDialog.openDialog()
     },
     SelectContract1(name, row) {
       debugger
@@ -447,7 +268,7 @@ export default {
           },
           '*'
         )
-      }, 500)
+      }, 300)
     },
 
     showDetailEvent(row) {

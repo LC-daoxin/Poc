@@ -37,7 +37,7 @@
     </style>
 
     <script language="javascript" type="text/javascript"
-        src="https://api.e-iceblue.cn/web/editors/spireapi/SpireCloudEditor.js"></script>
+        src="http://47.103.120.213:8000/web/editors/spireapi/SpireCloudEditor.js"></script>
 
     <script type="text/javascript" language="javascript">
 
@@ -48,6 +48,7 @@
         var token = null;
         var appid = "***";
         var appkey = "***";
+        var user = JSON.parse(sessionStorage.getItem("LoginUser"))
 
         var innerAlert = function (message) {
             if (console && console.log)
@@ -122,13 +123,13 @@
                     fileName = fileName.split('=')[1];
                 var host = location.hostname;
                 ajax({
-                    url: '自定义后端保存编辑后的文档数据的接口地址',
+                    url: 'http://47.103.127.217:8080/api/poc/Save',
                     type: 'post',
-                    data: { 'filename': fileName, 'fileuri': url },
+                    data: { 'filename': fileName, 'fileuri': url, 'userid': user.UserID },
                     dataType: 'json',
                     async: false,
                     success: function (json) {
-                        if (json.code == 200 || json.code == '200') {
+                        if (json.Code == 200 || json.Code == '200') {
                             alert('保存成功');
                         } else {
                             this.error(json, '保存失败');
@@ -243,11 +244,13 @@
                         canReview: true,
                         canDownload: true,
                         canForcesave: true,
+                        openReviewChanges: true,
                         embedded: {
                             saveUrl: '',
                             embedUrl: '',
                             shareUrl: ''
                         },
+
                         events: {
                             'onReady': onReady,
                             'onDocumentStateChange': onDocumentStateChange,
@@ -257,6 +260,7 @@
                             'onSave': callbackfn
                         }
                     }
+
                 },
                 appid,
                 appkey

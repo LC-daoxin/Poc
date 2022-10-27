@@ -163,7 +163,7 @@ export default {
           },
           '*'
         )
-      }, 500)
+      }, 200)
     },
     add() {
       this.title = 'New template'

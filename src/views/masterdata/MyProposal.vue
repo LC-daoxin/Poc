@@ -147,7 +147,7 @@ export default {
           },
           '*'
         )
-      }, 500)
+      }, 200)
     },
     getList(val) {
       var user = JSON.parse(sessionStorage.getItem('LoginUser'))

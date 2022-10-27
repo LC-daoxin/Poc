@@ -12,58 +12,58 @@
 </template>
 
 <script>
-  import { mapState } from 'vuex'
-  import _ from 'lodash'
-  import axios from 'axios'
+import { mapState } from 'vuex'
+import _ from 'lodash'
+import axios from 'axios'
 
-  export default {
-    name: 'TemplateList',
-    components: {
-    },
-    data() {
-      return {
-        iframeShow: true,
-        url: '/static/OnlineEditing.html'
-      }
-    },
-    computed: {
-      ...mapState({
-        lang: (state) => state.app.lang,
-        activitiesSelect: (state) => state.poc.activitiesSelect,
-      }),
-    },
-    watch: {
-      lang(val) {
-        this.setColumns(val)
-      },
-    },
-    mounted() {
-      window.addEventListener('message', this.pageListener);
-    },
-    methods: {
-      pageListener(event) {
-        let { name, type } = event.data
-        if (type === 'reload') {
-          console.log('监听save保存操作', event);
-          this.iframeShow = false
-          this.$nextTick(() => {
-            this.iframeShow = true
-            setTimeout(() => {
-              this.sendName(name)
-            }, 500)
-          })
-        }
-      },
-      sendName(name) {
-        document.getElementById('Generate').contentWindow.postMessage({
-          name
-        }, '*')
-      },
-      onload() {
-
-      }
+export default {
+  name: 'TemplateList',
+  components: {},
+  data() {
+    return {
+      iframeShow: true,
+      url: '/static/OnlineEditing.html'
     }
+  },
+  computed: {
+    ...mapState({
+      lang: state => state.app.lang,
+      activitiesSelect: state => state.poc.activitiesSelect
+    })
+  },
+  watch: {
+    lang(val) {
+      this.setColumns(val)
+    }
+  },
+  mounted() {
+    window.addEventListener('message', this.pageListener)
+  },
+  methods: {
+    pageListener(event) {
+      let { name, type } = event.data
+      if (type === 'reload') {
+        console.log('监听save保存操作', event)
+        this.iframeShow = false
+        this.$nextTick(() => {
+          this.iframeShow = true
+          setTimeout(() => {
+            this.sendName(name)
+          }, 200)
+        })
+      }
+    },
+    sendName(name) {
+      document.getElementById('Generate').contentWindow.postMessage(
+        {
+          name
+        },
+        '*'
+      )
+    },
+    onload() {}
   }
+}
 </script>
 
 <style lang="less" scoped>
@@ -73,8 +73,8 @@
 }
 .iframe {
   margin: 20px 0;
-  border:none;
-  width:95%;
+  border: none;
+  width: 95%;
   height: 100%;
   margin-left: 2.5%;
 }
